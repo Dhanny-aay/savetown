@@ -266,7 +266,7 @@ label {
 
 ::-webkit-scrollbar {
   -webkit-appearance: none;
-  width: 7px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -288,4 +288,37 @@ label {
 }
 .hero-bottom {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+}
+.sign-shadow {
+  box-shadow: 0px 18.95px 47.38px 0px #0000001a;
+}
+
+.shadowDB {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.rfrcode {
+  background: linear-gradient(90deg, #ed1450 0%, #9900cc 100%);
+}
+
+.plansbg {
+  box-shadow: 0px 18.95px 47.38px 0px #00000005;
+}
+
+.range-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #ed1450;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.range-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #ed1450;
+  cursor: pointer;
+  border-radius: 50%;
+  border: none;
 }

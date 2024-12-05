@@ -71,25 +71,22 @@ export default function Calculator() {
               1 Bed room
             </button>
             <button className="border border-[#595A5C] rounded-[10000px] py-2 px-3 text-xs 2xl:text-lg text-[#595A5C] font-medium font-Manrope">
-              1 Bed room
+              2 Bed room
             </button>
             <button className="border border-[#595A5C] rounded-[10000px] py-2 px-3 text-xs 2xl:text-lg text-[#595A5C] font-medium font-Manrope">
-              1 Bed room
+              3 Bed room
             </button>
             <button className="border border-[#595A5C] rounded-[10000px] py-2 px-3 text-xs 2xl:text-lg text-[#595A5C] font-medium font-Manrope">
-              1 Bed room
+              4 Bed room
             </button>
             <button className="border border-[#595A5C] rounded-[10000px] py-2 px-3 text-xs 2xl:text-lg text-[#595A5C] font-medium font-Manrope">
-              1 Bed room
+              5 Bed room
             </button>
             <button className="border border-[#595A5C] rounded-[10000px] py-2 px-3 text-xs 2xl:text-lg text-[#595A5C] font-medium font-Manrope">
-              1 Bed room
+              Studio
             </button>
             <button className="border border-[#595A5C] rounded-[10000px] py-2 px-3 text-xs 2xl:text-lg text-[#595A5C] font-medium font-Manrope">
-              1 Bed room
-            </button>
-            <button className="border border-[#595A5C] rounded-[10000px] py-2 px-3 text-xs 2xl:text-lg text-[#595A5C] font-medium font-Manrope">
-              1 Bed room
+              Penthouse
             </button>
           </div>
         </div>
