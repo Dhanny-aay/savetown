@@ -44,8 +44,8 @@ export default function page() {
           className=" w-full absolute top-0 left-0 z-[1]"
           alt=""
         />
-        <div className=" flex-col flex justify-center items-center z-10">
-          <h1 className=" text-black">Career</h1>
+        <div className="z-10 flex flex-col items-center justify-center ">
+          <h1 className="text-black ">Career</h1>
           <p className=" font-Manrope text-base md:text-xl font-normal text-black mt-3 max-w-[800px] text-center">
             Join our passionate team at Savetown and help shape the future of
             homeownership. Discover opportunities to make a difference and grow
@@ -53,32 +53,32 @@ export default function page() {
           </p>
         </div>
       </div>
-      <div className="w-full h-full py-12 md:py-16 flex flex-col justify-center items-start px-4 md:px-14">
-        <div className=" grid grid-cols-1 w-full gap-6">
+      <div className="flex flex-col items-start justify-center w-full h-full px-4 py-12 md:py-16 md:px-14">
+        <div className="grid w-full grid-cols-1 gap-6 ">
           {jobs.map((item, index) => (
             <div
               key={index}
               className=" border border-[#EAEBF0] rounded-2xl p-6"
             >
-              <div className=" flex items-center justify-between w-full">
+              <div className="flex items-center justify-between w-full ">
                 <h2 className=" text-[#000] font-Manrope text-lg font-bold">
                   {item.title}
                 </h2>
-                <button className=" flex items-center space-x-2">
-                  <p className=" text-btnPrimary font-Manrope font-bold text-base">
+                <button className="flex items-center space-x-2 ">
+                  <p className="text-base font-bold  text-btnPrimary font-Manrope">
                     View job
                   </p>
                   <img src={arrowright.src} alt="" />
                 </button>
               </div>
-              <div className=" mt-4 flex items-center space-x-6">
-                <span className=" flex items-center space-x-2">
+              <div className="flex items-center mt-4 space-x-6 ">
+                <span className="flex items-center space-x-2 ">
                   <img src={pin.src} alt="" />
                   <p className=" text-[#00000080] font-Manrope font-medium text-base">
                     {item.location}
                   </p>
                 </span>
-                <span className=" flex items-center space-x-2">
+                <span className="flex items-center space-x-2 ">
                   <img src={clock.src} alt="" />
                   <p className=" text-[#00000080] font-Manrope font-medium text-base">
                     {item.type}
