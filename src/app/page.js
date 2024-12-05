@@ -19,12 +19,12 @@ export default function Home() {
       <Navbar />
       <Hero />
       {/* our vision */}
-      <div className="w-full h-full py-12 md:py-16 flex flex-col justify-center items-start px-4 md:px-14">
-        <div className=" bg-bgSecondary p-6 w-full rounded-3xl block lg:hidden">
+      <div className="flex flex-col items-start justify-center w-full h-full px-4 py-12 md:py-16 md:px-14">
+        <div className="block w-full p-6  bg-bgSecondary rounded-3xl lg:hidden">
           <Calculator />
         </div>
 
-        <h3 className=" mt-16 text-black">Message from Our CEO</h3>
+        <h3 className="mt-16 text-black ">Message from Our CEO</h3>
         <h2 className=" capitalize mt-3 max-w-[800px]">
           Our vision and commitment to making homeownership accessible for all.
         </h2>
