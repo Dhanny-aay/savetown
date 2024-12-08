@@ -35,7 +35,7 @@ export default function StepTwo({ formData, updateFormData, handleBack }) {
         </div>
 
         <div className=" flex flex-col w-full mt-3">
-          <label htmlFor="DOB">Date of birth</label>
+          <label htmlFor="gender">Gender</label>
           <span className="rounded-[32px] border border-[#D5D7DA] py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2] mt-2 w-full">
             <select
               name="gender"

@@ -31,7 +31,7 @@ export default function Sidebar() {
       img: setting,
       activeImg: settingAct,
       page: "Settings",
-      url: "/dashboard",
+      url: "/dashboard/settings",
     },
     {
       name: "Support",

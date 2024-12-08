@@ -23,7 +23,7 @@ export default function StepThree({ formData, updateFormData, handleBack }) {
       </p>
 
       <div className=" mt-6">
-        <label htmlFor="Nationality">Phone Number</label>
+        <label htmlFor="Nationality">Nationality</label>
         <span className="rounded-[32px] border border-[#D5D7DA] block py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2] w-full mt-2">
           <select
             // value={selectedCode}
