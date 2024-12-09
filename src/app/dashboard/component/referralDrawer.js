@@ -9,7 +9,7 @@ export default function ReferralDrawer({ isVisible, onClose }) {
       onClick={onClose}
     >
       <div
-        className="bg-white w-[800px] h-full py-8 px-12 plansbg border border-[#D5D7DA] ml-auto"
+        className="bg-white w-full md:w-[70%] lg:w-[800px] h-full py-8 px-4 md:px-6 plansbg border border-[#D5D7DA] ml-auto"
         onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside
       >
         <img
@@ -19,7 +19,7 @@ export default function ReferralDrawer({ isVisible, onClose }) {
           onClick={onClose}
         />
 
-        <h3 className="text-h5 font-Manrope font-bold text-[#000] mt-9">
+        <h3 className=" text-h55 md:text-h5 font-Manrope font-bold text-[#000] mt-9">
           Referral
         </h3>
 

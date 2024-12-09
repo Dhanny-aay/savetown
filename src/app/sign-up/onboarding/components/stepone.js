@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
+import ArrowRight from "./assets/ArrowRight.svg";
 import stepper from "./assets/stepper.svg";
+import Link from "next/link";
 
 export default function StepOne({ formData, updateFormData }) {
   const handleChange = (e) => {
@@ -11,8 +13,13 @@ export default function StepOne({ formData, updateFormData }) {
   return (
     <>
       <img src={stepper.src} className="" alt="" />
-      <h2 className=" text-h3 font-Yeseva mt-5">Let’s Get To Know You More</h2>
-      <p className=" m text-body14Regular mt-1  text-[#737373]">
+      <Link href="/sign-up">
+        <img src={ArrowRight.src} className=" mt-4" alt="" />
+      </Link>
+      <h2 className=" text-h5 md:text-h3 font-Yeseva mt-5">
+        Let’s Get To Know You More
+      </h2>
+      <p className="  text-body12Regular md:text-body14Regular mt-1  text-[#737373]">
         Let’s get you started to savings for your dream house
       </p>
 

@@ -3,6 +3,7 @@ import { useState } from "react";
 import AddPayment from "./addPayment";
 import PlusCircle from "./assets/PlusCircle.svg";
 import Bank from "./assets/Bank.svg";
+import Trash from "./assets/Trash.svg";
 import RemoveModal from "./removeModal";
 import ChangeMeth from "./changeMeth";
 
@@ -45,16 +46,16 @@ export default function Payment() {
           <>
             <div className=" w-full border border-[#EAEBF0] p-6 rounded-[15px] flex items-center justify-between">
               <div className=" flex items-center space-x-3">
-                <span className=" w-16 h-16 bg-[#E6F2FF] rounded-full flex items-center justify-center">
-                  <img src={Bank.src} alt="" />
+                <span className=" w-12 md:w-16 h-12 md:h-16 bg-[#E6F2FF] rounded-full flex items-center justify-center">
+                  <img src={Bank.src} className=" w-5 md:w-auto" alt="" />
                 </span>
                 <div className="">
                   <div className=" flex items-center space-x-2">
-                    <p className=" text-body16SemiBold font-Manrope text-[#666666]">
+                    <p className=" text-body14SemiBold md:text-body16SemiBold font-Manrope text-[#000]">
                       Patrick James
                     </p>
 
-                    <p className=" text-body16SemiBold font-Manrope text-[#666666]">
+                    <p className=" text-body14SemiBold md:text-body16SemiBold font-Manrope text-[#000]">
                       Access Bank
                     </p>
                   </div>
@@ -64,7 +65,8 @@ export default function Payment() {
                 </div>
               </div>
               <button onClick={showRemoveModal} className="">
-                <p className=" text-[#F14373] text-body14SemiBold font-Manrope">
+                <img src={Trash.src} className=" md:hidden" alt="" />
+                <p className=" text-[#F14373] text-body14SemiBold hidden md:block font-Manrope">
                   Remove
                 </p>
               </button>

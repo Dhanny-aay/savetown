@@ -266,7 +266,8 @@ label {
 
 ::-webkit-scrollbar {
   -webkit-appearance: none;
-  width: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-thumb {

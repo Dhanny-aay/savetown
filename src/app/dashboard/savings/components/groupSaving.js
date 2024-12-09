@@ -38,39 +38,43 @@ export default function GroupSaving() {
 
   return (
     <>
-      <h2 className=" text-h5 font-bold text-[#262626] font-Manrope">
-        Savetown Wallet
+      <h2 className=" text-h55 md:text-h5 font-bold text-[#262626] font-Manrope">
+        Group Savings
       </h2>
 
-      <div className="bg-[#FB9E00] relative rounded-[24px] h-[180px] p-6 mt-6">
+      <div className="bg-[#FB9E00] relative rounded-[24px] md:h-[180px] p-6 mt-6 md:mt-8">
         <img src={pattern.src} className=" absolute top-0 right-0" alt="" />
 
         <div className=" flex w-full justify-between items-start">
           <div>
             <div className=" flex items-center space-x-3">
-              <p className=" text-body16Medium font-Manrope text-[#FFFFFF]">
+              <p className=" text-body14Medium md:text-body16Medium font-Manrope text-[#FFFFFF]">
                 Group Savings Balance
               </p>
-              <img src={openwhite.src} className=" w-5" alt="" />
+              <img src={openwhite.src} className=" w-4 md:w-5" alt="" />
             </div>
-            <h2 className=" text-[32px] font-Manrope font-bold text-white mt-1">
+            <h2 className=" text-[32px] font-Manrope font-bold text-white mt-[6px]">
               $ 0.00
             </h2>
           </div>
         </div>
 
-        <div className=" absolute bottom-6 right-6 flex items-center space-x-3 ">
+        <div className="  md:absolute mt-8 md:mt-0 w-full md:w-auto justify-end items-center bottom-6 right-6 flex space-x-3 ">
           {isGroupCreated ? (
             <>
-              <button className=" bg-[#fff] rounded-[40px] py-3 px-6 flex items-center space-x-2">
-                <img src={depo.src} className=" w-5" alt="" />
+              <button className=" bg-[#fff] rounded-[40px] py-3 px-6 w-1/2 md:w-auto flex items-center justify-center space-x-2">
+                <img src={depo.src} className=" w-4 md:w-5" alt="" />
                 <p className="text-body14Bold font-Manrope text-black">
                   Deposit
                 </p>
               </button>
-              <button className="border border-[#fff] rounded-[40px] py-3 px-6 flex items-center space-x-2">
-                <img src={withdraw.src} className=" rotate-90 w-5" alt="" />
-                <p className="text-body14Bold font-Manrope text-white">
+              <button className="border border-[#fff] rounded-[40px] py-3 px-6 w-1/2 md:w-auto flex items-center justify-center space-x-2">
+                <img
+                  src={withdraw.src}
+                  className=" rotate-90 w-4 md:w-5"
+                  alt=""
+                />
+                <p className=" text-body12SemiBold md:text-body14Bold font-Manrope text-white">
                   Withdraw
                 </p>
               </button>
@@ -80,8 +84,8 @@ export default function GroupSaving() {
               onClick={showGroupDrawer}
               className=" bg-[#fff] rounded-[40px] py-3 px-6 flex items-center space-x-2"
             >
-              <img src={grp.src} className=" w-5" alt="" />
-              <p className="text-body14Bold font-Manrope text-[#666666]">
+              <img src={grp.src} className=" w-4 md:w-5" alt="" />
+              <p className=" text-body12SemiBold md:text-body14Bold font-Manrope text-[#666666]">
                 Create Group
               </p>
             </button>
@@ -89,7 +93,7 @@ export default function GroupSaving() {
         </div>
       </div>
 
-      <div className=" w-full grid grid-cols-2 gap-6 mt-8">
+      <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
         {isGroupCreated && (
           <>
             <div

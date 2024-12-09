@@ -14,13 +14,15 @@ export default function Page() {
           }}
           className="  bg-bgSecondary w-[50%] h-full relative lg:flex flex-col hidden justify-center"
         ></div>
-        <div className=" w-full lg:w-[50%] h-full flex flex-col justify-center items-center px-12">
-          <div className=" bg-white sign-shadow p-8 w-full rounded-2xl">
+        <div className=" w-full lg:w-[50%] h-full flex flex-col justify-center items-center px-4 md:px-12">
+          <div className=" bg-white max-w-[570px] sign-shadow p-5 md:p-8 w-full rounded-2xl">
             <Link href="/">
               <img src={ArrowRight.src} className="" alt="" />
             </Link>
-            <h2 className=" text-h3 font-Yeseva mt-5">Welcome Back!</h2>
-            <p className=" m text-body14Regular mt-1  text-[#737373]">
+            <h2 className=" text-h5 md:text-h3 font-Yeseva mt-5">
+              Welcome Back!
+            </h2>
+            <p className=" text-body12Regular md:text-body14Regular mt-1  text-[#737373]">
               Sign in to your account
             </p>
 

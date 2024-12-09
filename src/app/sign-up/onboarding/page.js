@@ -7,6 +7,7 @@ import StepFour from "./components/stepfour";
 import StepOne from "./components/stepone";
 import StepTwo from "./components/steptwo";
 import StepThree from "./components/stepthree";
+import VerifyStep2 from "./components/verifyStep2";
 
 export default function Page() {
   const [currentStep, setCurrentStep] = useState(0); // Track the active step
@@ -63,7 +64,7 @@ export default function Page() {
     {
       id: 2,
       component: (
-        <StepThree
+        <VerifyStep2
           formData={formData}
           updateFormData={updateFormData}
           handleBack={handleBack}
@@ -72,7 +73,23 @@ export default function Page() {
     },
     {
       id: 3,
-      component: <StepFour formData={formData} />,
+      component: (
+        <StepThree
+          formData={formData}
+          updateFormData={updateFormData}
+          handleBack={handleBack}
+        />
+      ),
+    },
+    {
+      id: 4,
+      component: (
+        <StepFour
+          formData={formData}
+          updateFormData={updateFormData}
+          handleBack={handleBack}
+        />
+      ),
     },
   ];
 
@@ -92,8 +109,8 @@ export default function Page() {
         ></div>
 
         {/* Form Content Section */}
-        <div className="w-full lg:w-[50%] h-full flex flex-col justify-center items-center px-12">
-          <div className="bg-white sign-shadow p-8 w-full rounded-2xl">
+        <div className="w-full lg:w-[50%] h-full flex flex-col justify-center items-center px-6 md:px-12">
+          <div className="bg-white sign-shadow p-5 md:p-8 w-full rounded-2xl">
             {/* Render current step */}
             {CurrentStepComponent}
 

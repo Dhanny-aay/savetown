@@ -16,8 +16,8 @@ export default function StepTwo({ formData, updateFormData, handleBack }) {
     <>
       <img src={stepper1.src} className=" mt-4" alt="" />
       <img onClick={handleBack} src={ArrowRight.src} className=" mt-4" alt="" />
-      <h2 className=" text-h3 font-Yeseva mt-5">Add Phone Number</h2>
-      <p className=" m text-body14Regular mt-1  text-[#737373]">
+      <h2 className=" text-h5 md:text-h3 font-Yeseva mt-5">Add Phone Number</h2>
+      <p className="  text-body12Regular md:text-body14Regular mt-1  text-[#737373]">
         This should match the date on your ID
       </p>
 
@@ -30,7 +30,7 @@ export default function StepTwo({ formData, updateFormData, handleBack }) {
             type="date"
             name="DOB"
             value={formData.DOB}
-            className=" mt-2 bg-white rounded-[32px] border border-[#D5D7DA] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]"
+            className=" mt-2 bg-white rounded-[32px] border border-[#D5D7DA] w-full h-[35px] py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]"
           />
         </div>
 

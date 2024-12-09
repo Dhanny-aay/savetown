@@ -37,7 +37,7 @@ export default function Page() {
         {buttons.map((button, index) => (
           <button
             key={index}
-            className={` font-Manrope text-sm px-4 py-2  rounded-[32px] transition-all ${
+            className={` font-Manrope text-xs md:text-sm px-4 py-2  rounded-[32px] transition-all ${
               activeButton === button.value
                 ? "bg-[#FDE8EE] text-[#ED1450] font-bold"
                 : " bg-[#F3F0E9] text-[#000000B2] font-normal"
@@ -49,7 +49,7 @@ export default function Page() {
         ))}
       </div>
 
-      <div className=" mt-6">
+      <div className=" mt-8">
         {buttons.find((button) => button.value === activeButton).component}
       </div>
     </>

@@ -43,44 +43,51 @@ export default function Page() {
 
   return (
     <>
-      <div className=" shadowDB w-full bg-white rounded-[32px] p-8 flex items-center justify-between">
-        <div className=" w-1/2">
+      <p className="text-[#262626] block md:hidden font-bold text-lg py-3 md:text-xl leading-none font-Manrope">
+        Welcome Back, Veek!
+      </p>
+      <div className=" shadowDB w-full bg-white mt-6 md:mt-0 rounded-[32px] p-6 md:p-8 flex flex-col lg:flex-row items-center lg:items-center lg:justify-between">
+        <div className=" w-full lg:w-1/2">
           <div className=" flex items-center space-x-3">
-            <p className=" text-body16Bold font-Manrope text-[#595A5C]">
+            <p className=" text-body14Medium md:text-body16Bold font-Manrope text-[#595A5C]">
               Total Balance
             </p>
 
             <img src={open.src} className=" w-5" alt="" />
           </div>
-          <h2 className=" text-h1 font-Manrope font-bold mt-1">$ 0.00</h2>
+          <h2 className=" text-h3 md:text-h1 text-[#666666] font-Manrope font-bold mt-1">
+            $ 0.00
+          </h2>
         </div>
-        <div className=" w-1/2 flex items-center justify-end space-x-3">
+        <div className=" w-full mt-8 md:mt-0 lg:w-1/2 flex items-center justify-between md:justify-end space-x-3">
           <button
             onClick={showDepositDrawer}
-            className=" bg-btnPrimary rounded-[40px] border border-[#EAEBF0] py-3 px-6 flex items-center space-x-2"
+            className=" bg-btnPrimary w-1/2 md:w-auto rounded-[40px] border border-[#EAEBF0] py-3 px-6 flex items-center justify-center space-x-2"
           >
             <img src={depo.src} className=" w-5" alt="" />
-            <p className="text-body16Bold font-Manrope text-white">Deposit</p>
+            <p className=" text-body12SemiBold md:text-body16Bold font-Manrope text-white">
+              Deposit
+            </p>
           </button>
           <button
             onClick={showCalculatorDrawer}
-            className=" rounded-[40px] border border-[#C2C4C6] py-3 px-6 flex items-center space-x-2"
+            className=" w-1/2 md:w-auto rounded-[40px] border border-[#C2C4C6] py-3 px-6 flex items-center justify-center space-x-2"
           >
             <img src={Calculator.src} className=" w-5" alt="" />
-            <p className="text-body16Bold font-Manrope text-[#262626]">
+            <p className=" text-body12SemiBold md:text-body16Bold font-Manrope text-[#262626]">
               Calculator
             </p>
           </button>
         </div>
       </div>
 
-      <h2 className=" text-h5 font-bold text-[#262626] mt-8 font-Manrope">
+      <h2 className=" text-h55 md:text-h5 font-bold text-[#262626] mt-8 font-Manrope">
         My Savings Plan
       </h2>
-      <SavingPlanTab />
+      <SavingPlanTab isDashboard={true} />
 
-      <div className=" w-full mt-6 rfrcode h-[150px] rounded-[24px] py-8 px-6 flex justify-between items-center">
-        <div className=" w-[48%]">
+      <div className=" w-full mt-8 lg:mt-6 rfrcode md:h-auto lg:h-[150px] rounded-[24px] py-8 px-6 flex flex-col lg:flex-row justify-between items-start lg:items-center relative">
+        <div className=" w-full md:max-w-[400px] lg:max-w-full lg:w-[48%]">
           <h3 className=" text-h5 font-bold font-Manrope text-white">
             Refer your friends and Earn
           </h3>
@@ -89,50 +96,59 @@ export default function Page() {
             listing which will reflect on your wallet.
           </p>
         </div>
-        <div className=" w-[48%] flex items-center justify-between">
-          <img src={xml.src} className=" mt-[54px]" alt="" />
+        <div className=" w-full lg:w-[48%] mt-6 md:mt-3 lg:mt-0 flex items-center lg:justify-between">
+          <img src={xml.src} className=" hidden lg:block lg:mt-[54px]" alt="" />
 
-          <button className=" flex items-center bg-[#FFFFFF] rounded-[32px] px-6 py-3 space-x-2 text-[#262626] font-Manrope text-body14SemiBold">
+          <button className=" flex items-center bg-[#FFFFFF] rounded-[32px] px-6 py-3 space-x-2 text-[#262626] font-Manrope text-body12SemiBold md:text-body14SemiBold mr-4 md:mr-6 lg:mr-0">
             <p>ABCDG234</p>
-            <img src={share.src} className=" w-5" alt="" />
+            <img src={share.src} className=" w-4 md:w-5" alt="" />
           </button>
 
           <button
             onClick={showReferralDrawer}
-            className="flex items-center space-x-2"
+            className="flex items-center space-x-2 z-20"
           >
-            <span className="text-[#FFFFFF] text-body14Bold font-Manrope">
+            <span className="text-[#FFFFFF] text-body12SemiBold md:text-body14Bold font-Manrope">
               View referrals
             </span>
-            <img src={ArrowRightwhite.src} className="" alt="" />
+            <img src={ArrowRightwhite.src} className=" " alt="" />
           </button>
         </div>
+        <img
+          src={xml.src}
+          className=" w-[25%] md:w-full lg:hidden absolute bottom-0 right-0 md:right-14"
+          alt=""
+        />
       </div>
 
       <div className=" w-full ">
-        <h2 className=" text-h5 font-bold text-[#262626] mt-8 font-Manrope">
+        <h2 className="text-h55 md:text-h5 font-bold text-[#262626] mt-8 font-Manrope">
           My To-Dos
         </h2>
-        <div className=" w-full h-[140px] rounded-3xl bg-[#F3F0E9] mt-6 p-6">
-          <h4 className=" text-h5 font-Manrope font-bold text-black">
+        <div className=" w-full lg:h-[140px] rounded-3xl bg-[#F3F0E9] mt-6 p-6">
+          <h4 className=" text-h6 md:text-h5 font-Manrope font-bold text-black">
             Profile Verification
           </h4>
-          <p className=" text-body14Regular font-Manrope text-black mt-1">
+          <p className=" text-body12Regular md:text-body14Regular font-Manrope text-black mt-1">
             Complete your profile verification to unlock all features
           </p>
 
-          <div className=" flex items-end justify-between">
-            <div className="w-[70%] bg-[#FFFFFF] rounded-full mt-3">
-              <div
-                className="bg-[#9900CC] text-xs font-medium text-blue-100 font-Manrope text-center p-0.5 leading-none rounded-full"
-                style={{ width: "70%" }}
-              >
+          <div className=" flex flex-col lg:flex-row lg:items-end justify-between">
+            <div className="flex items-center w-full lg:w-[70%] space-x-2">
+              <div className="flex-grow bg-[#FFFFFF] rounded-full">
+                <div
+                  className="bg-[#9900CC] text-xs font-Manrope text-center p-0.5 leading-none rounded-full text-blue-100"
+                  style={{ width: `70%` }}
+                />
+              </div>
+              <div className="text-sm font-medium font-Manrope text-[#000]">
                 70%
               </div>
             </div>
+
             <button
               onClick={showVerifyDrawer}
-              className=" bg-btnPrimary rounded-[40px] w-[25%] border border-[#EAEBF0] py-3 px-6 "
+              className=" bg-btnPrimary rounded-[40px] w-full md:w-auto lg:w-[25%] border border-[#EAEBF0] py-3 px-6 mt-4 lg:mt-0 ml-auto lg:ml-0 "
             >
               <p className="text-xs font-bold font-Manrope text-white">
                 Complete Verification Now

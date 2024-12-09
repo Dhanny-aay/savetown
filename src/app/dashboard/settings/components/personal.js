@@ -17,12 +17,12 @@ export default function Personal() {
             Update your photo and personal details here.
           </p>
         </div>
-        <button className=" bg-btnPrimary rounded-[40px] border border-[#EAEBF0] py-3 px-6 flex items-center">
+        <button className=" hidden bg-btnPrimary rounded-[40px] border border-[#EAEBF0] py-3 px-6 md:flex items-center">
           <p className="text-body14SemiBold font-Manrope text-white">Save</p>
         </button>
       </div>
 
-      <div className=" mt-6 grid grid-cols-3 w-full gap-5">
+      <div className=" mt-6 grid grid-cols-1 md:grid-cols-3 w-full gap-4 md:gap-5">
         <div className=" w-full">
           <label>First Name</label>
           <div className="mt-2 flex items-center ">
@@ -60,7 +60,7 @@ export default function Personal() {
           </div>
         </div>
       </div>
-      <div className=" mt-6 grid grid-cols-2 w-full gap-5">
+      <div className=" mt-6 grid grid-cols-1 md:grid-cols-2 w-full gap-4 md:gap-5">
         <div className=" w-full">
           <label>Email Address</label>
           <div className="mt-2 flex items-center ">
@@ -86,7 +86,7 @@ export default function Personal() {
           </div>
         </div>
       </div>
-      <div className=" mt-6 grid grid-cols-2 w-full gap-5">
+      <div className=" mt-6 grid grid-cols-1 md:grid-cols-2 w-full gap-4 md:gap-5">
         <div className=" flex flex-col w-full">
           <label htmlFor="DOB">Date of birth</label>
           <input
@@ -109,7 +109,7 @@ export default function Personal() {
         </div>
       </div>
 
-      <div className=" mt-6 grid grid-cols-2 w-full gap-5">
+      <div className=" mt-6 grid grid-cols-1 md:grid-cols-2 w-full gap-4 md:gap-5">
         <div>
           <label htmlFor="Nationality">Nationality</label>
           <span className="rounded-[32px] border border-[#D5D7DA] block py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2] w-full mt-2">
@@ -153,6 +153,11 @@ export default function Personal() {
           />
         </div>
       </div>
+      <button className=" mt-6 bg-btnPrimary rounded-[40px] border border-[#EAEBF0] py-3 w-full px-6 flex md:hidden items-center">
+        <p className="text-body14SemiBold font-Manrope text-center w-full text-white">
+          Save
+        </p>
+      </button>
     </>
   );
 }

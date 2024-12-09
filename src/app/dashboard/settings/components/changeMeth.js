@@ -9,7 +9,7 @@ export default function ChangeMeth({ onClose, isVisible }) {
       onClick={onClose}
     >
       <div
-        className="bg-white w-[800px] h-full py-8 px-6 plansbg border overflow-auto border-[#D5D7DA] relative ml-auto"
+        className="bg-white w-full md:w-[70%] lg:w-[800px] h-full py-8 px-6 plansbg border overflow-auto border-[#D5D7DA] relative ml-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <img

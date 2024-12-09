@@ -23,13 +23,15 @@ export default function Page() {
           className="  bg-bgSecondary w-[50%] h-full relative lg:flex flex-col hidden justify-center"
         ></div>
 
-        <div className=" w-full lg:w-[50%] h-full flex flex-col justify-center items-center px-12">
-          <div className=" bg-white sign-shadow p-8 w-full rounded-2xl">
-            <img src={ArrowRight.src} className="" alt="" />
-            <h2 className=" text-h3 font-Yeseva mt-5">
+        <div className=" w-full lg:w-[50%] h-full flex flex-col justify-center items-center px-6 md:px-12">
+          <div className=" bg-white sign-shadow p-5 md:p-8 w-full rounded-2xl">
+            <Link href="/">
+              <img src={ArrowRight.src} className="" alt="" />
+            </Link>
+            <h2 className=" text-h5 md:text-h3 font-Yeseva mt-5">
               Enter verification code
             </h2>
-            <p className=" m text-body14Regular mt-1  text-[#737373]">
+            <p className="  text-body12Regular md:text-body14Regular mt-1  text-[#737373]">
               We sent a verification code to daniel*******@gmail.com
             </p>
 
@@ -39,7 +41,7 @@ export default function Page() {
               Verify
             </button>
             <p className=" block mt-4 px-8 text-body14Regular font-Manrope text-[#595959] text-center">
-              Didn’t receive the code?
+              Didn’t receive the code?{" "}
               <Link href="" className=" text-[#8133F1]">
                 Send again
               </Link>

@@ -52,22 +52,21 @@ export default function All() {
       <div className=" shadowDB w-full bg-white rounded-[32px] p-8 flex items-center justify-between">
         <div className=" w-1/2">
           <div className=" flex items-center space-x-3">
-            <p className=" text-body16Bold font-Manrope text-[#595A5C]">
+            <p className=" text-body14Bold md:text-body16Bold font-Manrope text-[#595A5C]">
               Total Balance
             </p>
 
-            <img src={open.src} className=" w-5" alt="" />
+            <img src={open.src} className=" w-4 md:w-5" alt="" />
           </div>
-          <h2 className=" text-h1 font-Manrope font-bold mt-1 text-[#666666]">
+          <h2 className=" text-h3 md:text-h1 font-Manrope font-bold mt-1 text-[#666666]">
             $ 0.00
           </h2>
         </div>
       </div>
-
-      <h2 className=" text-h5 font-bold text-[#262626] mt-8 font-Manrope">
+      <h2 className=" text-h55 md:text-h5 font-bold text-[#262626] mt-8 font-Manrope">
         My Savings Plan
       </h2>
-      <SavingPlanTab />
+      <SavingPlanTab isDashboard={false} />
       <div className=" w-full mt-8 flex flex-col items-center justify-center">
         <img src={receipt.src} className="" alt="" />
         <h6 className="text-center text-body16Bold font-Manrope text-[#666666] mt-6">
@@ -77,15 +76,13 @@ export default function All() {
           Recent tarnsctions and transctions history will show here
         </p>
       </div>
-
-      {/* <h2 className=" text-h5 font-bold text-[#262626] mt-8 font-Manrope">
+      {/* <h2 className=" text-h55 md:text-h5 font-bold text-[#262626] mt-8 font-Manrope">
         Recent Transactions
       </h2>
-
-       Table Section with Fixed Height 
+      Table Section with Fixed Height
       <div className="overflow-auto max-h-[100%] h-screen md:h-[55vh]">
         {" "}
-         Adjust the height to fit the screen 
+        Adjust the height to fit the screen
         <table className="w-full mt-4 bg-white rounded shadow font-Manrope relative">
           <thead className=" sticky top-0 left-0">
             <tr className="text-left bg-gray-50">

@@ -20,9 +20,10 @@ module.exports = {
       fontSize: {
         h1: ["42px", { lineHeight: "120%" }],
         h2: ["36px", { lineHeight: "64px" }],
-        h3: ["29px", { lineHeight: "120%" }],
+        h3: ["28px", { lineHeight: "120%" }],
         h4: ["24px", { lineHeight: "120%" }],
         h5: ["20px", { lineHeight: "120%" }],
+        h55: ["18px", { lineHeight: "120%" }],
         h6: ["16px", { lineHeight: "120%" }],
         h7: ["14px", { lineHeight: "120%" }],
         h8: ["12px", { lineHeight: "120%" }],

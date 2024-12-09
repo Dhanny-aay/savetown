@@ -14,17 +14,19 @@ export default function Page() {
           }}
           className="  bg-bgSecondary w-[50%] h-full relative lg:flex flex-col hidden justify-center"
         ></div>
-        <div className=" w-full lg:w-[50%] h-full flex flex-col justify-center items-center px-12">
-          <div className=" bg-white sign-shadow p-8 w-full rounded-2xl">
+        <div className=" w-full lg:w-[50%] h-full flex flex-col justify-center items-center px-6 md:px-12">
+          <div className=" bg-white sign-shadow p-5 md:p-8 w-full rounded-2xl">
             <Link href="/">
               <img src={ArrowRight.src} className="" alt="" />
             </Link>
-            <h2 className=" text-h3 font-Yeseva mt-5">Welcome to Savetown!</h2>
-            <p className=" m text-body14Regular mt-1  text-[#737373]">
+            <h2 className=" text-h5 md:text-h3 font-Yeseva mt-5">
+              Welcome to Savetown!
+            </h2>
+            <p className="  text-body12Regular md:text-body14Regular mt-1  text-[#737373]">
               Let’s get you started to savings for your dream house
             </p>
 
-            <div className=" mt-6">
+            <div className=" mt-8">
               <div className=" flex flex-col w-full">
                 <label htmlFor="Email">Email</label>
                 <input
@@ -35,7 +37,7 @@ export default function Page() {
                 />
               </div>
 
-              <button className=" bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg">
+              <button className=" bg-btnPrimary py-3 w-full rounded-[50px] mt-6 font-semibold font-Manrope text-white text-xs 2xl:text-lg">
                 Continue
               </button>
 

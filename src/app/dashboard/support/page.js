@@ -5,10 +5,10 @@ import forward from "./assets/forward.svg";
 export default function Page() {
   return (
     <>
-      <h3 className="text-h5 font-Manrope font-bold text-[#000]">
+      <h3 className=" text-h55 md:text-h5 font-Manrope font-bold text-[#000]">
         You can contact us via Email or Call Us
       </h3>
-      <div className=" mt-6 w-full grid grid-cols-2 gap-8">
+      <div className=" mt-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
         <div className=" border border-[#C2C4C6] rounded-[15px] px-6 py-3 flex items-center justify-between">
           <div className=" flex items-center space-x-4">
             <span className=" w-12 h-12 rounded-full flex items-center justify-center bg-[#F2F3F4]">
@@ -43,7 +43,7 @@ export default function Page() {
         </div>
       </div>
 
-      <h3 className="text-h5 font-Manrope font-bold text-[#000] mt-6">
+      <h3 className=" text-h55 md:text-h5 font-Manrope font-bold text-[#000] mt-6">
         Or drop a Message and our support team will respond in 2 minutes
       </h3>
 
@@ -73,7 +73,7 @@ export default function Page() {
           <label>Description</label>
           <textarea
             placeholder="Enter a detailed reason for contacting support"
-            rows={6}
+            rows={2}
             className="w-full border border-[#D5D7DA] rounded-[8px] mt-2 text-body14Regular font-Manrope px-6 py-4"
           ></textarea>
         </div>

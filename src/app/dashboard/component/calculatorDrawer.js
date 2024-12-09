@@ -40,7 +40,11 @@ export default function CalculatorDrawer({ isVisible, onClose }) {
     {
       id: 0,
       component: (
-        <InputInfo formData={formData} updateFormData={updateFormData} />
+        <InputInfo
+          formData={formData}
+          updateFormData={updateFormData}
+          onClose={onClose}
+        />
       ),
     },
     {
@@ -75,11 +79,11 @@ export default function CalculatorDrawer({ isVisible, onClose }) {
       onClick={onClose}
     >
       <div
-        className="bg-white w-[800px] h-full py-8 px-6 plansbg border overflow-auto border-[#D5D7DA] relative ml-auto"
+        className="bg-white w-full md:w-[70%] lg:w-[800px] h-full py-8 px-4 md:px-6 plansbg border overflow-auto border-[#D5D7DA] relative ml-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto h-full px-6 pb-16">
+        <div className="flex-1 overflow-y-auto h-full pb-16">
           {CurrentStepComponent}
         </div>
 

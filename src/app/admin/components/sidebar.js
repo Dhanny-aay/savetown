@@ -14,8 +14,8 @@ import interestIcon from "../assets/interestIcon.svg";
 import customerIcon from "../assets/customerIcon.svg";
 import settingsIcon from "../assets/settingsIcon.svg";
 import signOut from "../assets/signOut.svg";
-import key from '../assets/key.svg'
-import hamburgerMenu from '../assets/hamburgerMenu.svg'
+import key from "../assets/key.svg";
+import hamburgerMenu from "../assets/hamburgerMenu.svg";
 
 export default function Sidebar() {
   const [active, setActive] = useState("Home");
@@ -51,14 +51,14 @@ export default function Sidebar() {
               height={44}
               className="mx-auto md:hidden lg:block lg:w-40"
             />
-              <Image
+            <Image
               src={key.src}
               alt="key logo"
               width={23}
               height={23}
               priority
-              className='mx-auto lg:hidden '
-          />
+              className="mx-auto lg:hidden "
+            />
           </Link>
         </div>
 
@@ -66,7 +66,7 @@ export default function Sidebar() {
           {menuItems.map((item) => (
             <li
               key={item.name}
-  className={`flex flex-col lg:flex-row items-center lg:items-start gap-3 p-4 cursor-pointer transition-colors  ${
+              className={`flex flex-col lg:flex-row items-center lg:items-start gap-3 p-4 cursor-pointer transition-colors  ${
                 active === item.name
                   ? "bg-white text-[#ED1450] border-l-4 border-[#ED1450]"
                   : "hover:text-[#ED1450]"
@@ -84,10 +84,9 @@ export default function Sidebar() {
             </li>
           ))}
         </ul>
-
       </div>
 
-         {/* Bottom Menu */}
+      {/* Bottom Menu */}
 
       {/* Bottom Navbar for small screens */}
       <div className="fixed bottom-0 left-0 w-full bg-pink-50 border-t md:hidden">
@@ -213,47 +212,47 @@ export default function Sidebar() {
 //   </div>
 // );
 
-      //   {/* <div>
-      //   <ul className="space-y-2">
-      //     <li
-      //       className={`flex items-center gap-3 p-4 cursor-pointer font-Manrope font-medium transition-colors ${
-      //         active === "Settings"
-      //           ? "bg-white text-[#ED1450] border-l-4 border-[#ED1450]"
-      //           : " hover:border-l-4 hover:text-[#ED1450]"
-      //       }`}
-      //       onClick={() => setActive("Settings")}
-      //     >
-      //       <Image
-      //           src={settingsIcon}
-      //           alt={'settings icon'}
-      //           width={20}
-      //           height={20}
-      //           className={`transition-all ${
-      //             active === 'Settings' ? "fill-[#ED1450]" : "fill-gray-600"
-      //           }`}
-      //         />
-      //       {/* Settings */}
-      //       <span className="hidden lg:inline">Settings</span>
-      //     </li>
-      //     <li
-      //       className={`flex items-center gap-3 p-4 cursor-pointer font-Manrope font-medium transition-colors  ${
-      //         active === "signOut"
-      //           ? "bg-white text-[#ED1450] border-l-4 border-[#ED1450]"
-      //           : " hover:border-l-4 hover:text-[#ED1450]"
-      //       }`}
-      //       onClick={() => setActive("signOut")}
-      //     >
-      //       <Image
-      //           src={signOut}
-      //           alt={'sign out icon'}
-      //           width={20}
-      //           height={20}
-      //           className={`transition-all ${
-      //             active ===  "signOut" ? "fill-[#ED1450]" : "fill-gray-600"
-      //           }`}
-      //         />
-      //       {/* Sign Out */}
-      //       <span className="hidden lg:inline">Sign Out</span>
-      //     </li>
-      //   </ul>
-      // </div> */}
+//   {/* <div>
+//   <ul className="space-y-2">
+//     <li
+//       className={`flex items-center gap-3 p-4 cursor-pointer font-Manrope font-medium transition-colors ${
+//         active === "Settings"
+//           ? "bg-white text-[#ED1450] border-l-4 border-[#ED1450]"
+//           : " hover:border-l-4 hover:text-[#ED1450]"
+//       }`}
+//       onClick={() => setActive("Settings")}
+//     >
+//       <Image
+//           src={settingsIcon}
+//           alt={'settings icon'}
+//           width={20}
+//           height={20}
+//           className={`transition-all ${
+//             active === 'Settings' ? "fill-[#ED1450]" : "fill-gray-600"
+//           }`}
+//         />
+//       {/* Settings */}
+//       <span className="hidden lg:inline">Settings</span>
+//     </li>
+//     <li
+//       className={`flex items-center gap-3 p-4 cursor-pointer font-Manrope font-medium transition-colors  ${
+//         active === "signOut"
+//           ? "bg-white text-[#ED1450] border-l-4 border-[#ED1450]"
+//           : " hover:border-l-4 hover:text-[#ED1450]"
+//       }`}
+//       onClick={() => setActive("signOut")}
+//     >
+//       <Image
+//           src={signOut}
+//           alt={'sign out icon'}
+//           width={20}
+//           height={20}
+//           className={`transition-all ${
+//             active ===  "signOut" ? "fill-[#ED1450]" : "fill-gray-600"
+//           }`}
+//         />
+//       {/* Sign Out */}
+//       <span className="hidden lg:inline">Sign Out</span>
+//     </li>
+//   </ul>
+// </div> */}

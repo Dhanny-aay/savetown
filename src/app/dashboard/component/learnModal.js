@@ -6,11 +6,11 @@ export default function LearnModal({ isVisible, onClose }) {
     <>
       {isVisible && (
         <div
-          className={`fixed top-0 right-0 z-[999] h-screen overflow-y-auto flex items-center justify-center w-full bg-[#D5D7DA4D]`}
+          className={`fixed top-0 right-0 z-[999] h-screen overflow-y-auto flex items-center p-6 justify-center w-full bg-[#D5D7DA4D]`}
           onClick={onClose}
         >
           <div
-            className=" w-[600px] h-[270px] bg-white plansbg rounded-2xl border border-[#DAE0E6] flex items-center justify-center flex-col p-6 relative"
+            className=" w-full md:w-[600px] h-[270px] bg-white plansbg rounded-2xl border border-[#DAE0E6] flex items-center justify-center flex-col p-6 relative"
             onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside
           >
             <img

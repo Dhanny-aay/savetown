@@ -78,17 +78,17 @@ export default function SaveWallet() {
         Savetown Wallet
       </h2>
 
-      <div className="bg-[#9654F4] relative rounded-[24px] h-[180px] p-6 mt-6">
+      <div className="bg-[#9654F4] relative rounded-[24px] lg:h-[180px] p-6 mt-6 md:mt-8">
         <img src={pattern.src} className=" absolute top-0 right-0" alt="" />
         <div className=" flex w-full justify-between items-start">
           <div>
             <div className=" flex items-center space-x-3">
-              <p className=" text-body16Medium font-Manrope text-[#FFFFFF]">
+              <p className=" text-body14Medium md:text-body16Medium font-Manrope text-[#FFFFFF]">
                 Savetown Wallet Balance
               </p>
-              <img src={openwhite.src} className=" w-5" alt="" />
+              <img src={openwhite.src} className=" w-4 md:w-5" alt="" />
             </div>
-            <h2 className=" text-[32px] font-Manrope font-bold text-white mt-1">
+            <h2 className=" text-2xl md:text-[32px] font-Manrope font-bold text-white mt-[6px]">
               $ 0.00
             </h2>
           </div>
@@ -103,27 +103,31 @@ export default function SaveWallet() {
           </button> */}
         </div>
 
-        <div className=" absolute bottom-6 right-6 flex space-x-3">
+        <div className=" md:absolute mt-8 md:mt-0 w-full md:w-auto justify-center items-center bottom-6 right-6 flex space-x-3">
           <button
             onClick={showDepositDrawer}
-            className=" bg-[#fff] rounded-[40px] py-3 px-6 flex items-center space-x-2"
+            className=" bg-[#fff] rounded-[40px] py-3 px-6 w-1/2 md:w-auto flex items-center justify-center space-x-2"
           >
-            <img src={depo.src} className=" w-5" alt="" />
-            <p className="text-body14Bold font-Manrope text-black">Deposit</p>
+            <img src={depo.src} className=" w-4 md:w-5" alt="" />
+            <p className=" text-body12SemiBold md:text-body14Bold font-Manrope text-black">
+              Deposit
+            </p>
           </button>
           <button
             onClick={showWithdrawDrawer}
-            className="border border-[#fff] rounded-[40px] py-3 px-6 flex items-center space-x-2"
+            className="border border-[#fff] rounded-[40px] py-3 px-6 w-1/2 md:w-auto flex items-center justify-center space-x-2"
           >
-            <img src={withdraw.src} className=" rotate-90 w-5" alt="" />
-            <p className="text-body14Bold font-Manrope text-white">Withdraw</p>
+            <img src={withdraw.src} className=" rotate-90 w-4 md:w-5" alt="" />
+            <p className=" text-body12SemiBold md:text-body14Bold font-Manrope text-white">
+              Withdraw
+            </p>
           </button>
         </div>
       </div>
 
       <div
         onClick={showLearnModal}
-        className=" border border-[#C2C4C6] cursor-pointer rounded-[15px] px-6 py-3 w-1/2 mt-8 flex items-center justify-between"
+        className=" border border-[#C2C4C6] cursor-pointer rounded-[15px] px-6 py-3 w-full md:w-1/2 mt-8 flex items-center justify-between"
       >
         <div className=" flex items-center space-x-4">
           <span className=" w-16 h-16 rounded-full flex items-center justify-center bg-[#E6F2FF]">

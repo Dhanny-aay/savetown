@@ -3,7 +3,7 @@ import { useState } from "react";
 import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
 import stepper from "./assets/stepper.svg";
 
-export default function InputInfo({ updateFormData, formData }) {
+export default function InputInfo({ updateFormData, formData, onClose }) {
   const [housePrice, setHousePrice] = useState(0);
   const [monthlyCommitment, setMonthlyCommitment] = useState(0);
   const [savingDuration, setSavingDuration] = useState(1);
@@ -68,7 +68,14 @@ export default function InputInfo({ updateFormData, formData }) {
 
   return (
     <div>
-      <img src={stepper.src} className=" w-full" alt="" />
+      <img
+        src={ArrowRightBlk.src}
+        onClick={onClose}
+        className=" cursor-pointer"
+        alt=""
+      />
+
+      <img src={stepper.src} className=" mt-8 w-full" alt="" />
       <h3 className="text-h5 font-Manrope font-bold text-[#595A5C] mt-9">
         What can I save with my monthly payment
       </h3>

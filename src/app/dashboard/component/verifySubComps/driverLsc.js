@@ -15,9 +15,15 @@ export default function DriverLsc({ goBack }) {
   };
 
   return (
-    <div className=" mt-8">
-      <img src={ArrowRightBlk.src} onClick={goBack} alt="" />
-      <h3 className="text-h5 font-Manrope font-bold text-[#595A5C] mt-9">
+    <div className="">
+      <img
+        src={ArrowRightBlk.src}
+        onClick={goBack}
+        className=" cursor-pointer"
+        alt=""
+      />
+
+      <h3 className="text-h55 md:text-h5 font-Manrope font-bold text-[#595A5C] mt-9">
         Driver’s License
       </h3>
       <div className=" mt-6">
