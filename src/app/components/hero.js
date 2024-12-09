@@ -1,18 +1,47 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
 import herobg from "./assets/heroImg.svg";
+import mobHero from "./assets/mobHero.svg";
 import apple from "./assets/appleDownload.svg";
 import play from "./assets/playDownload.svg";
 import Calculator from "./calculator";
+import { useEffect, useState } from "react";
 
 export default function Hero() {
+  // Determine initial mobile state server-side
+  const [isMobile, setIsMobile] = useState(() => {
+    // Check if window is defined (client-side) and use its width
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 768;
+    }
+    // Default to mobile for server-side rendering to match most mobile devices
+    return true;
+  });
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768); // Tailwind's md breakpoint
+    };
+
+    // Check initial screen size
+    checkScreenSize();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", checkScreenSize);
+
+    // Cleanup event listener
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  const backgroundStyle = {
+    backgroundImage: `url(${isMobile ? mobHero.src : herobg.src})`,
+    backgroundPosition: "center",
+    backgroundSize: "cover",
+  };
   return (
     <div
-      style={{
-        backgroundImage: `url(${herobg.src})`,
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-      }}
+      style={backgroundStyle}
       className=" h-svh md:h-[600px] lg:h-svh relative w-full flex justify-center items-center flex-col"
     >
       <div className=" w-full h-full absolute top-0 left-0 hero-bg z-[1]"></div>

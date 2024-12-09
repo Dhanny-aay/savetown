@@ -40,7 +40,7 @@ export default function Navbar() {
     <>
       <div
         id="overlay"
-        className=" w-full bg-[#000000a2] backdrop-blur-xl h-[400px] p-6 flex justify-center items-center -translate-y-[600px] shadow transition-all duration-700 top-[78px] fixed z-[99]"
+        className=" w-full bg-[#000000a2] backdrop-blur-xl h-[460px] p-6 flex justify-center items-center -translate-y-[600px] shadow transition-all duration-700 top-0 fixed z-[99]"
       >
         <div className="w-full flex flex-col justify-center items-center space-y-5">
           <Link
@@ -98,7 +98,7 @@ export default function Navbar() {
         </div>
       </div>
       <header>
-        <nav className=" py-5 px-4 md:px-14  w-full flex items-center justify-between absolute top-0 left-0 z-50">
+        <nav className=" py-5 px-4 md:px-14  w-full flex items-center justify-between absolute top-0 left-0 z-[999]">
           <Link href="/">
             <Image
               src={logo.src}
