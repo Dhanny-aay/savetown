@@ -110,7 +110,7 @@ export default function Page() {
 
         {/* Form Content Section */}
         <div className="w-full lg:w-[50%] h-full flex flex-col justify-center items-center px-6 md:px-12">
-          <div className="bg-white sign-shadow p-5 md:p-8 w-full rounded-2xl">
+          <div className="bg-white sign-shadow md:p-8 w-full rounded-2xl">
             {/* Render current step */}
             {CurrentStepComponent}
 

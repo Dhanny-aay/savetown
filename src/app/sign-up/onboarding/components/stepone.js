@@ -12,7 +12,7 @@ export default function StepOne({ formData, updateFormData }) {
 
   return (
     <>
-      <img src={stepper.src} className="" alt="" />
+      <img src={stepper.src} className=" w-full" alt="" />
       <Link href="/sign-up">
         <img src={ArrowRight.src} className=" mt-4" alt="" />
       </Link>

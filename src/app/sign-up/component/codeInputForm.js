@@ -68,7 +68,7 @@ export default function CodeInputForm({
 
   return (
     <form className="flex items-center justify-center w-full mt-6">
-      <div className="flex mb-2 space-x-2 rtl:space-x-reverse">
+      <div className="flex mb-2 w-full space-x-4 md:space-x-2 rtl:space-x-reverse">
         {Array.from({ length: 6 }, (_, index) => {
           const currentId = `code-${index + 1}`;
           const nextId = index < 5 ? `code-${index + 2}` : null;

@@ -127,11 +127,11 @@ export default function SaveWallet() {
 
       <div
         onClick={showLearnModal}
-        className=" border border-[#C2C4C6] cursor-pointer rounded-[15px] px-6 py-3 w-full md:w-1/2 mt-8 flex items-center justify-between"
+        className=" border border-[#C2C4C6] cursor-pointer rounded-[15px] px-4 md:px-6 py-3 w-full md:w-1/2 mt-8 flex items-center justify-between"
       >
         <div className=" flex items-center space-x-4">
-          <span className=" w-16 h-16 rounded-full flex items-center justify-center bg-[#E6F2FF]">
-            <img src={infop.src} className=" ml-1" alt="" />
+          <span className=" w-10 md:w-16 h-10 md:h-16 rounded-full flex items-center justify-center bg-[#E6F2FF]">
+            <img src={infop.src} className=" w-5 md:w-auto ml-1" alt="" />
           </span>
           <div className="">
             <h6 className=" text-body14Bold font-Manrope text-[#262626]">
@@ -142,11 +142,12 @@ export default function SaveWallet() {
             </p>
           </div>
         </div>
-        <img src={forward.src} alt="" />
+        <img src={forward.src} className=" h-3 md:h-auto" alt="" />
       </div>
 
       <div className=" w-full mt-8 flex flex-col items-center justify-center">
-        <img src={receipt.src} className="" alt="" />
+        <img src={receipt.src} className=" w-[45px]  md:w-auto" alt="" />
+
         <h6 className="text-center text-body16Bold font-Manrope text-[#666666] mt-6">
           Transcation History
         </h6>

@@ -3,6 +3,7 @@ import open from "./assets/open.svg";
 import receipt from "./assets/receipt.svg";
 
 export default function All() {
+  const isDashboard = false;
   const transactions = [
     {
       id: 1,
@@ -50,7 +51,7 @@ export default function All() {
   return (
     <>
       <div className=" shadowDB w-full bg-white rounded-[32px] p-8 flex items-center justify-between">
-        <div className=" w-1/2">
+        <div className=" w-full ">
           <div className=" flex items-center space-x-3">
             <p className=" text-body14Bold md:text-body16Bold font-Manrope text-[#595A5C]">
               Total Balance
@@ -66,9 +67,9 @@ export default function All() {
       <h2 className=" text-h55 md:text-h5 font-bold text-[#262626] mt-8 font-Manrope">
         My Savings Plan
       </h2>
-      <SavingPlanTab isDashboard={false} />
+      <SavingPlanTab isDashboard={isDashboard} />
       <div className=" w-full mt-8 flex flex-col items-center justify-center">
-        <img src={receipt.src} className="" alt="" />
+        <img src={receipt.src} className=" w-[45px]  md:w-auto" alt="" />
         <h6 className="text-center text-body16Bold font-Manrope text-[#666666] mt-6">
           Transcation History
         </h6>

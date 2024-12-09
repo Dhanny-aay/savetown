@@ -28,11 +28,9 @@ export default function VerifyStep2({ formData, updateFormData, handleBack }) {
       {/* <button className=" bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg">
         Verify
       </button> */}
-      <p className=" block mt-4 px-8 text-body14Regular font-Manrope text-[#595959] text-center">
-        Didn’t receive the code?{" "}
-        <Link href="" className=" text-[#8133F1]">
-          Send again
-        </Link>
+      <p className=" block mt-8 px-8 text-body14Regular font-Manrope text-[#595959] text-center">
+        Didn’t receive the code?
+        <span className=" text-[#8133F1]">Send again</span>
       </p>
     </>
   );

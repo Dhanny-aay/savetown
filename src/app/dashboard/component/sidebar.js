@@ -99,9 +99,9 @@ export default function Sidebar() {
       </div>
 
       {/* Bottom Navbar for small screens */}
-      <div className="fixed bottom-0 left-0 w-full bg-pink-50 border-t md:hidden z-[99]">
+      <div className="fixed bottom-0 left-0 w-full bg-[#fff] border-[#E2E2E2] border-t md:hidden z-[99]">
         <div className="flex justify-between items-center p-3">
-          {sidebar.map((item) => (
+          {sidebar.slice(0, 3).map((item) => (
             <Link
               key={item.name}
               href={item.url}

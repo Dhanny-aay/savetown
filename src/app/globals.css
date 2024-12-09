@@ -290,10 +290,10 @@ label {
 .hero-bottom {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
 }
-.sign-shadow {
-  box-shadow: 0px 18.95px 47.38px 0px #0000001a;
-}
 
+.sign-shadow {
+  box-shadow: none;
+}
 .shadowDB {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
@@ -304,7 +304,16 @@ label {
 }
 
 .plansbg {
-  box-shadow: 0px 18.95px 47.38px 0px #00000005;
+  box-shadow: none; /* No shadow by default for mobile */
+}
+
+@media (min-width: 768px) {
+  .plansbg {
+    box-shadow: 0px 18.95px 47.38px 0px rgba(0, 0, 0, 0.05); /* Shadow for tablet and above */
+  }
+  .sign-shadow {
+    box-shadow: 0px 18.95px 47.38px 0px #0000001a;
+  }
 }
 
 .range-slider::-webkit-slider-thumb {
@@ -322,4 +331,49 @@ label {
   cursor: pointer;
   border-radius: 50%;
   border: none;
+}
+
+/* paginaation carousel */
+/* Container styling for the pagination */
+.custom-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f3f0e9; /* Light background */
+  border-radius: 40px;
+  padding: 4px 12px;
+  width: 60px; /* Fixed width */
+  margin: 12px auto; /* Margin-top of 12px and mx-auto */
+  flex-shrink: 0; /* Prevent the element from shrinking */
+}
+
+/* Individual bullet points */
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background-color: #f9b6c9; /* Inactive bullet color */
+  opacity: 1;
+  /* margin: 0 4px; */
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+/* Active bullet styling */
+.swiper-pagination-bullet-active {
+  background-color: #f14373; /* Active bullet color */
+  width: 20px;
+  border-radius: 20px;
+}
+/* paginaation carousel */
+/* Container styling for the pagination */
+.model-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f3f0e9; /* Light background */
+  border-radius: 40px;
+  padding: 4px 12px;
+  width: 60px; /* Fixed width */
+  margin: 12px auto; /* Margin-top of 12px and mx-auto */
+  flex-shrink: 0; /* Prevent the element from shrinking */
 }

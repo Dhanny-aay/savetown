@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import open from "./assets/open.svg";
 import depo from "./assets/depo.svg";
 import Calculator from "./assets/Calculator.svg";
@@ -13,9 +13,17 @@ import ReferralDrawer from "./component/referralDrawer";
 import CalculatorDrawer from "./component/calculatorDrawer";
 import VerifyDrawer from "./component/verifyDrawer";
 import DepositDrawer from "./component/depositDrawer";
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+// Import Swiper styles
+import "swiper/css";
+// import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
+import DinnerModal from "./component/dinnerModal";
 
 export default function Page() {
   const [isDinnerDrawerVisible, setDinnerDrawerVisible] = useState(false);
+  const [isDinnerModalVisible, setDinnerModalVisible] = useState(false);
   const [isReferralDrawerVisible, setReferralDrawerVisible] = useState(false);
   const [isCalculatorDrawerVisible, setCalculatorDrawerVisible] =
     useState(false);
@@ -24,6 +32,10 @@ export default function Page() {
   // dinner drawer
   const showDinnerDrawer = () => setDinnerDrawerVisible(true);
   const closeDinnerDrawer = () => setDinnerDrawerVisible(false);
+
+  // dinner modal
+  const showDinnerModal = () => setDinnerModalVisible(true);
+  const closeDinnerModal = () => setDinnerModalVisible(false);
 
   // referral drawer
   const showReferralDrawer = () => setReferralDrawerVisible(true);
@@ -40,6 +52,14 @@ export default function Page() {
   // deposit drawer
   const showDepositDrawer = () => setDepositDrawerVisible(true);
   const closeDepositDrawer = () => setDepositDrawerVisible(false);
+
+  useEffect(() => {
+    // Set a timer to call showDinnerModal after 30 seconds (30,000 ms)
+    const timer = setTimeout(showDinnerModal, 30000);
+
+    // Clean up the timer if the component unmounts before 60 seconds
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>
@@ -88,10 +108,10 @@ export default function Page() {
 
       <div className=" w-full mt-8 lg:mt-6 rfrcode md:h-auto lg:h-[150px] rounded-[24px] py-8 px-6 flex flex-col lg:flex-row justify-between items-start lg:items-center relative">
         <div className=" w-full md:max-w-[400px] lg:max-w-full lg:w-[48%]">
-          <h3 className=" text-h5 font-bold font-Manrope text-white">
+          <h3 className=" text-h6 md:text-h5 font-bold font-Manrope text-white">
             Refer your friends and Earn
           </h3>
-          <p className=" mt-1 font-Manrope font-normal text-body14Regular text-white">
+          <p className=" mt-3 font-Manrope font-normal text-body12Regular md:text-body14Regular text-white">
             Your friend gets 10% bonus on sign up and you get 20% bonus on house
             listing which will reflect on your wallet.
           </p>
@@ -106,7 +126,7 @@ export default function Page() {
 
           <button
             onClick={showReferralDrawer}
-            className="flex items-center space-x-2 z-20"
+            className="hidden md:flex items-center space-x-2 z-20"
           >
             <span className="text-[#FFFFFF] text-body12SemiBold md:text-body14Bold font-Manrope">
               View referrals
@@ -116,9 +136,29 @@ export default function Page() {
         </div>
         <img
           src={xml.src}
-          className=" w-[25%] md:w-full lg:hidden absolute bottom-0 right-0 md:right-14"
+          className=" w-[35%] md:w-auto lg:hidden absolute bottom-0 right-6 md:right-14"
           alt=""
         />
+      </div>
+
+      <div className=" w-full block md:hidden">
+        <h2 className=" text-h55 md:text-h5 font-bold text-[#262626] mt-8 font-Manrope">
+          Referrals
+        </h2>
+        <div className=" w-full lg:h-[140px] rounded-3xl border border-[#C2C4C6] mt-6 p-6">
+          <div>
+            <h5 className=" text-body12SemiBold font-Manrope text-[#595A5C]">
+              Referral bonus
+            </h5>
+            <span className=" mt-2 text-[#000] text-body12Regular">0</span>
+          </div>
+          <div className=" mt-5">
+            <h5 className=" text-body12SemiBold font-Manrope text-[#595A5C]">
+              Number of referrals
+            </h5>
+            <span className=" mt-2 text-[#000] text-body12Regular">0</span>
+          </div>
+        </div>
       </div>
 
       <div className=" w-full ">
@@ -169,12 +209,42 @@ export default function Page() {
           </button>
         </div>
 
-        <div className=" w-full mt-6 grid grid-cols-3 gap-6">
+        <div className=" w-full mt-6 hidden lg:grid grid-cols-3 gap-6">
           <div className="plansbg w-full h-[250px] bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]"></div>
           <div className="plansbg w-full h-[250px] bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]"></div>
           <div className="plansbg w-full h-[250px] bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]"></div>
         </div>
+
+        <div className=" w-full mt-6 block lg:hidden">
+          <Swiper
+            pagination={{
+              clickable: true,
+              el: ".model-pagination",
+            }}
+            modules={[Pagination]}
+            breakpoints={{
+              768: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+            }}
+            className="mt-6 w-full"
+          >
+            <SwiperSlide>
+              <div className="plansbg w-full h-[250px] bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]"></div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="plansbg w-full h-[250px] bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]"></div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="plansbg w-full h-[250px] bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]"></div>
+            </SwiperSlide>
+          </Swiper>
+
+          <div className="model-pagination flex justify-center w-full items-center space-x-1"></div>
+        </div>
       </div>
+
       {/* <SavingPlanTab /> */}
 
       {/* dinner form */}
@@ -182,6 +252,14 @@ export default function Page() {
         isVisible={isDinnerDrawerVisible}
         onClose={closeDinnerDrawer}
       />
+
+      {/* dinner modal */}
+      <DinnerModal
+        isVisible={isDinnerModalVisible}
+        onClose={closeDinnerModal}
+        showDinnerDrawer={showDinnerDrawer}
+      />
+
       {/* referrals */}
       <ReferralDrawer
         isVisible={isReferralDrawerVisible}

@@ -1,6 +1,8 @@
 "use client";
 import openwhite from "./assets/openwhite.svg";
 import infop from "./assets/infop.svg";
+import tabler_send from "./assets/tabler_send.svg";
+import groups from "./assets/groups.svg";
 import forward from "./assets/forward.svg";
 import receipt from "./assets/receipt.svg";
 import grp from "./assets/grp.svg";
@@ -82,7 +84,7 @@ export default function GroupSaving() {
           ) : (
             <button
               onClick={showGroupDrawer}
-              className=" bg-[#fff] rounded-[40px] py-3 px-6 flex items-center space-x-2"
+              className=" bg-[#fff] w-full md:w-auto rounded-[40px] py-3 px-6 flex justify-center items-center space-x-2"
             >
               <img src={grp.src} className=" w-4 md:w-5" alt="" />
               <p className=" text-body12SemiBold md:text-body14Bold font-Manrope text-[#666666]">
@@ -98,11 +100,11 @@ export default function GroupSaving() {
           <>
             <div
               onClick={showMemberDrawer}
-              className=" border border-[#C2C4C6] rounded-[15px] cursor-pointer px-6 py-3 w-full flex items-center justify-between"
+              className=" border border-[#C2C4C6] rounded-[15px] h-[80px] cursor-pointer px-4 md:px-6 py-3 w-full flex items-center justify-between"
             >
               <div className=" flex items-center space-x-4">
-                <span className=" w-16 h-16 rounded-full flex items-center justify-center bg-[#EFE6FD]">
-                  <img src={infop.src} className=" ml-1" alt="" />
+                <span className="  w-10 md:w-16 h-10 md:h-16 rounded-full flex items-center justify-center bg-[#EFE6FD]">
+                  <img src={groups.src} className=" w-5 md:w-auto " alt="" />
                 </span>
                 <div className="">
                   <h6 className=" text-body14Bold font-Manrope text-[#262626]">
@@ -113,36 +115,40 @@ export default function GroupSaving() {
                   </p>
                 </div>
               </div>
-              <img src={forward.src} alt="" />
+              <img src={forward.src} className=" h-3 md:h-auto" alt="" />
             </div>
             <div
               onClick={showInviteDrawer}
-              className=" border border-[#C2C4C6] rounded-[15px] cursor-pointer px-6 py-3 w-full flex items-center justify-between"
+              className=" border border-[#C2C4C6] rounded-[15px] h-[80px] cursor-pointer px-4 md:px-6 py-3 w-full flex items-center justify-between"
             >
               <div className=" flex items-center space-x-4">
-                <span className=" w-16 h-16 rounded-full flex items-center justify-center bg-[#EAF6EC]">
-                  <img src={infop.src} className=" ml-1" alt="" />
+                <span className="  w-10 md:w-16 h-10 md:h-16 rounded-full flex items-center justify-center bg-[#EAF6EC]">
+                  <img
+                    src={tabler_send.src}
+                    className="w-5 md:w-auto "
+                    alt=""
+                  />
                 </span>
-                <div className="">
+                <div className="max-w-[70%] md:max-w-max">
                   <h6 className=" text-body14Bold font-Manrope text-[#262626]">
                     Invite more friends
                   </h6>
-                  <p className=" font-Manrope text-body12Regular text-[#595A5C] mt-2 leading-none">
+                  <p className=" font-Manrope text-body12Regular  text-[#595A5C] mt-2 leading-none">
                     Send your friends an invitation to join savings
                   </p>
                 </div>
               </div>
-              <img src={forward.src} alt="" />
+              <img src={forward.src} className=" h-3 md:h-auto" alt="" />
             </div>
           </>
         )}
         <div
           onClick={showLearnModal}
-          className=" border border-[#C2C4C6] rounded-[15px] cursor-pointer px-6 py-3 w-full flex items-center justify-between"
+          className=" border border-[#C2C4C6] rounded-[15px] h-[80px] cursor-pointer px-4 md:px-6 py-3 w-full flex items-center justify-between"
         >
           <div className=" flex items-center space-x-4">
-            <span className=" w-16 h-16 rounded-full flex items-center justify-center bg-[#E6F2FF]">
-              <img src={infop.src} className=" ml-1" alt="" />
+            <span className=" w-10 md:w-16 h-10 md:h-16 rounded-full flex items-center justify-center bg-[#E6F2FF]">
+              <img src={infop.src} className=" w-5 md:w-auto ml-1" alt="" />
             </span>
             <div className="">
               <h6 className=" text-body14Bold font-Manrope text-[#262626]">
@@ -153,12 +159,13 @@ export default function GroupSaving() {
               </p>
             </div>
           </div>
-          <img src={forward.src} alt="" />
+          <img src={forward.src} className=" h-3 md:h-auto" alt="" />
         </div>
       </div>
 
       <div className=" w-full mt-8 flex flex-col items-center justify-center">
-        <img src={receipt.src} className="" alt="" />
+        <img src={receipt.src} className=" w-[45px]  md:w-auto" alt="" />
+
         <h6 className="text-center text-body16Bold font-Manrope text-[#666666] mt-6">
           Transcation History
         </h6>

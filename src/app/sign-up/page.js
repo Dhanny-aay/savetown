@@ -14,8 +14,8 @@ export default function Page() {
           }}
           className="  bg-bgSecondary w-[50%] h-full relative lg:flex flex-col hidden justify-center"
         ></div>
-        <div className=" w-full lg:w-[50%] h-full flex flex-col justify-center items-center px-6 md:px-12">
-          <div className=" bg-white sign-shadow p-5 md:p-8 w-full rounded-2xl">
+        <div className=" w-full lg:w-[50%] h-full flex flex-col justify-center items-center px-4 md:px-12">
+          <div className=" bg-white sign-shadow  md:p-8 w-full rounded-2xl">
             <Link href="/">
               <img src={ArrowRight.src} className="" alt="" />
             </Link>

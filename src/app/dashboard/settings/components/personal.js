@@ -1,10 +1,30 @@
+"use client";
 import countryCodes from "country-codes-list";
+import { useState } from "react";
 
 export default function Personal() {
   // Extract a list of countries from the package
   const countryCodeList = countryCodes.all().map((country) => ({
     name: country.countryNameEn,
   }));
+  const [day, setDay] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
+
+  const handleDayChange = (event) => {
+    setDay(event.target.value);
+  };
+
+  const handleMonthChange = (event) => {
+    setMonth(event.target.value);
+  };
+
+  const handleYearChange = (event) => {
+    setYear(event.target.value);
+  };
+  const handlePhoneNumberChange = (phoneNumber) => {
+    console.log("Selected Phone Number:", phoneNumber);
+  };
 
   return (
     <>
@@ -88,14 +108,73 @@ export default function Personal() {
       </div>
       <div className=" mt-6 grid grid-cols-1 md:grid-cols-2 w-full gap-4 md:gap-5">
         <div className=" flex flex-col w-full">
-          <label htmlFor="DOB">Date of birth</label>
-          <input
-            type="date"
-            name="DOB"
-            className=" mt-2 bg-white rounded-[32px] border border-[#D5D7DA] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]"
-          />
-        </div>
+          <label htmlFor="dob">Date of birth</label>
+          <div className="flex space-x-4 mt-2">
+            <span className="rounded-[32px] border border-[#D5D7DA] py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2] w-full p-2.5">
+              <select
+                id="day"
+                value={day}
+                onChange={handleDayChange}
+                className=" w-full"
+              >
+                <option value="">Day</option>
+                {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
+                  <option key={d} value={d}>
+                    {d}
+                  </option>
+                ))}
+              </select>
+            </span>
 
+            <span className="rounded-[32px] border border-[#D5D7DA] py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2] w-full p-2.5">
+              <select
+                id="month"
+                value={month}
+                onChange={handleMonthChange}
+                className=" w-full"
+              >
+                <option value="">Month</option>
+                {[
+                  "January",
+                  "February",
+                  "March",
+                  "April",
+                  "May",
+                  "June",
+                  "July",
+                  "August",
+                  "September",
+                  "October",
+                  "November",
+                  "December",
+                ].map((m, i) => (
+                  <option key={m} value={i + 1}>
+                    {m}
+                  </option>
+                ))}
+              </select>
+            </span>
+
+            <span className="rounded-[32px] border border-[#D5D7DA] py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2] w-full p-2.5">
+              <select
+                id="year"
+                value={year}
+                onChange={handleYearChange}
+                className=" w-full"
+              >
+                <option value="">Year</option>
+                {Array.from(
+                  { length: 100 },
+                  (_, i) => new Date().getFullYear() - i
+                ).map((y) => (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
+                ))}
+              </select>
+            </span>
+          </div>
+        </div>
         <div className=" flex flex-col w-full">
           <label htmlFor="gender">Gender</label>
           <span className="rounded-[32px] border border-[#D5D7DA] py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2] mt-2 w-full">

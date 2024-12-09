@@ -73,7 +73,7 @@ export default function Page() {
           <label>Description</label>
           <textarea
             placeholder="Enter a detailed reason for contacting support"
-            rows={2}
+            rows={6}
             className="w-full border border-[#D5D7DA] rounded-[8px] mt-2 text-body14Regular font-Manrope px-6 py-4"
           ></textarea>
         </div>

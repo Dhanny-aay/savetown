@@ -9,7 +9,7 @@ import { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/css";
-import "swiper/css/pagination";
+// import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import Link from "next/link";
 import LearnModal from "./learnModal";
@@ -100,7 +100,8 @@ export default function SavingPlanTab({ isDashboard }) {
       <div className=" block lg:hidden">
         <Swiper
           pagination={{
-            dynamicBullets: true,
+            clickable: true,
+            el: ".custom-pagination",
           }}
           modules={[Pagination]}
           className="mt-6 w-full"
@@ -116,7 +117,7 @@ export default function SavingPlanTab({ isDashboard }) {
                 <div>
                   <div className=" flex items-center space-x-3">
                     <p className=" text-body14Medium md:text-body16Medium font-Manrope text-[#FFFFFF]">
-                      Savetown Wallet Balance
+                      Wallet Balance
                     </p>
                     <img src={openwhite.src} className=" w-5" alt="" />
                   </div>
@@ -124,15 +125,17 @@ export default function SavingPlanTab({ isDashboard }) {
                     $ 0.00
                   </h2>
                 </div>
-                <button
-                  onClick={showLearnModal}
-                  className=" bg-[#EFE6FD] absolute top-3 right-3 md:static px-3 py-2 rounded-[40px] flex items-center space-x-1"
-                >
-                  <img src={infop.src} className=" w-4 md:w-auto" alt="" />
-                  <p className=" text-[#5900D9] font-Manrope text-h9 md:text-body14Regular">
-                    Learn more
-                  </p>
-                </button>
+                {isDashboard && (
+                  <button
+                    onClick={showLearnModal}
+                    className=" bg-[#EFE6FD] absolute top-3 right-3 md:static px-3 py-2 rounded-[40px] flex items-center space-x-1"
+                  >
+                    <img src={infop.src} className=" w-4 md:w-auto" alt="" />
+                    <p className=" text-[#5900D9] font-Manrope text-h9 md:text-body14Regular">
+                      Learn more
+                    </p>
+                  </button>
+                )}
               </div>
             </div>
           </SwiperSlide>
@@ -156,15 +159,17 @@ export default function SavingPlanTab({ isDashboard }) {
                     $ 0.00
                   </h2>
                 </div>
-                <button
-                  onClick={showLearnModal}
-                  className=" bg-[#EFE6FD] px-3 py-2 absolute top-3 right-3 md:static rounded-[40px] flex items-center space-x-1"
-                >
-                  <img src={info.src} className=" w-4 md:w-auto" alt="" />
-                  <p className=" text-[#8C5800] font-Manrope text-h9 md:text-body14Regular">
-                    Learn more
-                  </p>
-                </button>
+                {isDashboard && (
+                  <button
+                    onClick={showLearnModal}
+                    className=" bg-[#EFE6FD] px-3 py-2 absolute top-3 right-3 md:static rounded-[40px] flex items-center space-x-1"
+                  >
+                    <img src={info.src} className=" w-4 md:w-auto" alt="" />
+                    <p className=" text-[#8C5800] font-Manrope text-h9 md:text-body14Regular">
+                      Learn more
+                    </p>
+                  </button>
+                )}
               </div>
 
               <div className=" absolute bottom-6 right-6 flex items-center space-x-2">
@@ -179,6 +184,7 @@ export default function SavingPlanTab({ isDashboard }) {
             </div>
           </SwiperSlide>
         </Swiper>
+        <div className="custom-pagination flex justify-center w-full items-center space-x-1"></div>
       </div>
 
       {/* learn modal */}
