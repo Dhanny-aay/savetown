@@ -377,3 +377,11 @@ label {
   margin: 12px auto; /* Margin-top of 12px and mx-auto */
   flex-shrink: 0; /* Prevent the element from shrinking */
 }
+
+/* Focus and active state for all inputs */
+input:focus,
+input:active {
+  border-color: #6200ee;
+  color: #8133f1;
+  outline: none; /* Removes default browser outline */
+}
