@@ -6,9 +6,14 @@ import noti from "./assets/noti.svg";
 import support from "./assets/support.svg";
 import NotiDrawer from "./notiDrawer";
 import Link from "next/link";
+import { useUserContext } from "../UserContext";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function Headbar() {
   const [isNotiDrawerVisible, setNotiDrawerVisible] = useState(false);
+  const { userProfile, loadingProfile } = useUserContext();
+
   const currencies = [
     { name: "USD", flag: "https://flagcdn.com/us.svg" },
     { name: "NGN", flag: "https://flagcdn.com/ng.svg" },
@@ -54,9 +59,20 @@ export default function Headbar() {
       case "/dashboard/support":
         return "Support";
       default:
-        return "Welcome Back, Veek!";
+        return `Welcome Back, ${userProfile.first_name}!`;
     }
   };
+
+  // console.log(userProfile.first_name);
+  // console.log(userProfile.last_name);
+
+  const getInitials = (firstName, lastName) => {
+    if (!firstName || !lastName) return "VD";
+    return `${firstName[0].toUpperCase()}${lastName[0].toUpperCase()}`;
+  };
+
+  // Once loaded, show initials
+  const initials = getInitials(userProfile?.first_name, userProfile?.last_name);
 
   return (
     <>
@@ -64,9 +80,13 @@ export default function Headbar() {
         <div className="flex items-center space-x-4 md:space-x-0">
           <img src={key.src} className="w-4 z-[9999] md:hidden" alt="" />
 
-          <p className="text-[#262626] hidden md:block font-bold text-base md:text-xl leading-none font-Manrope">
-            {getPageTitle()}
-          </p>
+          {loadingProfile ? (
+            <Skeleton width={200} height={32} />
+          ) : (
+            <p className="text-[#262626] hidden md:block font-bold text-base md:text-xl leading-none font-Manrope">
+              {getPageTitle()}
+            </p>
+          )}
         </div>
         <div className="flex items-center space-x-3">
           <div className="relative hidden md:inline-block" ref={dropdownRef}>
@@ -134,9 +154,18 @@ export default function Headbar() {
             onClick={showNotiDrawer}
             alt=""
           />
-          <span className="w-12 h-12 rounded-full bg-[#FFF6E6] text-center hidden font-Manrope font-bold text-base md:flex items-center justify-center text-btnPrimary">
-            VD
-          </span>
+          {loadingProfile ? (
+            <Skeleton
+              circle
+              width={40}
+              height={40}
+              containerClassName="flex items-center justify-center"
+            />
+          ) : (
+            <span className="w-12 h-12 rounded-full bg-[#FFF6E6] text-center hidden font-Manrope font-bold text-base md:flex items-center justify-center text-btnPrimary">
+              {initials}
+            </span>
+          )}
           <div className="relative inline-block md:hidden" ref={dropdownRef}>
             {/* Button displaying only the flag */}
             <button

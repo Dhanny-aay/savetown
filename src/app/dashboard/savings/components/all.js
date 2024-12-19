@@ -1,9 +1,22 @@
+"use client";
+import { useState } from "react";
 import SavingPlanTab from "../../component/savingPlanTab";
+import { useUserContext } from "../../UserContext";
 import open from "./assets/open.svg";
 import receipt from "./assets/receipt.svg";
 
 export default function All() {
   const isDashboard = false;
+  const { userStats, loading } = useUserContext();
+
+  // balance visibility
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Toggle visibility function
+  const toggleVisibility = () => {
+    setIsVisible((prev) => !prev);
+  };
+
   const transactions = [
     {
       id: 1,
@@ -57,10 +70,15 @@ export default function All() {
               Total Balance
             </p>
 
-            <img src={open.src} className=" w-4 md:w-5" alt="" />
+            <img
+              src={open.src}
+              className="w-4 md:w-5 cursor-pointer"
+              alt="Toggle visibility"
+              onClick={toggleVisibility}
+            />
           </div>
           <h2 className=" text-h3 md:text-h1 font-Manrope font-bold mt-1 text-[#666666]">
-            $ 0.00
+            {isVisible ? `$${userStats?.total_balance ?? 0}` : "****"}
           </h2>
         </div>
       </div>

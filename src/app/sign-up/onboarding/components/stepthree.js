@@ -1,3 +1,5 @@
+"use client";
+import { useEffect } from "react";
 import ArrowRight from "./assets/ArrowRight.svg";
 import stepper2 from "./assets/stepper3.svg";
 import countryCodes from "country-codes-list";
@@ -7,6 +9,14 @@ export default function StepThree({ formData, updateFormData, handleBack }) {
   const countryCodeList = countryCodes.all().map((country) => ({
     name: country.countryNameEn,
   }));
+
+  // On mount, check for a referral code in localStorage
+  useEffect(() => {
+    const savedReferralCode = localStorage.getItem("savetown_referral_code");
+    if (savedReferralCode && !formData.referral_code) {
+      updateFormData({ referral_code: savedReferralCode });
+    }
+  }, [updateFormData, formData.referral_code]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,8 +36,9 @@ export default function StepThree({ formData, updateFormData, handleBack }) {
         <label htmlFor="Nationality">Nationality</label>
         <span className="rounded-[32px] border border-[#D5D7DA] block py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2] w-full mt-2">
           <select
-            // value={selectedCode}
-            // onChange={(e) => handleCodeChange(e.target.value)}
+            name="nationality"
+            value={formData.nationality}
+            onChange={handleChange}
             className="z-10 w-full bg-transparent"
           >
             <option value="">Choose Country</option>
@@ -40,11 +51,12 @@ export default function StepThree({ formData, updateFormData, handleBack }) {
         </span>
 
         <div className=" flex flex-col w-full mt-4">
-          <label htmlFor="rfrcode">Referral Code (if any)</label>
+          <label htmlFor="referral_code">Referral Code (if any)</label>
           <input
             type="text"
-            name="rfrcode"
-            value={formData.rfrcode}
+            name="referral_code"
+            onChange={handleChange}
+            value={formData.referral_code}
             className=" mt-2 bg-white rounded-[32px] border border-[#D5D7DA] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]"
             placeholder="Enter Referral Code"
           />

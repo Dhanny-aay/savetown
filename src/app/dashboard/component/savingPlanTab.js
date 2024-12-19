@@ -14,10 +14,26 @@ import { Pagination } from "swiper/modules";
 import Link from "next/link";
 import LearnModal from "./learnModal";
 import GroupDrawer from "./groupDrawer";
+import { useUserContext } from "../UserContext";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function SavingPlanTab({ isDashboard }) {
   const [isLearnVisible, setLearnVisible] = useState(false);
   const [isGroupDrawerVisible, setGroupDrawerVisible] = useState(false);
+  const { userStats, loading } = useUserContext();
+  const [visibility, setVisibility] = useState({
+    wallet: false,
+    groupSavings: false,
+  });
+
+  // Generic function to toggle visibility for each balance type
+  const toggleVisibility = (balanceType) => {
+    setVisibility((prev) => ({
+      ...prev,
+      [balanceType]: !prev[balanceType],
+    }));
+  };
 
   // learn modal
   const showLearnModal = () => setLearnVisible(true);
@@ -38,11 +54,26 @@ export default function SavingPlanTab({ isDashboard }) {
                 <p className=" text-body14Medium md:text-body16Medium font-Manrope text-[#FFFFFF]">
                   Savetown Wallet Balance
                 </p>
-                <img src={openwhite.src} className=" w-5" alt="" />
+                <img
+                  src={openwhite.src}
+                  className="w-5 cursor-pointer"
+                  alt="Toggle wallet balance visibility"
+                  onClick={() => toggleVisibility("wallet")}
+                />
               </div>
-              <h2 className=" text-[32px] font-Manrope font-bold text-white mt-1">
-                $ 0.00
-              </h2>
+              {loading ? (
+                <Skeleton
+                  width={72}
+                  height={32}
+                  containerClassName="mt-1 opacity-50"
+                />
+              ) : (
+                <h2 className="text-[32px] font-Manrope font-bold text-white mt-1">
+                  {visibility.wallet
+                    ? `$${userStats?.wallet_balance ?? "0.00"}`
+                    : "****"}
+                </h2>
+              )}
             </div>
             {isDashboard && (
               <button
@@ -66,11 +97,26 @@ export default function SavingPlanTab({ isDashboard }) {
                 <p className=" text-body16Medium font-Manrope text-[#FFFFFF]">
                   Group Savings Balance
                 </p>
-                <img src={openwhite.src} className=" w-5" alt="" />
+                <img
+                  src={openwhite.src}
+                  className="w-5 cursor-pointer"
+                  alt="Toggle group savings balance visibility"
+                  onClick={() => toggleVisibility("groupSavings")}
+                />
               </div>
-              <h2 className=" text-[32px] font-Manrope font-bold text-white mt-1">
-                $ 0.00
-              </h2>
+              {loading ? (
+                <Skeleton
+                  width={72}
+                  height={32}
+                  containerClassName=" mt-1 opacity-50"
+                />
+              ) : (
+                <h2 className="text-[32px] font-Manrope font-bold text-white mt-1">
+                  {visibility.groupSavings
+                    ? `$${userStats?.group_savings_balance ?? "0.00"}`
+                    : "****"}
+                </h2>
+              )}
             </div>
             {isDashboard && (
               <button
@@ -119,11 +165,26 @@ export default function SavingPlanTab({ isDashboard }) {
                     <p className=" text-body14Medium md:text-body16Medium font-Manrope text-[#FFFFFF]">
                       Wallet Balance
                     </p>
-                    <img src={openwhite.src} className=" w-5" alt="" />
+                    <img
+                      src={openwhite.src}
+                      className="w-5 cursor-pointer"
+                      alt="Toggle wallet balance visibility"
+                      onClick={() => toggleVisibility("wallet")}
+                    />
                   </div>
-                  <h2 className=" text-2xl md:text-[32px] font-Manrope font-bold text-white mt-1">
-                    $ 0.00
-                  </h2>
+                  {loading ? (
+                    <Skeleton
+                      width={72}
+                      height={28}
+                      containerClassName=" mt-1 opacity-50"
+                    />
+                  ) : (
+                    <h2 className="text-[32px] font-Manrope font-bold text-white mt-1">
+                      {visibility.wallet
+                        ? `$${userStats?.wallet_balance ?? "0.00"}`
+                        : "****"}
+                    </h2>
+                  )}
                 </div>
                 {isDashboard && (
                   <button
@@ -153,11 +214,26 @@ export default function SavingPlanTab({ isDashboard }) {
                     <p className=" text-body14Medium md:text-body16Medium font-Manrope text-[#FFFFFF]">
                       Group Savings Balance
                     </p>
-                    <img src={openwhite.src} className=" w-5" alt="" />
+                    <img
+                      src={openwhite.src}
+                      className="w-5 cursor-pointer"
+                      alt="Toggle group savings balance visibility"
+                      onClick={() => toggleVisibility("groupSavings")}
+                    />
                   </div>
-                  <h2 className=" text-2xl md:text-[32px] font-Manrope font-bold text-white mt-1">
-                    $ 0.00
-                  </h2>
+                  {loading ? (
+                    <Skeleton
+                      width={72}
+                      height={28}
+                      containerClassName=" mt-1 opacity-50"
+                    />
+                  ) : (
+                    <h2 className="text-[32px] font-Manrope font-bold text-white mt-1">
+                      {visibility.groupSavings
+                        ? `$${userStats?.group_savings_balance ?? "0.00"}`
+                        : "****"}
+                    </h2>
+                  )}
                 </div>
                 {isDashboard && (
                   <button

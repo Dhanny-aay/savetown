@@ -54,11 +54,14 @@ const api = async (method, uri, body = null) => {
       }
       // Handle other status codes
       if (response.status === 403) {
-        localStorage.removeItem("savetown_token");
-        window.location = "/sign-in";
+        // localStorage.removeItem("savetown_token");
+        // window.location = "/sign-in";
+        SnackbarUtils.error(
+          res?.data?.error ? res.data.error : "Something went wrong"
+        );
       } else if (response.status === 409) {
         SnackbarUtils.error(
-          res?.data?.message ? res.data.message : "Something went wrong"
+          res?.data?.error ? res.data.error : "Something went wrong"
         );
         throw new Error(
           res?.data?.message ? res.data.message : "Something went wrong"
@@ -69,8 +72,10 @@ const api = async (method, uri, body = null) => {
         );
         throw new Error(res?.message ? res.message : "Something went wrong");
       } else {
-        SnackbarUtils.error(res?.message ? res.message : response.statusText);
-        throw new Error(res?.message ? res.message : response.statusText);
+        SnackbarUtils.error(
+          res?.data.error ? res.data.error : response.statusText
+        );
+        throw new Error(res?.data.error ? res.data.error : response.statusText);
       }
     }
   } catch (err) {

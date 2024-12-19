@@ -1,9 +1,19 @@
+"use client";
 import bgImg from "./assets/bgimage.svg";
 import ArrowRight from "./assets/ArrowRight.svg";
 import Link from "next/link";
 import PasswordCreate from "../utils/passwordCreate";
+import { useState } from "react";
 
 export default function Page() {
+  const savedEmail = localStorage.getItem("savetown_reset_email");
+  const [password, setPassword] = useState("");
+
+  const handlePasswordValid = (password) => {
+    console.log("Valid password submitted:", password);
+    setPassword(password);
+  };
+
   return (
     <div className="  w-full h-svh flex justify-center items-center bg-[#f1f1f1] text-[#000]">
       <div className="w-full max-w-[1280px] lg:max-h-[650px] bg-[rgb(255,255,255)] h-full flex rounded-[15px] flex-row justify-center lg:justify-between">
@@ -27,7 +37,7 @@ export default function Page() {
             </p>
 
             <div className=" mt-6">
-              <PasswordCreate />
+              <PasswordCreate onPasswordValid={handlePasswordValid} />
 
               <button className=" bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg">
                 Reset Password

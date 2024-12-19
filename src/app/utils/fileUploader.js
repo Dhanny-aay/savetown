@@ -1,11 +1,23 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import add from "./assets/image.svg";
 
-const FileUploader = ({ label, accept, maxSize, isImage, onFileSelect }) => {
+const FileUploader = ({
+  label,
+  accept,
+  maxSize,
+  isImage,
+  onFileSelect,
+  initialPreview,
+}) => {
   const [fileName, setFileName] = useState(null);
   const [fileSizeError, setFileSizeError] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState(initialPreview || null);
+
+  useEffect(() => {
+    // Set the initial preview when the component mounts or when `initialPreview` changes
+    setImagePreview(initialPreview);
+  }, [initialPreview]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -38,9 +50,9 @@ const FileUploader = ({ label, accept, maxSize, isImage, onFileSelect }) => {
     return accept
       .split(",")
       .map((type) => {
-        const extension = type.split("/")[1]; // Get part after "/"
+        const extension = type.split("/")[1];
         if (extension.includes("+")) {
-          return extension.split("+")[0]; // Handle cases like "epub+zip"
+          return extension.split("+")[0];
         }
         return extension;
       })
@@ -48,7 +60,7 @@ const FileUploader = ({ label, accept, maxSize, isImage, onFileSelect }) => {
   };
 
   return (
-    <label className="w-full flex flex-col mt-6 ">
+    <label className="w-full flex flex-col mt-6">
       {label}
       <div className="mt-2 w-full border border-[#E5E5E5] bg-[#FAFAFA] border-dashed rounded-[5px] flex items-center justify-center flex-col p-4">
         {isImage && imagePreview ? (
@@ -58,15 +70,13 @@ const FileUploader = ({ label, accept, maxSize, isImage, onFileSelect }) => {
             className="max-w-full max-h-48"
           />
         ) : (
-          <div className="  flex items-center justify-center">
+          <div className="flex items-center justify-center">
             <img src={add.src} alt="Upload" />
           </div>
         )}
 
         <p className="mt-3 text-sm font-normal font-Manrope text-[#525252]">
-          <span className=" text-[#ED1450] font-bold mr-1">
-            Click to upload
-          </span>{" "}
+          <span className="text-[#ED1450] font-bold mr-1">Click to upload</span>{" "}
           or drag and drop
         </p>
 

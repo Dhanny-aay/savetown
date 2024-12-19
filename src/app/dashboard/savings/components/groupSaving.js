@@ -9,11 +9,21 @@ import grp from "./assets/grp.svg";
 import depo from "./assets/depo.svg";
 import withdraw from "./assets/withdraw.svg";
 import pattern from "./assets/pattern.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GroupDrawer from "../../component/groupDrawer";
 import LearnModal from "../../component/learnModal";
 import InviteMore from "./inviteMore";
 import GroupMembers from "./groupMembers";
+import {
+  handleDeleteGroup,
+  handleGetUserGroups,
+} from "@/app/userControllers/groupController";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import GroupDepositDrawer from "../../component/groupDepositDrawer";
+import { useUserContext } from "../../UserContext";
+import GroupWithdraw from "../../component/groupWithdraw";
+import VerifyDrawer from "../../component/verifyDrawer";
 
 export default function GroupSaving() {
   const [isGroupDrawerVisible, setGroupDrawerVisible] = useState(false);
@@ -21,6 +31,35 @@ export default function GroupSaving() {
   const [isGroupCreated, setGroupCreated] = useState(false);
   const [isInviteDrawerVisible, setInviteDrawerVisible] = useState(false);
   const [isMemberDrawerVisible, setMemberDrawerVisible] = useState(false);
+  const [userGroups, setUserGroups] = useState([]);
+  const [loadingGroups, setLoadingGroups] = useState(true);
+  const [trigger, setTrigger] = useState(false);
+  const [selectedID, setSelectedID] = useState(null);
+  const [members, setMembers] = useState(null);
+  const [isGroupDepositDrawerVisible, setGroupDepositDrawerVisible] =
+    useState(false);
+  const [isGroupWithdrawDrawerVisible, setGroupWithdrawDrawerVisible] =
+    useState(false);
+  const [isVerifyDrawerVisible, setVerifyDrawerVisible] = useState(false);
+
+  const { userProfile, loadingProfile, userStats, loading } = useUserContext();
+
+  const [visibility, setVisibility] = useState({
+    wallet: false,
+    groupSavings: false,
+  });
+
+  // Generic function to toggle visibility for each balance type
+  const toggleVisibility = (balanceType) => {
+    setVisibility((prev) => ({
+      ...prev,
+      [balanceType]: !prev[balanceType],
+    }));
+  };
+
+  const triggerFetch = () => {
+    setTrigger(!trigger); // Toggle trigger to true or false
+  };
 
   // learn modal
   const showLearnModal = () => setLearnVisible(true);
@@ -38,6 +77,45 @@ export default function GroupSaving() {
   const showMemberDrawer = () => setMemberDrawerVisible(true);
   const closeMemberDrawer = () => setMemberDrawerVisible(false);
 
+  //group deposit drawer
+  const showGroupDepositDrawer = () => setGroupDepositDrawerVisible(true);
+  const closeGroupDepositDrawer = () => setGroupDepositDrawerVisible(false);
+
+  //group withdraw drawer
+  const showGroupWithdrawDrawer = () => setGroupWithdrawDrawerVisible(true);
+  const closeGroupWithdrawDrawer = () => setGroupWithdrawDrawerVisible(false);
+
+  // verification drawer
+  const showVerifyDrawer = () => setVerifyDrawerVisible(true);
+  const closeVerifyDrawer = () => setVerifyDrawerVisible(false);
+
+  const fetchUserGroups = async () => {
+    setLoadingGroups(true);
+    try {
+      const data = await handleGetUserGroups();
+      if (data) {
+        if (data?.data?.length > 0) {
+          setUserGroups(data.data); // Set the full array to state
+          setGroupCreated(data.data.length > 0);
+          setSelectedID(data.data[0].id); // Set the first object's id
+          setMembers(data.data[0].members);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching bank details:", error);
+    } finally {
+      setLoadingGroups(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserGroups();
+  }, [trigger]);
+
+  const handleDelete = () => {
+    handleDeleteGroup(selectedID);
+  };
+
   return (
     <>
       <h2 className=" text-h55 md:text-h5 font-bold text-[#262626] font-Manrope">
@@ -53,10 +131,17 @@ export default function GroupSaving() {
               <p className=" text-body14Medium md:text-body16Medium font-Manrope text-[#FFFFFF]">
                 Group Savings Balance
               </p>
-              <img src={openwhite.src} className=" w-4 md:w-5" alt="" />
+              <img
+                src={openwhite.src}
+                className=" w-4 md:w-5 cursor-pointer"
+                alt="Toggle groupSavings balance visibility"
+                onClick={() => toggleVisibility("groupSavings")}
+              />
             </div>
             <h2 className=" text-[32px] font-Manrope font-bold text-white mt-[6px]">
-              $ 0.00
+              {visibility.groupSavings
+                ? `$${userStats?.group_savings_balance ?? "0.00"}`
+                : "****"}
             </h2>
           </div>
         </div>
@@ -64,13 +149,25 @@ export default function GroupSaving() {
         <div className="  md:absolute mt-8 md:mt-0 w-full md:w-auto justify-end items-center bottom-6 right-6 flex space-x-3 ">
           {isGroupCreated ? (
             <>
-              <button className=" bg-[#fff] rounded-[40px] py-3 px-6 w-1/2 md:w-auto flex items-center justify-center space-x-2">
+              <button
+                onClick={() => {
+                  if (userProfile?.id_status === "pending") {
+                    showVerifyDrawer();
+                  } else if (userProfile?.id_status === "verified") {
+                    showGroupDepositDrawer();
+                  }
+                }}
+                className=" bg-[#fff] rounded-[40px] py-3 px-6 w-1/2 md:w-auto flex items-center justify-center space-x-2"
+              >
                 <img src={depo.src} className=" w-4 md:w-5" alt="" />
                 <p className="text-body14Bold font-Manrope text-black">
                   Deposit
                 </p>
               </button>
-              <button className="border border-[#fff] rounded-[40px] py-3 px-6 w-1/2 md:w-auto flex items-center justify-center space-x-2">
+              <button
+                onClick={showGroupWithdrawDrawer}
+                className="border border-[#fff] rounded-[40px] py-3 px-6 w-1/2 md:w-auto flex items-center justify-center space-x-2"
+              >
                 <img
                   src={withdraw.src}
                   className=" rotate-90 w-4 md:w-5"
@@ -79,6 +176,9 @@ export default function GroupSaving() {
                 <p className=" text-body12SemiBold md:text-body14Bold font-Manrope text-white">
                   Withdraw
                 </p>
+              </button>
+              <button onClick={handleDelete} className="">
+                Delete
               </button>
             </>
           ) : (
@@ -95,73 +195,86 @@ export default function GroupSaving() {
         </div>
       </div>
 
-      <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-        {isGroupCreated && (
-          <>
-            <div
-              onClick={showMemberDrawer}
-              className=" border border-[#C2C4C6] rounded-[15px] h-[80px] cursor-pointer px-4 md:px-6 py-3 w-full flex items-center justify-between"
-            >
-              <div className=" flex items-center space-x-4">
-                <span className="  w-10 md:w-16 h-10 md:h-16 rounded-full flex items-center justify-center bg-[#EFE6FD]">
-                  <img src={groups.src} className=" w-5 md:w-auto " alt="" />
-                </span>
-                <div className="">
-                  <h6 className=" text-body14Bold font-Manrope text-[#262626]">
-                    Number of group members
-                  </h6>
-                  <p className=" font-Manrope text-body12Regular text-[#595A5C] mt-2 leading-none">
-                    0
-                  </p>
-                </div>
-              </div>
-              <img src={forward.src} className=" h-3 md:h-auto" alt="" />
-            </div>
-            <div
-              onClick={showInviteDrawer}
-              className=" border border-[#C2C4C6] rounded-[15px] h-[80px] cursor-pointer px-4 md:px-6 py-3 w-full flex items-center justify-between"
-            >
-              <div className=" flex items-center space-x-4">
-                <span className="  w-10 md:w-16 h-10 md:h-16 rounded-full flex items-center justify-center bg-[#EAF6EC]">
-                  <img
-                    src={tabler_send.src}
-                    className="w-5 md:w-auto "
-                    alt=""
-                  />
-                </span>
-                <div className="max-w-[70%] md:max-w-max">
-                  <h6 className=" text-body14Bold font-Manrope text-[#262626]">
-                    Invite more friends
-                  </h6>
-                  <p className=" font-Manrope text-body12Regular  text-[#595A5C] mt-2 leading-none">
-                    Send your friends an invitation to join savings
-                  </p>
-                </div>
-              </div>
-              <img src={forward.src} className=" h-3 md:h-auto" alt="" />
-            </div>
-          </>
-        )}
-        <div
-          onClick={showLearnModal}
-          className=" border border-[#C2C4C6] rounded-[15px] h-[80px] cursor-pointer px-4 md:px-6 py-3 w-full flex items-center justify-between"
-        >
-          <div className=" flex items-center space-x-4">
-            <span className=" w-10 md:w-16 h-10 md:h-16 rounded-full flex items-center justify-center bg-[#E6F2FF]">
-              <img src={infop.src} className=" w-5 md:w-auto ml-1" alt="" />
-            </span>
-            <div className="">
-              <h6 className=" text-body14Bold font-Manrope text-[#262626]">
-                About Group savings plan
-              </h6>
-              <p className=" font-Manrope text-body12Regular text-[#595A5C] mt-2 leading-none">
-                Learn more about the plan
-              </p>
+      {loadingGroups ? (
+        // Skeleton loader while loading is true
+        <div className="w-full border border-[#EAEBF0] p-6 rounded-[15px] mt-8">
+          <div className="flex items-center space-x-3">
+            <Skeleton circle width={48} height={48} />
+            <div className="w-full">
+              <Skeleton width="60%" height={20} />
+              <Skeleton width="40%" height={20} className="mt-2" />
             </div>
           </div>
-          <img src={forward.src} className=" h-3 md:h-auto" alt="" />
         </div>
-      </div>
+      ) : (
+        <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          {isGroupCreated && (
+            <>
+              <div
+                onClick={showMemberDrawer}
+                className=" border border-[#C2C4C6] rounded-[15px] h-[80px] cursor-pointer px-4 md:px-6 py-3 w-full flex items-center justify-between"
+              >
+                <div className=" flex items-center space-x-4">
+                  <span className="  w-10 md:w-16 h-10 md:h-16 rounded-full flex items-center justify-center bg-[#EFE6FD]">
+                    <img src={groups.src} className=" w-5 md:w-auto " alt="" />
+                  </span>
+                  <div className="">
+                    <h6 className=" text-body14Bold font-Manrope text-[#262626]">
+                      Number of group members
+                    </h6>
+                    <p className="font-Manrope text-body12Regular text-[#595A5C] mt-2 leading-none">
+                      {userGroups[0]?.members?.length || 0}
+                    </p>
+                  </div>
+                </div>
+                <img src={forward.src} className=" h-3 md:h-auto" alt="" />
+              </div>
+              <div
+                onClick={showInviteDrawer}
+                className=" border border-[#C2C4C6] rounded-[15px] h-[80px] cursor-pointer px-4 md:px-6 py-3 w-full flex items-center justify-between"
+              >
+                <div className=" flex items-center space-x-4">
+                  <span className="  w-10 md:w-16 h-10 md:h-16 rounded-full flex items-center justify-center bg-[#EAF6EC]">
+                    <img
+                      src={tabler_send.src}
+                      className="w-5 md:w-auto "
+                      alt=""
+                    />
+                  </span>
+                  <div className="max-w-[70%] md:max-w-max">
+                    <h6 className=" text-body14Bold font-Manrope text-[#262626]">
+                      Invite more friends
+                    </h6>
+                    <p className=" font-Manrope text-body12Regular  text-[#595A5C] mt-2 leading-none">
+                      Send your friends an invitation to join savings
+                    </p>
+                  </div>
+                </div>
+                <img src={forward.src} className=" h-3 md:h-auto" alt="" />
+              </div>
+            </>
+          )}
+          <div
+            onClick={showLearnModal}
+            className=" border border-[#C2C4C6] rounded-[15px] h-[80px] cursor-pointer px-4 md:px-6 py-3 w-full flex items-center justify-between"
+          >
+            <div className=" flex items-center space-x-4">
+              <span className=" w-10 md:w-16 h-10 md:h-16 rounded-full flex items-center justify-center bg-[#E6F2FF]">
+                <img src={infop.src} className=" w-5 md:w-auto ml-1" alt="" />
+              </span>
+              <div className="">
+                <h6 className=" text-body14Bold font-Manrope text-[#262626]">
+                  About Group savings plan
+                </h6>
+                <p className=" font-Manrope text-body12Regular text-[#595A5C] mt-2 leading-none">
+                  Learn more about the plan
+                </p>
+              </div>
+            </div>
+            <img src={forward.src} className=" h-3 md:h-auto" alt="" />
+          </div>
+        </div>
+      )}
 
       <div className=" w-full mt-8 flex flex-col items-center justify-center">
         <img src={receipt.src} className=" w-[45px]  md:w-auto" alt="" />
@@ -178,20 +291,45 @@ export default function GroupSaving() {
       <GroupDrawer
         isVisible={isGroupDrawerVisible}
         onClose={closeGroupDrawer}
+        triggerFetch={triggerFetch}
       />
       {/* invite */}
       <InviteMore
         isVisible={isInviteDrawerVisible}
         onClose={closeInviteDrawer}
+        selectedID={selectedID}
+        triggerFetch={triggerFetch}
       />
       {/* member */}
       <GroupMembers
         isVisible={isMemberDrawerVisible}
         onClose={closeMemberDrawer}
+        members={members}
+        loading={loadingGroups}
       />
 
       {/* learn modal */}
       <LearnModal isVisible={isLearnVisible} onClose={closeLearnModal} />
+
+      {/*group deposit */}
+      <GroupDepositDrawer
+        isVisible={isGroupDepositDrawerVisible}
+        onClose={closeGroupDepositDrawer}
+        selectedID={selectedID}
+      />
+
+      {/*group withdraw */}
+      <GroupWithdraw
+        isVisible={isGroupWithdrawDrawerVisible}
+        onClose={closeGroupWithdrawDrawer}
+        selectedID={selectedID}
+      />
+
+      {/* verify  */}
+      <VerifyDrawer
+        isVisible={isVerifyDrawerVisible}
+        onClose={closeVerifyDrawer}
+      />
     </>
   );
 }

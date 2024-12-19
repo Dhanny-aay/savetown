@@ -8,13 +8,30 @@ import receipt from "./assets/receipt.svg";
 import pattern from "./assets/pattern.svg";
 import { useState } from "react";
 import LearnModal from "../../component/learnModal";
-import DepositDrawer from "../../component/depositDrawer";
 import WithdrawDrawer from "../../component/withdrawDrawer";
+import WalletDepositDrawer from "../../component/walletDepositDrawer";
+import { useUserContext } from "../../UserContext";
+import VerifyDrawer from "../../component/verifyDrawer";
 
 export default function SaveWallet() {
   const [isLearnVisible, setLearnVisible] = useState(false);
   const [isWithdrawDrawerVisible, setWithdrawDrawerVisible] = useState(false);
   const [isDepositDrawerVisible, setDepositDrawerVisible] = useState(false);
+  const [isVerifyDrawerVisible, setVerifyDrawerVisible] = useState(false);
+
+  const { userProfile, loadingProfile, userStats, loading } = useUserContext();
+  const [visibility, setVisibility] = useState({
+    wallet: false,
+    groupSavings: false,
+  });
+
+  // Generic function to toggle visibility for each balance type
+  const toggleVisibility = (balanceType) => {
+    setVisibility((prev) => ({
+      ...prev,
+      [balanceType]: !prev[balanceType],
+    }));
+  };
 
   // withdraw drawer
   const showWithdrawDrawer = () => setWithdrawDrawerVisible(true);
@@ -27,6 +44,10 @@ export default function SaveWallet() {
   // learn modal
   const showLearnModal = () => setLearnVisible(true);
   const closeLearnModal = () => setLearnVisible(false);
+
+  // verification drawer
+  const showVerifyDrawer = () => setVerifyDrawerVisible(true);
+  const closeVerifyDrawer = () => setVerifyDrawerVisible(false);
 
   const transactions = [
     {
@@ -86,10 +107,17 @@ export default function SaveWallet() {
               <p className=" text-body14Medium md:text-body16Medium font-Manrope text-[#FFFFFF]">
                 Savetown Wallet Balance
               </p>
-              <img src={openwhite.src} className=" w-4 md:w-5" alt="" />
+              <img
+                src={openwhite.src}
+                className=" w-4 md:w-5 cursor-pointer"
+                alt="Toggle wallet balance visibility"
+                onClick={() => toggleVisibility("wallet")}
+              />
             </div>
             <h2 className=" text-2xl md:text-[32px] font-Manrope font-bold text-white mt-[6px]">
-              $ 0.00
+              {visibility.wallet
+                ? `$${userStats?.wallet_balance ?? "0.00"}`
+                : "****"}
             </h2>
           </div>
           {/* <button
@@ -105,7 +133,13 @@ export default function SaveWallet() {
 
         <div className=" md:absolute mt-8 md:mt-0 w-full md:w-auto justify-center items-center bottom-6 right-6 flex space-x-3">
           <button
-            onClick={showDepositDrawer}
+            onClick={() => {
+              if (userProfile?.id_status === "pending") {
+                showVerifyDrawer();
+              } else if (userProfile?.id_status === "verified") {
+                showDepositDrawer();
+              }
+            }}
             className=" bg-[#fff] rounded-[40px] py-3 px-6 w-1/2 md:w-auto flex items-center justify-center space-x-2"
           >
             <img src={depo.src} className=" w-4 md:w-5" alt="" />
@@ -214,7 +248,7 @@ export default function SaveWallet() {
       <LearnModal isVisible={isLearnVisible} onClose={closeLearnModal} />
 
       {/* deposit */}
-      <DepositDrawer
+      <WalletDepositDrawer
         isVisible={isDepositDrawerVisible}
         onClose={closeDepositDrawer}
       />
@@ -222,6 +256,12 @@ export default function SaveWallet() {
       <WithdrawDrawer
         isVisible={isWithdrawDrawerVisible}
         onClose={closeWithdrawDrawer}
+      />
+
+      {/* verify */}
+      <VerifyDrawer
+        isVisible={isVerifyDrawerVisible}
+        onClose={closeVerifyDrawer}
       />
     </>
   );

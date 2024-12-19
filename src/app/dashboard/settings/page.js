@@ -9,9 +9,10 @@ import Lock from "./assets/Lock.svg";
 import User from "./assets/User.svg";
 import ArrowSquareOut from "./assets/ArrowSquareOut.svg";
 import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
+import Logout from "./components/logOut";
 
 export default function Page() {
-  const [activeButton, setActiveButton] = useState("Personal");
+  const [activeButton, setActiveButton] = useState(null); // Initially null for mobile
   const [isMobile, setIsMobile] = useState(false);
 
   const buttons = [
@@ -42,15 +43,16 @@ export default function Page() {
     {
       label: "Log out",
       value: "logout",
-      component: null, // Replace with actual component or logout logic
+      component: <Logout />,
       icon: ArrowSquareOut,
     },
   ];
-
   // Check screen size and update isMobile state
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 768); // Tailwind's md breakpoint
+      const mobileView = window.innerWidth < 768; // Tailwind's md breakpoint
+      setIsMobile(mobileView);
+      setActiveButton(mobileView ? null : "Personal"); // Set activeButton to null for mobile
     };
 
     // Check initial screen size

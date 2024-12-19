@@ -1,6 +1,11 @@
+import { useUserContext } from "../UserContext";
 import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function ReferralDrawer({ isVisible, onClose }) {
+  const { userStats, loading } = useUserContext();
+
   return (
     <div
       className={`fixed top-0 right-0 z-[999] h-screen overflow-y-auto transition-transform transform ${
@@ -9,7 +14,7 @@ export default function ReferralDrawer({ isVisible, onClose }) {
       onClick={onClose}
     >
       <div
-        className="bg-white w-full md:w-[70%] lg:w-[800px] h-full py-8 px-4 md:px-6 plansbg border border-[#D5D7DA] ml-auto"
+        className="bg-white w-full md:w-[70%] lg:w-[600px] h-full py-8 px-4 md:px-6 plansbg border border-[#D5D7DA] ml-auto"
         onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside
       >
         <img
@@ -28,13 +33,25 @@ export default function ReferralDrawer({ isVisible, onClose }) {
             <h5 className=" text-body16SemiBold font-Manrope text-[#595A5C]">
               Referral bonus
             </h5>
-            <span className=" mt-2 text-[#595A5C] text-body14Regular">0</span>
+            {loading ? (
+              <Skeleton width={24} height={24} containerClassName=" mt-2" />
+            ) : (
+              <span className=" mt-2 text-[#595A5C] text-body14Regular">
+                {`$${userStats?.referral_balance ?? 0}.00`}
+              </span>
+            )}
           </div>
           <div className=" mt-12">
             <h5 className=" text-body16SemiBold font-Manrope text-[#595A5C]">
               Number of referrals
             </h5>
-            <span className=" mt-2 text-[#595A5C] text-body14Regular">0</span>
+            {loading ? (
+              <Skeleton width={24} height={24} containerClassName=" mt-2" />
+            ) : (
+              <span className=" mt-2 text-[#595A5C] text-body14Regular">
+                {`${userStats?.referral_count ?? 0}`}
+              </span>
+            )}
           </div>
         </div>
       </div>
