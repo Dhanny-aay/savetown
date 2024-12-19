@@ -19,7 +19,9 @@ import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [currentStep, setCurrentStep] = useState(0); // Track the active step
-  const savedEmail = localStorage.getItem("savetown_signup_email");
+
+const savedEmail = typeof window !== "undefined" ? localStorage.getItem("("savetown_signup_email") : null;
+
   const [loadingSend, setLoadingSend] = useState(false);
   const [loadingRegister, setLoadingRegister] = useState(false);
   const [loadingVerify, setLoadingVerify] = useState(false);
