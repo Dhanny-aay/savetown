@@ -5,7 +5,7 @@ import ArrowRight from "./assets/ArrowRight.svg";
 import Link from "next/link";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { handleSendResetPasswordOTP } from "../userControllers/authController";
 import load from "./assets/load.gif";
 
