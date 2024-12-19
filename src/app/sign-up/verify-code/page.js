@@ -14,7 +14,9 @@ import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [code, setCode] = useState(Array(6).fill("")); // Initialize with six empty strings
-  const savedEmail = localStorage.getItem("savetown_signup_email");
+
+const savedEmail = typeof window !== "undefined" ? localStorage.getItem("savetown_signup_email") : null;
+
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [loadingVerify, setLoadingVerify] = useState(false);
