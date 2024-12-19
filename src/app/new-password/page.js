@@ -6,7 +6,7 @@ import PasswordCreate from "../utils/passwordCreate";
 import { useState } from "react";
 
 export default function Page() {
-  const savedEmail = localStorage.getItem("savetown_reset_email");
+  const savedEmail = typeof window !== "undefined" ? localStorage.getItem("savetown_reset_email") : null;;
   const [password, setPassword] = useState("");
 
   const handlePasswordValid = (password) => {
