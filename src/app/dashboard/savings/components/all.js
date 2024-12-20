@@ -7,15 +7,7 @@ import receipt from "./assets/receipt.svg";
 
 export default function All() {
   const isDashboard = false;
-  const { userStats, loading } = useUserContext();
-
-  // balance visibility
-  const [isVisible, setIsVisible] = useState(false);
-
-  // Toggle visibility function
-  const toggleVisibility = () => {
-    setIsVisible((prev) => !prev);
-  };
+  const { userStats, loading, toggleVisibility, isVisible } = useUserContext();
 
   const transactions = [
     {
@@ -61,6 +53,11 @@ export default function All() {
     },
   ];
 
+  const formatWithCommas = (value) => {
+    if (value === 0 || value == null) return "0.00"; // Handle 0, null, and undefined
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   return (
     <>
       <div className=" shadowDB w-full bg-white rounded-[32px] p-8 flex items-center justify-between">
@@ -78,7 +75,9 @@ export default function All() {
             />
           </div>
           <h2 className=" text-h3 md:text-h1 font-Manrope font-bold mt-1 text-[#666666]">
-            {isVisible ? `$${userStats?.total_balance ?? 0}` : "****"}
+            {isVisible
+              ? `$${formatWithCommas(userStats?.total_balance) ?? 0}`
+              : "****"}
           </h2>
         </div>
       </div>

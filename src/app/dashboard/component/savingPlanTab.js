@@ -21,19 +21,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 export default function SavingPlanTab({ isDashboard }) {
   const [isLearnVisible, setLearnVisible] = useState(false);
   const [isGroupDrawerVisible, setGroupDrawerVisible] = useState(false);
-  const { userStats, loading } = useUserContext();
-  const [visibility, setVisibility] = useState({
-    wallet: false,
-    groupSavings: false,
-  });
-
-  // Generic function to toggle visibility for each balance type
-  const toggleVisibility = (balanceType) => {
-    setVisibility((prev) => ({
-      ...prev,
-      [balanceType]: !prev[balanceType],
-    }));
-  };
+  const { userStats, loading, isVisible, toggleVisibility } = useUserContext();
 
   // learn modal
   const showLearnModal = () => setLearnVisible(true);
@@ -42,6 +30,11 @@ export default function SavingPlanTab({ isDashboard }) {
   // group drawer
   const showGroupDrawer = () => setGroupDrawerVisible(true);
   const closeGroupDrawer = () => setGroupDrawerVisible(false);
+
+  const formatWithCommas = (value) => {
+    if (value === 0 || value == null) return "0.00"; // Handle 0, null, and undefined
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
 
   return (
     <>
@@ -58,7 +51,7 @@ export default function SavingPlanTab({ isDashboard }) {
                   src={openwhite.src}
                   className="w-5 cursor-pointer"
                   alt="Toggle wallet balance visibility"
-                  onClick={() => toggleVisibility("wallet")}
+                  onClick={toggleVisibility}
                 />
               </div>
               {loading ? (
@@ -69,8 +62,10 @@ export default function SavingPlanTab({ isDashboard }) {
                 />
               ) : (
                 <h2 className="text-[32px] font-Manrope font-bold text-white mt-1">
-                  {visibility.wallet
-                    ? `$${userStats?.wallet_balance ?? "0.00"}`
+                  {isVisible
+                    ? `$${
+                        formatWithCommas(userStats?.wallet_balance) ?? "0.00"
+                      }`
                     : "****"}
                 </h2>
               )}
@@ -101,7 +96,7 @@ export default function SavingPlanTab({ isDashboard }) {
                   src={openwhite.src}
                   className="w-5 cursor-pointer"
                   alt="Toggle group savings balance visibility"
-                  onClick={() => toggleVisibility("groupSavings")}
+                  onClick={toggleVisibility}
                 />
               </div>
               {loading ? (
@@ -112,8 +107,11 @@ export default function SavingPlanTab({ isDashboard }) {
                 />
               ) : (
                 <h2 className="text-[32px] font-Manrope font-bold text-white mt-1">
-                  {visibility.groupSavings
-                    ? `$${userStats?.group_savings_balance ?? "0.00"}`
+                  {isVisible
+                    ? `$${
+                        formatWithCommas(userStats?.group_savings_balance) ??
+                        "0.00"
+                      }`
                     : "****"}
                 </h2>
               )}
@@ -169,7 +167,7 @@ export default function SavingPlanTab({ isDashboard }) {
                       src={openwhite.src}
                       className="w-5 cursor-pointer"
                       alt="Toggle wallet balance visibility"
-                      onClick={() => toggleVisibility("wallet")}
+                      onClick={toggleVisibility}
                     />
                   </div>
                   {loading ? (
@@ -180,8 +178,11 @@ export default function SavingPlanTab({ isDashboard }) {
                     />
                   ) : (
                     <h2 className="text-[32px] font-Manrope font-bold text-white mt-1">
-                      {visibility.wallet
-                        ? `$${userStats?.wallet_balance ?? "0.00"}`
+                      {isVisible
+                        ? `$${
+                            formatWithCommas(userStats?.wallet_balance) ??
+                            "0.00"
+                          }`
                         : "****"}
                     </h2>
                   )}
@@ -218,7 +219,7 @@ export default function SavingPlanTab({ isDashboard }) {
                       src={openwhite.src}
                       className="w-5 cursor-pointer"
                       alt="Toggle group savings balance visibility"
-                      onClick={() => toggleVisibility("groupSavings")}
+                      onClick={toggleVisibility}
                     />
                   </div>
                   {loading ? (
@@ -229,8 +230,12 @@ export default function SavingPlanTab({ isDashboard }) {
                     />
                   ) : (
                     <h2 className="text-[32px] font-Manrope font-bold text-white mt-1">
-                      {visibility.groupSavings
-                        ? `$${userStats?.group_savings_balance ?? "0.00"}`
+                      {isVisible
+                        ? `$${
+                            formatWithCommas(
+                              userStats?.group_savings_balance
+                            ) ?? "0.00"
+                          }`
                         : "****"}
                     </h2>
                   )}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
 import copy from "./assets/copy.svg";
 import load from "./assets/load.gif";
@@ -23,6 +23,20 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
   const [selectedID, setSelectedID] = useState("");
   const { triggerFetchDashboard } = useUserContext();
 
+  const resetState = () => {
+    setAmount(null);
+    setLoading(false);
+    setLoadingInitiate(false);
+    setLoadingPaid(false);
+    setErrors({});
+    setConversion(null);
+    setDetails([]);
+    setSavingDetails([]);
+    setInitiateSuccess(false);
+    setIsCopied(false);
+    setSelectedID("");
+  };
+
   const handleAmountChange = (e) => {
     const rawValue = e.target.value.replace(/[^0-9]/g, "");
     const intValue = rawValue ? parseInt(rawValue, 10) : "";
@@ -30,7 +44,8 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
   };
 
   const formatWithCommas = (value) => {
-    return value ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "";
+    if (value === 0 || value == null) return "0.00"; // Handle 0, null, and undefined
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   const validateFields = () => {
@@ -57,6 +72,16 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
       handleGetExchangAmount(userData, onSuccess, onError);
     }
   };
+
+  const debounce = (func, delay) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  const debouncedHandleSend = useCallback(debounce(handleSend, 500), [amount]);
 
   const onSuccessInitiate = (response) => {
     setLoadingInitiate(false);
@@ -87,6 +112,7 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
         setSavingDetails(data.data);
         triggerFetchDashboard();
         onClose();
+        resetState(); // Reset all state values
       }
     } catch (error) {
       console.error("Error fetching personal saving details:", error);
@@ -205,12 +231,13 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
               Deposit Funds
             </h3>
             <label className="mt-9">How much will you like to deposit?</label>
-            <div className="mt-2 flex flex-col">
+            <div className="mt-2 flex flex-col items-start">
               <input
                 placeholder="₦0.00"
                 value={formatWithCommas(amount)}
                 type="text"
                 onChange={handleAmountChange}
+                onKeyUp={debouncedHandleSend} // Use the debounced version
                 className={`w-full border rounded-[32px] mt-1 text-body14Regular ${
                   errors.amount ? "border-[#DC3545]" : "border-[#D5D7DA]"
                 } font-Manrope px-6 py-3`}
@@ -221,6 +248,7 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
                 </span>
               )}
             </div>
+
             {conversion && (
               <>
                 <p className="text-[#8133F1] mt-3 text-body12Regular font-Manrope">
@@ -233,19 +261,7 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
                 </p>
               </>
             )}
-            <button
-              onClick={handleSend}
-              disabled={loading || conversion}
-              className={`bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center justify-center ${
-                conversion ? "hidden" : ""
-              }`}
-            >
-              {loading ? (
-                <img src={load.src} className="w-5" alt="" />
-              ) : (
-                "Proceed"
-              )}
-            </button>
+
             {conversion && (
               <button
                 onClick={handleInitiate}

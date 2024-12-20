@@ -28,7 +28,14 @@ import WalletDepositDrawer from "./component/walletDepositDrawer";
 import GroupDepositDrawer from "./component/groupDepositDrawer";
 
 export default function Page() {
-  const { userProfile, loadingProfile, userStats, loading } = useUserContext();
+  const {
+    userProfile,
+    loadingProfile,
+    userStats,
+    loading,
+    toggleVisibility,
+    isVisible,
+  } = useUserContext();
   const [isDinnerDrawerVisible, setDinnerDrawerVisible] = useState(false);
   const [isDinnerModalVisible, setDinnerModalVisible] = useState(false);
   const [isReferralDrawerVisible, setReferralDrawerVisible] = useState(false);
@@ -42,8 +49,11 @@ export default function Page() {
   const [isDepositModalVisible, setDepositModalVisible] = useState(false);
   const BASE_URL = process.env.NEXT_PUBLIC_BASEURL;
 
-  // balance visibility
-  const [isVisible, setIsVisible] = useState(false);
+  const formatWithCommas = (value) => {
+    if (value === 0 || value == null) return "0.00"; // Handle 0, null, and undefined
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   const [isCopied, setIsCopied] = useState(false);
 
   // Function to copy the referral link
@@ -60,11 +70,6 @@ export default function Page() {
     } catch (err) {
       console.error("Failed to copy referral link:", err);
     }
-  };
-
-  // Toggle visibility function
-  const toggleVisibility = () => {
-    setIsVisible((prev) => !prev);
   };
 
   // dinner drawer
@@ -140,7 +145,9 @@ export default function Page() {
             <Skeleton width={90} height={36} />
           ) : (
             <h2 className="text-h3 md:text-h1 text-[#666666] font-Manrope font-bold mt-1">
-              {isVisible ? `$${userStats?.total_balance ?? 0}` : "****"}
+              {isVisible
+                ? `$${formatWithCommas(userStats?.total_balance) ?? 0}`
+                : "****"}
             </h2>
           )}
         </div>

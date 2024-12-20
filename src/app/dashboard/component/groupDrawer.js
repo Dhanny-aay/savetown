@@ -46,7 +46,8 @@ export default function GroupDrawer({ isVisible, onClose, triggerFetch }) {
   };
 
   const formatWithCommas = (value) => {
-    return value ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "";
+    if (value === 0 || value == null) return "0.00"; // Handle 0, null, and undefined
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   const validateFields = () => {

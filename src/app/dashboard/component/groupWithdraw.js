@@ -12,6 +12,12 @@ export default function GroupWithdraw({ onClose, isVisible, selectedID }) {
   const [errors, setErrors] = useState({});
   const [showWithdrawForm, setShowWithdrawForm] = useState(false);
 
+  const resetStates = () => {
+    setAmount(""); // Reset the amount field
+    setErrors({}); // Clear any errors
+    setShowWithdrawForm(false);
+  };
+
   const validateFields = () => {
     const newErrors = {};
     const balance = userStats?.group_savings_balance;
@@ -30,6 +36,7 @@ export default function GroupWithdraw({ onClose, isVisible, selectedID }) {
     setLoadingTransfer(false);
     triggerFetchDashboard();
     onClose();
+    resetStates(); // Reset the states after a successful verify pay
   };
 
   const onErrorTransfer = () => {

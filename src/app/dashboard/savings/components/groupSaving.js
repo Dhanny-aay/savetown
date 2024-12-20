@@ -42,20 +42,14 @@ export default function GroupSaving() {
     useState(false);
   const [isVerifyDrawerVisible, setVerifyDrawerVisible] = useState(false);
 
-  const { userProfile, loadingProfile, userStats, loading } = useUserContext();
-
-  const [visibility, setVisibility] = useState({
-    wallet: false,
-    groupSavings: false,
-  });
-
-  // Generic function to toggle visibility for each balance type
-  const toggleVisibility = (balanceType) => {
-    setVisibility((prev) => ({
-      ...prev,
-      [balanceType]: !prev[balanceType],
-    }));
-  };
+  const {
+    userProfile,
+    loadingProfile,
+    userStats,
+    loading,
+    isVisible,
+    toggleVisibility,
+  } = useUserContext();
 
   const triggerFetch = () => {
     setTrigger(!trigger); // Toggle trigger to true or false
@@ -116,6 +110,11 @@ export default function GroupSaving() {
     handleDeleteGroup(selectedID);
   };
 
+  const formatWithCommas = (value) => {
+    if (value === 0 || value == null) return "0.00"; // Handle 0, null, and undefined
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   return (
     <>
       <h2 className=" text-h55 md:text-h5 font-bold text-[#262626] font-Manrope">
@@ -135,12 +134,14 @@ export default function GroupSaving() {
                 src={openwhite.src}
                 className=" w-4 md:w-5 cursor-pointer"
                 alt="Toggle groupSavings balance visibility"
-                onClick={() => toggleVisibility("groupSavings")}
+                onClick={toggleVisibility}
               />
             </div>
             <h2 className=" text-[32px] font-Manrope font-bold text-white mt-[6px]">
-              {visibility.groupSavings
-                ? `$${userStats?.group_savings_balance ?? "0.00"}`
+              {isVisible
+                ? `$${
+                    formatWithCommas(userStats?.group_savings_balance) ?? "0.00"
+                  }`
                 : "****"}
             </h2>
           </div>

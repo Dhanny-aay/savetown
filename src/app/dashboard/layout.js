@@ -17,6 +17,12 @@ export default function DashboardLayout({ children }) {
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [trigger, setTrigger] = useState(false);
   const [triggerProfile, setTriggerProfile] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Toggle visibility function
+  const toggleVisibility = () => {
+    setIsVisible((prev) => !prev);
+  };
 
   const triggerFetchDashboard = () => {
     setTrigger(!trigger); // Toggle trigger to true or false
@@ -75,8 +81,10 @@ export default function DashboardLayout({ children }) {
     loadingProfile,
     userStats,
     loading,
+    isVisible,
     triggerFetchDashboard,
     triggerFetchProfile,
+    toggleVisibility,
   };
 
   return (

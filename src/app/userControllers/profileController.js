@@ -43,3 +43,14 @@ export const handleUpdateProfile = async (userData, onSuccess, onError) => {
     }
   }
 };
+// Function to handle password Update
+export const handleUpdatePassword = async (userData, onSuccess, onError) => {
+  try {
+    const response = await api("POST", "/user/change-password", userData);
+    onSuccess(response);
+  } catch (error) {
+    if (onError) {
+      onError(error);
+    }
+  }
+};

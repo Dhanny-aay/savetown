@@ -19,19 +19,14 @@ export default function SaveWallet() {
   const [isDepositDrawerVisible, setDepositDrawerVisible] = useState(false);
   const [isVerifyDrawerVisible, setVerifyDrawerVisible] = useState(false);
 
-  const { userProfile, loadingProfile, userStats, loading } = useUserContext();
-  const [visibility, setVisibility] = useState({
-    wallet: false,
-    groupSavings: false,
-  });
-
-  // Generic function to toggle visibility for each balance type
-  const toggleVisibility = (balanceType) => {
-    setVisibility((prev) => ({
-      ...prev,
-      [balanceType]: !prev[balanceType],
-    }));
-  };
+  const {
+    userProfile,
+    loadingProfile,
+    userStats,
+    loading,
+    toggleVisibility,
+    isVisible,
+  } = useUserContext();
 
   // withdraw drawer
   const showWithdrawDrawer = () => setWithdrawDrawerVisible(true);
@@ -93,13 +88,18 @@ export default function SaveWallet() {
     },
   ];
 
+  const formatWithCommas = (value) => {
+    if (value === 0 || value == null) return "0.00"; // Handle 0, null, and undefined
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   return (
     <>
       <h2 className=" text-h5 font-bold text-[#262626] font-Manrope">
         Savetown Wallet
       </h2>
 
-      <div className="bg-[#9654F4] relative rounded-[24px] lg:h-[180px] p-6 mt-6 md:mt-8">
+      <div className="bg-[#9654F4] relative rounded-[24px] md:h-[180px] p-6 mt-6 md:mt-8">
         <img src={pattern.src} className=" absolute top-0 right-0" alt="" />
         <div className=" flex w-full justify-between items-start">
           <div>
@@ -111,12 +111,12 @@ export default function SaveWallet() {
                 src={openwhite.src}
                 className=" w-4 md:w-5 cursor-pointer"
                 alt="Toggle wallet balance visibility"
-                onClick={() => toggleVisibility("wallet")}
+                onClick={toggleVisibility}
               />
             </div>
             <h2 className=" text-2xl md:text-[32px] font-Manrope font-bold text-white mt-[6px]">
-              {visibility.wallet
-                ? `$${userStats?.wallet_balance ?? "0.00"}`
+              {isVisible
+                ? `$${formatWithCommas(userStats?.wallet_balance) ?? "0.00"}`
                 : "****"}
             </h2>
           </div>

@@ -30,6 +30,23 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
   const { userStats, triggerFetchDashboard } = useUserContext();
   const [amountToReceive, setAmountToReceive] = useState("");
 
+  const resetStates = () => {
+    setAmount(null);
+    setLoading(false);
+    setLoadingInitiate(false);
+    setLoadingPaid(false);
+    setLoadingTransfer(false);
+    setErrors({});
+    setConversion(null);
+    setDetails([]);
+    setSavingDetails([]);
+    setInitiateSuccess(false);
+    setIsCopied(false);
+    setSelectedIdentifier("");
+    setSelectedOption(null);
+    setAmountToReceive("");
+  };
+
   const handleAmountChange = (e) => {
     const rawValue = e.target.value.replace(/[^0-9]/g, "");
     const intValue = rawValue ? parseInt(rawValue, 10) : "";
@@ -37,7 +54,8 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
   };
 
   const formatWithCommas = (value) => {
-    return value ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "";
+    if (value === 0 || value == null) return "0.00"; // Handle 0, null, and undefined
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   const validateFields = () => {
@@ -92,6 +110,7 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
     setLoadingTransfer(false);
     triggerFetchDashboard();
     onClose();
+    resetStates(); // Reset the states after a successful verify pay
   };
 
   const onErrorTransfer = () => {
@@ -117,6 +136,7 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
         setSavingDetails(data.data);
         triggerFetchDashboard();
         onClose();
+        resetStates(); // Reset the states after a successful verify pay
       }
     } catch (error) {
       console.error("Error fetching personal saving details:", error);
