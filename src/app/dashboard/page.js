@@ -56,6 +56,17 @@ export default function Page() {
   };
 
   const [isCopied, setIsCopied] = useState(false);
+const [selectedID, setSelectedID] = useState(null);
+
+useEffect(() => {
+    // Check if userProfile and group_savings are defined before accessing them
+    if (userProfile?.group_savings?.length > 0) {
+      setSelectedID(userProfile.group_savings[0]);
+    }
+  }, [userProfile]);
+
+  
+
 
   // Function to copy the referral link
   const handleCopyReferral = async () => {
@@ -404,7 +415,7 @@ export default function Page() {
       <GroupDepositDrawer
         isVisible={isGroupDepositDrawerVisible}
         onClose={closeGroupDepositDrawer}
-        selectedID={userProfile.group_savings[0]?.id}
+        selectedID={selectedID}
       />
     </>
   );
