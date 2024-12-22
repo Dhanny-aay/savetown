@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from "react";
 import blog1 from "./assets/blog1.svg";
 import blog2 from "./assets/blog2.svg";
