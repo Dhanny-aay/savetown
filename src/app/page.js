@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Navbar from "./components/navbar";
 import Hero from "./components/hero";
@@ -12,8 +13,39 @@ import Download from "./components/download";
 import Banner from "./components/banner";
 import Footer from "./components/footer";
 import Calculator from "./components/calculator";
+import { useEffect, useState } from "react";
+import { handleGetItemsWithParam } from "./userControllers/blogController";
 
 export default function Home() {
+  const [headings, setHeadings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [pageTitle, setPageTitle] = useState("Message from Our CEO");
+  const [pageExcerpt, setPageExcerpt] = useState(
+    "Our vision and commitment to making homeownership accessible for all."
+  );
+
+  const fetchHeadings = async () => {
+    const params = {
+      type: "PageTitle",
+      page: "Home",
+    };
+    try {
+      const data = await handleGetItemsWithParam(params);
+      if (data) {
+        setHeadings(data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchHeadings();
+  }, []);
+
   return (
     <>
       <Navbar />

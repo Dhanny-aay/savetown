@@ -48,6 +48,7 @@ export default function GroupSaving() {
     userStats,
     loading,
     isVisible,
+
     toggleVisibility,
   } = useUserContext();
 
@@ -148,7 +149,7 @@ export default function GroupSaving() {
         </div>
 
         <div className="  md:absolute mt-8 md:mt-0 w-full md:w-auto justify-end items-center bottom-6 right-6 flex space-x-3 ">
-          {isGroupCreated ? (
+          {userProfile.group_savings?.length > 0 ? (
             <>
               <button
                 onClick={() => {
@@ -178,9 +179,9 @@ export default function GroupSaving() {
                   Withdraw
                 </p>
               </button>
-              <button onClick={handleDelete} className="">
+              {/* <button onClick={handleDelete} className="">
                 Delete
-              </button>
+              </button> */}
             </>
           ) : (
             <button

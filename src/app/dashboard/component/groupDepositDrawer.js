@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
 import copy from "./assets/copy.svg";
 import bank from "./assets/Bank.svg";
@@ -27,8 +27,10 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
   const [isCopied, setIsCopied] = useState(false);
   const [selectedIdentifier, setSelectedIdentifier] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
-  const { userStats, triggerFetchDashboard } = useUserContext();
+  const { userStats, triggerFetchDashboard, userProfile } = useUserContext();
   const [amountToReceive, setAmountToReceive] = useState("");
+
+  console.log(selectedID);
 
   const resetStates = () => {
     setAmount(null);
@@ -84,6 +86,16 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
     }
   };
 
+  const debounce = (func, delay) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  const debouncedHandleSend = useCallback(debounce(handleSend, 500), [amount]);
+
   const onSuccessInitiate = (response) => {
     setLoadingInitiate(false);
     setDetails(response.data);
@@ -101,7 +113,7 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
     const userData = {
       amount: conversion?.amountToCharge,
       group_saving_id: selectedID,
-      category: "group_saving",
+      category: "group_savings",
     };
     handleInitiateDeposit(userData, onSuccessInitiate, onErrorInitiate);
   };
@@ -169,7 +181,7 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
     setInitiateSuccess(false);
   };
 
-  console.log(amountToReceive);
+  // console.log(amountToReceive);
 
   return (
     <div
@@ -354,6 +366,7 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
                 value={formatWithCommas(amount)}
                 type="text"
                 onChange={handleAmountChange}
+                onKeyUp={debouncedHandleSend} // Use the debounced version
                 className={`w-full border rounded-[32px] mt-1 text-body14Regular ${
                   errors.amount ? "border-[#DC3545]" : "border-[#D5D7DA]"
                 } font-Manrope px-6 py-3`}
@@ -376,7 +389,7 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
                 </p>
               </>
             )}
-            <button
+            {/* <button
               onClick={handleSend}
               disabled={loading || conversion}
               className={`bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center justify-center ${
@@ -388,7 +401,7 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
               ) : (
                 "Proceed"
               )}
-            </button>
+            </button> */}
             {conversion && (
               <button
                 onClick={handleInitiate}

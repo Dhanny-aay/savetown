@@ -1,30 +1,57 @@
+"use client";
+import { useEffect, useState } from "react";
 import du from "./assets/du.svg";
 import fa from "./assets/fa.svg";
+import { handleGetItemsWithParam } from "../userControllers/blogController";
 
 export default function Partners() {
-  const partners = [
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchItems = async () => {
+    const params = { type: "Partners", page: "Home" };
+    try {
+      const data = await handleGetItemsWithParam(params);
+      if (data) {
+        setItems(data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  const fallbackPartners = [
     {
-      name: "Design Union",
-      logo: du,
-      about: "Real estate development & Advisory",
+      title: "Design Union",
+      image: du.src,
+      excerpt: "Real estate development & Advisory",
     },
-    { name: "Future Africa", logo: fa, about: "Technology partners" },
+    { title: "Future Africa", image: fa.src, excerpt: "Technology partners" },
   ];
+
+  const itemsToRender = loading ? fallbackPartners : items;
+
   return (
     <div className="w-full h-full py-12 md:py-16 flex flex-col justify-center items-start px-4 md:px-14">
       <h2 className=" text-center w-full">Our Partners</h2>
 
       <div className=" w-full flex flex-col gap-8 lg:gap-0 lg:flex-row items-center justify-between mt-16">
-        {partners.map((item, index) => (
+        {itemsToRender.map((item, index) => (
           <div key={index} className=" w-full lg:w-[48%]">
             <div className=" w-full h-[200px] bg-bgSecondary rounded-[15px] flex items-center justify-center">
-              <img src={item.logo.src} alt="" />
+              <img src={item.image} className=" w-[27%]" alt={item.title} />
             </div>
             <h2 className=" mt-3 text-xl md:text-2xl font-normal">
-              {item.name}
+              {item.title}
             </h2>
             <p className=" text-[#000000B2] mt-3 font-normal text-base font-Manrope">
-              {item.about}
+              {item.excerpt}
             </p>
           </div>
         ))}

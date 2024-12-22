@@ -1,5 +1,8 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import XClose from "./assets/XClose.svg";
+import { useUserContext } from "../UserContext";
+import GroupDrawer from "./groupDrawer";
 
 export default function DepositModal({
   isVisible,
@@ -7,6 +10,13 @@ export default function DepositModal({
   showWalletDepositDrawer,
   showGroupDepositDrawer,
 }) {
+  const { userProfile, loadingProfile } = useUserContext();
+  const [isGroupDrawerVisible, setGroupDrawerVisible] = useState(false);
+
+  // group drawer
+  const showGroupDrawer = () => setGroupDrawerVisible(true);
+  const closeGroupDrawer = () => setGroupDrawerVisible(false);
+
   const handleWalletDepo = () => {
     onClose(); // Close the modal
     showWalletDepositDrawer(); // Then call the function to show the dinner drawer
@@ -23,7 +33,7 @@ export default function DepositModal({
           onClick={onClose}
         >
           <div
-            className=" w-full md:w-[600px] lg:h-[270px] bg-white plansbg rounded-2xl border border-[#DAE0E6] flex items-start justify-center flex-col p-6 relative"
+            className=" w-full md:w-[600px] bg-white plansbg rounded-2xl border border-[#DAE0E6] flex items-start justify-center flex-col p-6 relative"
             onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside
           >
             <img
@@ -45,16 +55,31 @@ export default function DepositModal({
               >
                 Savetown Wallet
               </button>
-              <button
-                onClick={handleGroupDepo}
-                className="w-full py-5 px-8 font-Manrope text-base font-medium text-[#595a5c] border border-gray-300 rounded-full text-left hover:bg-gray-100 transition"
-              >
-                Group Savings
-              </button>
+              {userProfile.group_savings?.length > 0 ? (
+                <button
+                  onClick={handleGroupDepo}
+                  className="w-full py-5 px-8 font-Manrope text-base font-medium text-[#595a5c] border border-gray-300 rounded-full text-left hover:bg-gray-100 transition"
+                >
+                  Group Savings
+                </button>
+              ) : (
+                <button
+                  onClick={showGroupDrawer}
+                  className="w-full py-5 px-8 font-Manrope text-base font-medium text-[#595a5c] border border-gray-300 rounded-full text-left hover:bg-gray-100 transition"
+                >
+                  Create Group Savings
+                </button>
+              )}
             </div>
           </div>
         </div>
       )}
+
+      {/* groups */}
+      <GroupDrawer
+        isVisible={isGroupDrawerVisible}
+        onClose={closeGroupDrawer}
+      />
     </>
   );
 }

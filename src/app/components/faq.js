@@ -1,8 +1,30 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import down from "./assets/caretDown.svg";
+import { handleGetItemsWithParam } from "../userControllers/blogController";
 
 export default function Faq() {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchItems = async () => {
+    const params = { type: "FAQ ", page: "Home" };
+    try {
+      const data = await handleGetItemsWithParam(params);
+      if (data) {
+        setItems(data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
   const faqs = [
     {
       question: "What is Savetown?",
@@ -43,8 +65,8 @@ export default function Faq() {
       <h2 className=" mt-3 max-w-[900px] text-center">
         Frequently Asked Questions
       </h2>
-      <div className="mt-16">
-        {faqs.map((faq, index) => (
+      <div className="mt-16 w-full">
+        {items.map((faq, index) => (
           <div
             key={index}
             onClick={() => toggleDropDown(index)}
@@ -53,8 +75,8 @@ export default function Faq() {
             }`}
           >
             <div className="flex flex-row w-full justify-between items-center">
-              <p className="font-Manrope text-[#000000] text-base md:text-lg font-normal">
-                {faq.question}
+              <p className="font-Manrope text-[#000000] text-base md:text-lg font-normal w-full">
+                {faq.title}
               </p>
               <img
                 src={down.src}
@@ -64,9 +86,11 @@ export default function Faq() {
                 alt=""
               />
             </div>
-            <div className={`answer${openIndex === index ? " open" : ""}`}>
-              <p className="font-Manrope text-[#282D2D] font-normal text-sm md:text-base mt-5 transition-all duration-500">
-                {faq.answer}
+            <div
+              className={`w-full answer${openIndex === index ? " open" : ""}`}
+            >
+              <p className="font-Manrope w-full text-[#282D2D] font-normal text-sm md:text-base mt-5 transition-all duration-500">
+                {faq.excerpt}
               </p>
             </div>
           </div>

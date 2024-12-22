@@ -6,18 +6,21 @@ import withdraw from "./assets/withdraw.svg";
 import forward from "./assets/forward.svg";
 import receipt from "./assets/receipt.svg";
 import pattern from "./assets/pattern.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LearnModal from "../../component/learnModal";
 import WithdrawDrawer from "../../component/withdrawDrawer";
 import WalletDepositDrawer from "../../component/walletDepositDrawer";
 import { useUserContext } from "../../UserContext";
 import VerifyDrawer from "../../component/verifyDrawer";
+import { handleGetUserTransactions } from "@/app/userControllers/transactionController";
 
 export default function SaveWallet() {
   const [isLearnVisible, setLearnVisible] = useState(false);
   const [isWithdrawDrawerVisible, setWithdrawDrawerVisible] = useState(false);
   const [isDepositDrawerVisible, setDepositDrawerVisible] = useState(false);
   const [isVerifyDrawerVisible, setVerifyDrawerVisible] = useState(false);
+  const [transaction, setTransactions] = useState([]);
+  const [loadingTransactions, setLoadingTransactions] = useState(true);
 
   const {
     userProfile,
@@ -43,6 +46,24 @@ export default function SaveWallet() {
   // verification drawer
   const showVerifyDrawer = () => setVerifyDrawerVisible(true);
   const closeVerifyDrawer = () => setVerifyDrawerVisible(false);
+
+  const fetchTransactions = async () => {
+    setLoadingTransactions(true);
+    try {
+      const data = await handleGetUserTransactions();
+      if (data) {
+        setTransactions(data.data); // Set the full array to state
+      }
+    } catch (error) {
+      console.error("Error fetching bank transactions:", error);
+    } finally {
+      setLoadingTransactions(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
 
   const transactions = [
     {

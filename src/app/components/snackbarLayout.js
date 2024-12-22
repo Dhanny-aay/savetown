@@ -6,7 +6,7 @@ import { SnackbarUtilsConfigurator } from "../utils/snackbarUtils";
 export default function SnackbarLayout({ children }) {
   return (
     <SnackbarProvider
-      maxSnack={3}
+      maxSnack={1}
       anchorOrigin={{
         vertical: "top",
         horizontal: "right",

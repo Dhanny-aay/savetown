@@ -4,6 +4,7 @@ import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
 import load from "./assets/load.gif";
 import { handleCreateGroup } from "@/app/userControllers/groupController";
 import { useSnackbar } from "notistack";
+import { useUserContext } from "../UserContext";
 
 export default function GroupDrawer({ isVisible, onClose, triggerFetch }) {
   const [inputValue, setInputValue] = useState("");
@@ -14,6 +15,7 @@ export default function GroupDrawer({ isVisible, onClose, triggerFetch }) {
   const [errors, setErrors] = useState({});
   const [loadingCreate, setLoadingCreate] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const { triggerFetchProfile } = useUserContext();
 
   // Regex for basic email validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -23,9 +25,9 @@ export default function GroupDrawer({ isVisible, onClose, triggerFetch }) {
     setInputValue(e.target.value);
   };
 
-  // Handle input key press (e.g., Enter key to add email)
+  // Handle input key press (e.g., Enter key, comma, or space to add email)
   const handleKeyDown = (e) => {
-    if (e.key === "Enter" || e.key === ",") {
+    if (["Enter", ",", " "].includes(e.key)) {
       e.preventDefault();
       if (emailRegex.test(inputValue.trim())) {
         setEmails([...emails, inputValue.trim()]);
@@ -66,7 +68,7 @@ export default function GroupDrawer({ isVisible, onClose, triggerFetch }) {
   const onSuccess = (response) => {
     setLoadingCreate(false);
     triggerFetch();
-
+    triggerFetchProfile();
     enqueueSnackbar("Group Created", {
       variant: "success",
     });

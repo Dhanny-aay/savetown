@@ -26,8 +26,9 @@ export default function InviteMore({
   };
 
   // Handle input key press (e.g., Enter key to add email)
+  // Handle input key press (e.g., Enter key, comma, or space to add email)
   const handleKeyDown = (e) => {
-    if (e.key === "Enter" || e.key === ",") {
+    if (["Enter", ",", " "].includes(e.key)) {
       e.preventDefault();
       if (emailRegex.test(inputValue.trim())) {
         setEmails([...emails, inputValue.trim()]);

@@ -377,6 +377,17 @@ label {
   margin: 12px auto; /* Margin-top of 12px and mx-auto */
   flex-shrink: 0; /* Prevent the element from shrinking */
 }
+.testi-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f3f0e9; /* Light background */
+  border-radius: 40px;
+  padding: 8px 16px;
+  width: 90px; /* Fixed width */
+  margin: 12px auto; /* Margin-top of 12px and mx-auto */
+  flex-shrink: 0; /* Prevent the element from shrinking */
+}
 
 /* Focus and active state for all inputs */
 input:focus,

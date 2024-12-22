@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import open from "./assets/open.svg";
 import depo from "./assets/depo.svg";
 import Calculator from "./assets/Calculator.svg";
+import housemodel from "./assets/housemodel.svg";
 import ArrowRightwhite from "./assets/ArrowRightwhite.svg";
 import xml from "./assets/xml.svg";
 import share from "./assets/share.svg";
@@ -334,13 +335,19 @@ export default function Page() {
             className="mt-6 w-full"
           >
             <SwiperSlide>
-              <div className="plansbg w-full h-[250px] bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]"></div>
+              <div className="plansbg w-full h-[250px] flex items-center justify-center bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]">
+                <img src={housemodel.src} alt="" />
+              </div>
             </SwiperSlide>
             <SwiperSlide>
-              <div className="plansbg w-full h-[250px] bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]"></div>
+              <div className="plansbg w-full h-[250px] flex items-center justify-center bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]">
+                <img src={housemodel.src} alt="" />
+              </div>
             </SwiperSlide>
             <SwiperSlide>
-              <div className="plansbg w-full h-[250px] bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]"></div>
+              <div className="plansbg w-full h-[250px] flex items-center justify-center bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]">
+                <img src={housemodel.src} alt="" />
+              </div>
             </SwiperSlide>
           </Swiper>
 
@@ -397,6 +404,7 @@ export default function Page() {
       <GroupDepositDrawer
         isVisible={isGroupDepositDrawerVisible}
         onClose={closeGroupDepositDrawer}
+        selectedID={userProfile.group_savings[0]?.id}
       />
     </>
   );

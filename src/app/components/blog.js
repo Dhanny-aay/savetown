@@ -1,8 +1,31 @@
+import { useEffect, useState } from "react";
 import blog1 from "./assets/blog1.svg";
 import blog2 from "./assets/blog2.svg";
 import blog3 from "./assets/blog3.svg";
+import { handleGetItemsWithParam } from "../userControllers/blogController";
 
 export default function Blog() {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchItems = async () => {
+    const params = { type: "" };
+    try {
+      const data = await handleGetItemsWithParam(params);
+      if (data) {
+        setItems(data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
   const blogs = [
     {
       image: blog1,

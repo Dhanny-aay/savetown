@@ -61,3 +61,13 @@ export const handleInitiateWithdrawal = async (
     }
   }
 };
+
+// Function to get user transactions
+export const handleGetUserTransactions = async () => {
+  try {
+    const response = await api("GET", "/user/transactions");
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};

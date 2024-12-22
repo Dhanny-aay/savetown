@@ -1,27 +1,54 @@
+"use client";
 import pay from "./assets/payicon.svg";
 import plan from "./assets/planicon.svg";
 import percent from "./assets/percent.svg";
+import { handleGetItemsWithParam } from "../userControllers/blogController";
+import { useEffect, useState } from "react";
 
 export default function WhySavetown() {
-  const reasons = [
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchItems = async () => {
+    const params = { type: "Why ", page: "Home" };
+    try {
+      const data = await handleGetItemsWithParam(params);
+      if (data) {
+        setItems(data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  const fallbackreasons = [
     {
-      icon: pay,
+      image: pay.src,
       title: "Flexible Payment Plans",
       excerpt: "Save at your pace with plans that match your financial goals.",
     },
     {
-      icon: plan,
+      image: plan.src,
       title: "Personalized Plans",
       excerpt:
         "We offer tailored savings plans based on your income and target.",
     },
     {
-      icon: percent,
+      image: percent.src,
       title: "Interest-Free Savings",
       excerpt:
         "Your savings grow towards homeownership with no hidden charges or interest rates..",
     },
   ];
+
+  const itemsToRender = loading ? fallbackreasons : items;
+
   return (
     <div className="w-full h-full py-12 md:py-16 flex flex-col justify-center items-center px-4 md:px-14">
       <h3 className=" text-center">Why Savetown?</h3>
@@ -29,9 +56,13 @@ export default function WhySavetown() {
         Discover the benefits that set us apart from traditional saving methods.
       </h2>
       <div className=" w-full grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12">
-        {reasons.map((item, index) => (
+        {itemsToRender.map((item, index) => (
           <div key={index} className=" bg-bgSecondary rounded-[20px] p-8">
-            <img src={item.icon.src} alt="" />
+            <img
+              src={item.image}
+              className=" w-16 h-16 md:w-24 md:h-24"
+              alt=""
+            />
             <h2 className=" mt-8 text-xl md:text-2xl font-normal">
               {item.title}
             </h2>

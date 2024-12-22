@@ -21,7 +21,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 export default function SavingPlanTab({ isDashboard }) {
   const [isLearnVisible, setLearnVisible] = useState(false);
   const [isGroupDrawerVisible, setGroupDrawerVisible] = useState(false);
-  const { userStats, loading, isVisible, toggleVisibility } = useUserContext();
+  const { userStats, loading, isVisible, toggleVisibility, userProfile } =
+    useUserContext();
 
   // learn modal
   const showLearnModal = () => setLearnVisible(true);
@@ -129,15 +130,17 @@ export default function SavingPlanTab({ isDashboard }) {
             )}
           </div>
 
-          <div className=" absolute bottom-6 right-6 flex items-center space-x-2">
-            <button
-              onClick={showGroupDrawer}
-              className="text-[#6B4300] text-body14Bold font-Manrope"
-            >
-              Create Group
-            </button>
-            <img src={ArrowRight.src} className="" alt="" />
-          </div>
+          {!userProfile.group_savings?.length > 0 && (
+            <div className=" absolute bottom-6 right-6 flex items-center space-x-2">
+              <button
+                onClick={showGroupDrawer}
+                className="text-[#6B4300] text-body14Bold font-Manrope"
+              >
+                Create Group
+              </button>
+              <img src={ArrowRight.src} className="" alt="" />
+            </div>
+          )}
         </div>
       </div>
 
@@ -253,15 +256,17 @@ export default function SavingPlanTab({ isDashboard }) {
                 )}
               </div>
 
-              <div className=" absolute bottom-6 right-6 flex items-center space-x-2">
-                <button
-                  onClick={showGroupDrawer}
-                  className="text-[#6B4300] text-body12SemiBold md:text-body14Bold font-Manrope"
-                >
-                  Create Group
-                </button>
-                <img src={ArrowRight.src} className="" alt="" />
-              </div>
+              {!userProfile.group_savings?.length > 0 && (
+                <div className=" absolute bottom-6 right-6 flex items-center space-x-2">
+                  <button
+                    onClick={showGroupDrawer}
+                    className="text-[#6B4300] text-body12SemiBold md:text-body14Bold font-Manrope"
+                  >
+                    Create Group
+                  </button>
+                  <img src={ArrowRight.src} className="" alt="" />
+                </div>
+              )}
             </div>
           </SwiperSlide>
         </Swiper>
