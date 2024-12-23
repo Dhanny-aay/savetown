@@ -18,12 +18,13 @@ import { handleGetItemsWithParam } from "./userControllers/blogController";
 
 export default function Home() {
   const [headings, setHeadings] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingHeading, setLoadingHeading] = useState(true);
 
   const [pageTitle, setPageTitle] = useState("Message from Our CEO");
   const [pageExcerpt, setPageExcerpt] = useState(
     "Our vision and commitment to making homeownership accessible for all."
   );
+  const [pageLink, setPageLink] = useState("https://youtu.be/pnUhZw0LTLE");
 
   const fetchHeadings = async () => {
     const params = {
@@ -38,13 +39,37 @@ export default function Home() {
     } catch (error) {
       console.error("Error fetching events:", error);
     } finally {
-      setLoading(false);
+      setLoadingHeading(false);
     }
   };
 
   useEffect(() => {
     fetchHeadings();
   }, []);
+
+  // Set the page title and excerpt based on headings passed as props
+  const setDynamicHeading = () => {
+    // Find the item with category "Features"
+    const messaheHeading = headings.find(
+      (heading) => heading.category === "CEOMessage"
+    );
+
+    if (messaheHeading) {
+      setPageTitle(messaheHeading.title || "Message from Our CEO");
+      setPageLink(
+        messaheHeading.link ||
+          "https://www.youtube.com/embed/pnUhZw0LTLE?si=6i_jfP6pMFiCdrw7"
+      );
+      setPageExcerpt(
+        messaheHeading.excerpt ||
+          "Our vision and commitment to making homeownership accessible for all."
+      );
+    }
+  };
+
+  useEffect(() => {
+    setDynamicHeading();
+  }, [headings]);
 
   return (
     <>
@@ -56,28 +81,35 @@ export default function Home() {
           <Calculator />
         </div>
 
-        <h3 className="mt-16 text-black ">Message from Our CEO</h3>
-        <h2 className=" capitalize mt-3 max-w-[800px]">
-          Our vision and commitment to making homeownership accessible for all.
-        </h2>
-        <div className=" w-full mt-12 bg-bgSecondary rounded-[32px] h-[450px]"></div>
+        <h3 className="mt-16 text-black ">{pageTitle}</h3>
+        <h2 className=" capitalize mt-3 max-w-[800px]">{pageExcerpt}</h2>
+        <div className=" w-full mt-12 bg-bgSecondary rounded-[32px] h-[450px]">
+          <iframe
+            width="100%"
+            height="450px"
+            src={pageLink}
+            title="Message from Our CEO"
+            className=" rounded-[32px]"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          ></iframe>
+        </div>
       </div>
       {/* our partners */}
-      <Partners />
+      <Partners headings={headings} />
       {/* Why Savetown? */}
-      <WhySavetown />
+      <WhySavetown headings={headings} />
       {/* our features */}
-      <Features />
+      <Features headings={headings} />
       {/* how it works */}
-      <Works />
+      <Works headings={headings} />
       {/* blog */}
-      <Blog />
+      <Blog headings={headings} />
       {/* testimonial */}
-      <Testimony />
+      <Testimony heading={headings} />
       {/* faq */}
-      <Faq />
-      <Download />
-      <Banner />
+      <Faq heading={headings} />
+      <Download heading={headings} />
+      <Banner heading={headings} />
       <Footer />
     </>
   );

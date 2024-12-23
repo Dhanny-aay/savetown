@@ -5,7 +5,7 @@ import flex from "./assets/flex.svg";
 import { useEffect, useState } from "react";
 import { handleGetItemsWithParam } from "../userControllers/blogController";
 
-export default function Features() {
+export default function Features({ headings }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,6 +26,32 @@ export default function Features() {
   useEffect(() => {
     fetchItems();
   }, []);
+
+  const [pageTitle, setPageTitle] = useState("Our Features");
+  const [pageExcerpt, setPageExcerpt] = useState(
+    "Every tool you need to track and manage your homeownership savings."
+  );
+
+  // Set the page title and excerpt based on headings passed as props
+  const setDynamicHeading = () => {
+    // Find the item with category "Features"
+    const messaheHeading = headings?.find(
+      (heading) => heading.category === "OurFeatures"
+    );
+
+    if (messaheHeading) {
+      setPageTitle(messaheHeading?.title || "Our Features");
+
+      setPageExcerpt(
+        messaheHeading?.excerpt ||
+          "Every tool you need to track and manage your homeownership savings."
+      );
+    }
+  };
+
+  useEffect(() => {
+    setDynamicHeading();
+  }, [headings]);
 
   const fallbackFeatures = [
     {
@@ -57,10 +83,8 @@ export default function Features() {
 
   return (
     <div className="w-full h-full py-12 md:py-16 flex flex-col justify-center items-center px-4 md:px-14">
-      <h3 className=" text-center">Our Features</h3>
-      <h2 className=" max-w-[900px] text-center mt-3">
-        Every tool you need to track and manage your homeownership savings.
-      </h2>
+      <h3 className=" text-center">{pageTitle}</h3>
+      <h2 className=" max-w-[900px] text-center mt-3">{pageExcerpt}</h2>
 
       <div className=" mt-16 flex items-center flex-col gap-8 lg:gap-0 lg:flex-row w-full justify-between">
         <div

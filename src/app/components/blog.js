@@ -1,11 +1,11 @@
-"use client"
+"use client";
 import { useEffect, useState } from "react";
 import blog1 from "./assets/blog1.svg";
 import blog2 from "./assets/blog2.svg";
 import blog3 from "./assets/blog3.svg";
 import { handleGetItemsWithParam } from "../userControllers/blogController";
 
-export default function Blog() {
+export default function Blog({ headings }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -51,12 +51,35 @@ export default function Blog() {
     },
   ];
 
+  const [pageTitle, setPageTitle] = useState("Our Latest Blog");
+  const [pageExcerpt, setPageExcerpt] = useState(
+    "Get expert tips and insights to guide your homeownership journey."
+  );
+
+  // Set the page title and excerpt based on headings passed as props
+  const setDynamicHeading = () => {
+    // Find the item with category "Features"
+    const whyHeading = headings?.find(
+      (heading) => heading.category === "LatestBlogs"
+    );
+
+    if (whyHeading) {
+      setPageTitle(whyHeading?.title || "Our Latest Blog");
+      setPageExcerpt(
+        whyHeading?.excerpt ||
+          " Get expert tips and insights to guide your homeownership journey."
+      );
+    }
+  };
+
+  useEffect(() => {
+    setDynamicHeading();
+  }, [headings]);
+
   return (
     <div className="w-full h-full py-12 md:py-16 flex flex-col justify-center items-center px-4 md:px-14">
-      <h3>Our Latest Blog</h3>
-      <h2 className=" mt-3 max-w-[900px] text-center">
-        Get expert tips and insights to guide your homeownership journey.
-      </h2>
+      <h3>{pageTitle}</h3>
+      <h2 className=" mt-3 max-w-[900px] text-center">{pageExcerpt}</h2>
       <div className=" w-full grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12">
         {blogs.map((item, index) => (
           <div key={index} className=" border border-[#F3F0E9] rounded-[24px] ">

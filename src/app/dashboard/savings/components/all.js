@@ -91,7 +91,7 @@ export default function All() {
           Transcation History
         </h6>
         <p className="text-body14Regular font-Manrope text-[#595A5C] mt-2 text-center">
-          Recent tarnsctions and transctions history will show here
+          Recent transactions and transactions history will show here
         </p>
       </div>
       {/* <h2 className=" text-h55 md:text-h5 font-bold text-[#262626] mt-8 font-Manrope">

@@ -2,12 +2,13 @@ import { handleKYCVerify } from "@/app/userControllers/kycController";
 import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
 import { useState } from "react";
 import load from "./assets/load.gif";
+import FileUploader from "@/app/utils/fileUploader";
 
 export default function Bvn({ goBack }) {
   const [loading, setLoading] = useState(false);
   // const [step, setStep] = useState(1);
   const id_type = "id_bvn";
-  // const [id_image, setid_image] = useState("");
+  const [id_image, setid_image] = useState("");
   // const [id_front, setId_front] = useState("");
   // const [id_back, setId_back] = useState("");
   const [id_number, setId_number] = useState("");
@@ -17,7 +18,7 @@ export default function Bvn({ goBack }) {
     const newErrors = {};
     //  if (!id_front) newErrors.id_front = "ID front image is required";
     //  if (!id_back) newErrors.id_back = "ID back image is required";
-    //  if (!id_image) newErrors.id_image = "A picture of you is required";
+    if (!id_image) newErrors.id_image = "A picture of you is required";
     if (!id_number) newErrors.id_number = "ID number is required";
 
     setErrors(newErrors);
@@ -87,6 +88,11 @@ export default function Bvn({ goBack }) {
               className="w-full border border-[#D5D7DA] rounded-[32px] mt-1 text-body14Regular font-Manrope px-6 py-3"
               id=""
             />
+            {errors.id_number && (
+              <span className="text-red-500 text-xs font-Manrope mt-2">
+                {errors.id_number}
+              </span>
+            )}
           </div>
           <p className=" text-[#535862] font-Manrope text-body12Regular mt-1">
             Dial <span className=" font-medium text-[#8133F1]">*565*0#</span> on
@@ -94,21 +100,35 @@ export default function Bvn({ goBack }) {
           </p>
         </div>
         <div className=" mt-4">
-          <label>House Address</label>
-          <div className="mt-2 flex items-center ">
-            <input
-              type="text"
-              placeholder="Enter House Address"
-              name=""
-              className="w-full border border-[#D5D7DA] rounded-[32px] mt-1 text-body14Regular font-Manrope px-6 py-3"
-              id=""
-            />
-          </div>
+          <FileUploader
+            label="Upload a picture of yourself"
+            accept="image/png, image/jpeg"
+            maxSize={10000000} // 10MB
+            isImage={true}
+            onFileSelect={(file) => handleImgFileSelect(file, "image")}
+            initialPreview={id_selfie_image}
+          />
+          {errors.id_selfie_image && (
+            <span className="text-red-500 text-xs font-Manrope mt-2">
+              {errors.id_selfie_image}
+            </span>
+          )}
         </div>
         <button
           onClick={handleSend}
           disabled={loading}
           className="bg-btnPrimary py-3 w-full rounded-[50px] font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center mt-4 justify-center"
+        >
+          {loading ? <img src={load.src} className="w-5" alt="" /> : "Submit"}
+        </button>
+      </div>
+
+      {/* Navigation Buttons */}
+      <div className="absolute bottom-0 left-0 w-full bg-white py-4 px-6 border-t border-gray-200">
+        <button
+          onClick={handleSend}
+          disabled={loading}
+          className="bg-btnPrimary py-3 w-full rounded-[50px] font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center justify-center"
         >
           {loading ? <img src={load.src} className="w-5" alt="" /> : "Submit"}
         </button>

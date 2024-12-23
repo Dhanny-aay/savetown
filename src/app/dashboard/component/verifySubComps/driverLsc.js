@@ -111,7 +111,7 @@ export default function DriverLsc({ goBack }) {
             )}
           </div>
           <FileUploader
-            label="Upload front of your NIN slip"
+            label="Upload front of your Passport"
             accept="image/png, image/jpeg"
             maxSize={10000000} // 10MB
             isImage={true}
@@ -124,7 +124,7 @@ export default function DriverLsc({ goBack }) {
             </span>
           )}
           <FileUploader
-            label="Upload back of your NIN slip"
+            label="Upload back of your Passport"
             accept="image/png, image/jpeg"
             maxSize={10000000} // 10MB
             isImage={true}

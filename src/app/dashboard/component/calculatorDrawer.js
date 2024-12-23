@@ -12,10 +12,13 @@ export default function CalculatorDrawer({ isVisible, onClose }) {
   const [currentStep, setCurrentStep] = useState(0); // Track the active step
   const { userProfile, loadingProfile } = useUserContext();
   const email = userProfile.email;
+  const first_name = userProfile.first_name;
+  const last_name = userProfile.last_name;
   const [result, setResult] = useState(null);
   const [formData, setFormData] = useState({
     house_price: "",
     email: email,
+    name: `${first_name} ${last_name}`,
     monthly_commitment: "",
     house_type: "",
     location: "",

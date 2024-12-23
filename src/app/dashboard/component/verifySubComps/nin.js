@@ -14,7 +14,6 @@ export default function Nin({ goBack }) {
   const [id_back, setId_back] = useState("");
   const [id_number, setId_number] = useState("");
   const [errors, setErrors] = useState({});
-  
 
   const validateFields = () => {
     const newErrors = {};

@@ -4,7 +4,7 @@ import du from "./assets/du.svg";
 import fa from "./assets/fa.svg";
 import { handleGetItemsWithParam } from "../userControllers/blogController";
 
-export default function Partners() {
+export default function Partners({ headings }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,6 +26,24 @@ export default function Partners() {
     fetchItems();
   }, []);
 
+  const [pageTitle, setPageTitle] = useState("Our Partners");
+
+  // Set the page title and excerpt based on headings passed as props
+  const setDynamicHeading = () => {
+    // Find the item with category "Features"
+    const partnerHeading = headings?.find(
+      (heading) => heading.category === "Partners"
+    );
+
+    if (partnerHeading) {
+      setPageTitle(partnerHeading?.title || "Our Partners");
+    }
+  };
+
+  useEffect(() => {
+    setDynamicHeading();
+  }, [headings]);
+
   const fallbackPartners = [
     {
       title: "Design Union",
@@ -39,7 +57,7 @@ export default function Partners() {
 
   return (
     <div className="w-full h-full py-12 md:py-16 flex flex-col justify-center items-start px-4 md:px-14">
-      <h2 className=" text-center w-full">Our Partners</h2>
+      <h2 className=" text-center w-full">{pageTitle}</h2>
 
       <div className=" w-full flex flex-col gap-8 lg:gap-0 lg:flex-row items-center justify-between mt-16">
         {itemsToRender.map((item, index) => (

@@ -285,7 +285,7 @@ export default function GroupSaving() {
           Transcation History
         </h6>
         <p className="text-body14Regular font-Manrope text-[#595A5C] mt-2 text-center">
-          Recent tarnsctions and transctions history will show here
+          Recent transactions and transactions history will show here
         </p>
       </div>
 

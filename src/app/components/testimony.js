@@ -12,7 +12,7 @@ import "swiper/css";
 // import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 
-export default function Testimony() {
+export default function Testimony({ headings }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const swiperRef = useRef(null); // Reference for Swiper instance
@@ -70,12 +70,34 @@ export default function Testimony() {
 
   const itemsToRender = loading ? fallbackTestimonials : items;
 
+  const [pageTitle, setPageTitle] = useState("Our Customer’s Reviews gggghhgg");
+  const [pageExcerpt, setPageExcerpt] = useState(
+    "Hear from our satisfied customers."
+  );
+
+  // Set the page title and excerpt based on headings passed as props
+  const setDynamicHeading = () => {
+    // Find the item with category "Features"
+    const whyHeading = headings?.find(
+      (heading) => heading.category === "OurReviews"
+    );
+
+    if (whyHeading) {
+      setPageTitle(whyHeading?.title || "Our Customer’s Reviews ghgghghg");
+      setPageExcerpt(
+        whyHeading?.excerpt || "Hear from our satisfied customers."
+      );
+    }
+  };
+
+  useEffect(() => {
+    setDynamicHeading();
+  }, [headings]);
+
   return (
     <div className="w-full h-full py-12 md:py-16 flex flex-col justify-center items-center  px-4 md:px-14">
-      <h3>Our Customer’s Reviews</h3>
-      <h2 className=" mt-3 max-w-[900px] text-center">
-        Hear from our satisfied customers.
-      </h2>
+      <h3>{pageTitle}</h3>
+      <h2 className=" mt-3 max-w-[900px] text-center">{pageExcerpt}</h2>
       <Swiper
         pagination={{
           clickable: true,

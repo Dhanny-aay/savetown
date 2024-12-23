@@ -98,6 +98,11 @@ export default function IntlPass({ goBack }) {
                 className="w-full border border-[#D5D7DA] rounded-[32px] mt-1 text-body14Regular font-Manrope px-6 py-3"
                 id=""
               />
+              {errors.id_number && (
+                <span className="text-red-500 text-xs font-Manrope mt-2">
+                  {errors.id_number}
+                </span>
+              )}
             </div>
             <p className=" text-[#535862] font-Manrope text-body12Regular mt-1">
               The number shown on
@@ -109,7 +114,7 @@ export default function IntlPass({ goBack }) {
             </p>
           </div>
           <FileUploader
-            label="Upload front of your NIN slip"
+            label="Upload front of your Passport"
             accept="image/png, image/jpeg"
             maxSize={10000000} // 10MB
             isImage={true}
@@ -122,7 +127,7 @@ export default function IntlPass({ goBack }) {
             </span>
           )}
           <FileUploader
-            label="Upload back of your NIN slip"
+            label="Upload back of your Passport"
             accept="image/png, image/jpeg"
             maxSize={10000000} // 10MB
             isImage={true}
