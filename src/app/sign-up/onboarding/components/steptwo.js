@@ -30,7 +30,7 @@ export default function StepTwo({ formData, updateFormData, handleBack }) {
   // };
   const handlePhoneNumberChange = ({ phone, nationality_code }) => {
     updateFormData({
-      phone,
+      phone: `${nationality_code}${phone}`,
       nationality_code,
     });
   };

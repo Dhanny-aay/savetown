@@ -69,7 +69,7 @@ export default function Home() {
 
   useEffect(() => {
     setDynamicHeading();
-  }, [headings]);
+  }, [headings, loadingHeading]);
 
   return (
     <>
@@ -105,11 +105,11 @@ export default function Home() {
       {/* blog */}
       <Blog headings={headings} />
       {/* testimonial */}
-      <Testimony heading={headings} />
+      <Testimony headings={headings} />
       {/* faq */}
-      <Faq heading={headings} />
-      <Download heading={headings} />
-      <Banner heading={headings} />
+      <Faq headings={headings} />
+      <Download headings={headings} />
+      <Banner headings={headings} />
       <Footer />
     </>
   );

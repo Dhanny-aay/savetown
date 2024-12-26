@@ -63,11 +63,21 @@ export const handleInitiateWithdrawal = async (
 };
 
 // Function to get user transactions
-export const handleGetUserTransactions = async () => {
+
+// Function to get items with params
+export const handleGetTransactionsWithParam = async (params = {}) => {
   try {
-    const response = await api("GET", "/user/transactions");
+    const queryString = new URLSearchParams(params).toString();
+
+    const endpoint = `/user/transactions/${
+      queryString ? `?${queryString}` : ""
+    }`;
+
+    const response = await api("GET", endpoint);
+
     return response;
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching items with params:", error);
+    throw error; // Optionally re-throw the error
   }
 };

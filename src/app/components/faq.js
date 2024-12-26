@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import down from "./assets/caretDown.svg";
 import { handleGetItemsWithParam } from "../userControllers/blogController";
 
-export default function Faq() {
+export default function Faq({ headings }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -53,6 +53,26 @@ export default function Faq() {
     },
   ];
 
+  const [pageTitle, setPageTitle] = useState("Our FAQs");
+  const [pageExcerpt, setPageExcerpt] = useState("Frequently Asked Questions");
+
+  // Set the page title and excerpt based on headings passed as props
+  const setDynamicHeading = () => {
+    // Find the item with category "Features"
+    const whyHeading = headings?.find(
+      (heading) => heading.category === "OurFAQs"
+    );
+
+    if (whyHeading) {
+      setPageTitle(whyHeading?.title || "Our FAQs");
+      setPageExcerpt(whyHeading?.excerpt || "Frequently Asked Questions");
+    }
+  };
+
+  useEffect(() => {
+    setDynamicHeading();
+  }, [headings]);
+
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggleDropDown = (index) => {
@@ -61,10 +81,8 @@ export default function Faq() {
 
   return (
     <div className="w-full h-full py-12 md:py-16 flex flex-col justify-center items-center px-4 md:px-14">
-      <h3>Our FAQs</h3>
-      <h2 className=" mt-3 max-w-[900px] text-center">
-        Frequently Asked Questions
-      </h2>
+      <h3>{pageTitle}</h3>
+      <h2 className=" mt-3 max-w-[900px] text-center">{pageExcerpt}</h2>
       <div className="mt-16 w-full">
         {items.map((faq, index) => (
           <div

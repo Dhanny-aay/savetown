@@ -11,3 +11,13 @@ export const handleCalculatorRequest = async (userData, onSuccess, onError) => {
     }
   }
 };
+
+// Function to get user transactions
+export const handleGetCalculatorControl = async () => {
+  try {
+    const response = await api("GET", "/calculator");
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};

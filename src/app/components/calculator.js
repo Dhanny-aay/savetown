@@ -1,4 +1,36 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { handleGetCalculatorControl } from "../userControllers/calculatorController";
+
 export default function Calculator() {
+  const [calculatorAccess, setcalculatorAccess] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [prices, setPrices] = useState([]);
+  const [houseType, setHouseType] = useState([]);
+  const [houseLocation, setHouseLocation] = useState([]);
+
+  const fetchCalculatorinputs = async () => {
+    setLoading(true);
+    try {
+      const data = await handleGetCalculatorControl();
+      if (data) {
+        setcalculatorAccess(data.data);
+        // setPrices(data.data.House)
+        // setHouseType(data.data.Price)
+        // setHouseLocation(data.data.Price)
+      }
+    } catch (error) {
+      console.error("Error fetching calc:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCalculatorinputs();
+  }, []);
+
   return (
     <>
       <h2 className=" font-Yeseva font-normal text-[28px] 2xl:text-4xl text-black leading-[24px]">

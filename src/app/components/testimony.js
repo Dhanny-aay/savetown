@@ -70,7 +70,7 @@ export default function Testimony({ headings }) {
 
   const itemsToRender = loading ? fallbackTestimonials : items;
 
-  const [pageTitle, setPageTitle] = useState("Our Customer’s Reviews gggghhgg");
+  const [pageTitle, setPageTitle] = useState("Our Customer’s Reviews");
   const [pageExcerpt, setPageExcerpt] = useState(
     "Hear from our satisfied customers."
   );
