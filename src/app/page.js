@@ -24,7 +24,9 @@ export default function Home() {
   const [pageExcerpt, setPageExcerpt] = useState(
     "Our vision and commitment to making homeownership accessible for all."
   );
-  const [pageLink, setPageLink] = useState("https://youtu.be/pnUhZw0LTLE");
+  const [pageLink, setPageLink] = useState(
+    "https://www.youtube.com/embed/pnUhZw0LTLE?si=6i_jfP6pMFiCdrw7"
+  );
 
   const fetchHeadings = async () => {
     const params = {

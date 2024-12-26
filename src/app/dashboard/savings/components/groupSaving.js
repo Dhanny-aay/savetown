@@ -56,7 +56,7 @@ export default function GroupSaving() {
         setTransactions(data.data);
       }
     } catch (error) {
-      console.error("Error fetching transactions:", error);
+      console.log("Error fetching transactions:", error);
     } finally {
       setLoadingTransactions(false);
     }

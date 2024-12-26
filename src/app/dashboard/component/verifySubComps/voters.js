@@ -4,6 +4,7 @@ import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
 import load from "./assets/load.gif";
 import { useState } from "react";
 import { handleKYCVerify } from "@/app/userControllers/kycController";
+import { useSnackbar } from "notistack";
 
 export default function Voters({ goBack }) {
   const [loading, setLoading] = useState(false);
@@ -14,6 +15,7 @@ export default function Voters({ goBack }) {
   const [id_back, setId_back] = useState("");
   const [id_number, setId_number] = useState("");
   const [errors, setErrors] = useState({});
+  const { enqueueSnackbar } = useSnackbar();
 
   const validateFields = () => {
     const newErrors = {};
@@ -24,7 +26,15 @@ export default function Voters({ goBack }) {
     if (!id_number) newErrors.id_number = "ID number is required";
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // If no errors, validation passed
+    if (Object.keys(newErrors).length > 0) {
+      enqueueSnackbar("Please fill all required fields", {
+        variant: "error",
+        autoHideDuration: 3000,
+      });
+      return false;
+    }
+
+    return true;
   };
 
   const handleImgFileSelect = (file, type) => {
@@ -89,7 +99,7 @@ export default function Voters({ goBack }) {
         <div className="mt-6 w-full pb-8">
           <div>
             <label>Voter’s Card</label>
-            <div className="mt-2 flex items-center ">
+            <div className="mt-2 flex flex-col items-start ">
               <input
                 type="text"
                 placeholder="Enter ID Number"

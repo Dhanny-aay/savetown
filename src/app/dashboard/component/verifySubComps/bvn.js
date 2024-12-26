@@ -3,33 +3,44 @@ import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
 import { useState } from "react";
 import load from "./assets/load.gif";
 import FileUploader from "@/app/utils/fileUploader";
+import { useSnackbar } from "notistack";
 
 export default function Bvn({ goBack }) {
   const [loading, setLoading] = useState(false);
   // const [step, setStep] = useState(1);
   const id_type = "id_bvn";
-  const [id_image, setid_image] = useState("");
+  const [id_selfie_image, setid_selfie_image] = useState("");
   // const [id_front, setId_front] = useState("");
   // const [id_back, setId_back] = useState("");
   const [id_number, setId_number] = useState("");
   const [errors, setErrors] = useState({});
+  const { enqueueSnackbar } = useSnackbar();
 
   const validateFields = () => {
     const newErrors = {};
     //  if (!id_front) newErrors.id_front = "ID front image is required";
     //  if (!id_back) newErrors.id_back = "ID back image is required";
-    if (!id_image) newErrors.id_image = "A picture of you is required";
+    if (!id_selfie_image)
+      newErrors.id_selfie_image = "A picture of you is required";
     if (!id_number) newErrors.id_number = "ID number is required";
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // If no errors, validation passed
+    if (Object.keys(newErrors).length > 0) {
+      enqueueSnackbar("Please fill all required fields", {
+        variant: "error",
+        autoHideDuration: 3000,
+      });
+      return false;
+    }
+
+    return true;
   };
 
   const handleImgFileSelect = (file, type) => {
     const reader = new FileReader();
     reader.onloadend = () => {
       if (type === "image") {
-        setid_image(reader.result);
+        setid_selfie_image(reader.result);
       }
       if (type === "front") {
         setId_front(reader.result);
@@ -59,7 +70,7 @@ export default function Bvn({ goBack }) {
     if (validateFields()) {
       e.preventDefault();
       setLoading(true);
-      const userData = { id_number, id_type };
+      const userData = { id_number, id_type, id_selfie_image };
       handleKYCVerify(userData, onSuccess, onError);
     }
   };
@@ -78,7 +89,7 @@ export default function Bvn({ goBack }) {
       <div className=" mt-6">
         <div>
           <label>Bank verification number(BVN)</label>
-          <div className="mt-2 flex items-center ">
+          <div className="mt-2 flex flex-col items-start ">
             <input
               type="text"
               placeholder="Enter ID Number"
@@ -114,13 +125,13 @@ export default function Bvn({ goBack }) {
             </span>
           )}
         </div>
-        <button
+        {/* <button
           onClick={handleSend}
           disabled={loading}
           className="bg-btnPrimary py-3 w-full rounded-[50px] font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center mt-4 justify-center"
         >
           {loading ? <img src={load.src} className="w-5" alt="" /> : "Submit"}
-        </button>
+        </button> */}
       </div>
 
       {/* Navigation Buttons */}

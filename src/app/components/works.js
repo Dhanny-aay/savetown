@@ -10,7 +10,7 @@ export default function Works({ headings }) {
   const [loading, setLoading] = useState(true);
 
   const fetchItems = async () => {
-    const params = { type: "HowItWorks ", page: "Home" };
+    const params = { type: "HowItWorks", page: "Home" };
     try {
       const data = await handleGetItemsWithParam(params);
       if (data) {

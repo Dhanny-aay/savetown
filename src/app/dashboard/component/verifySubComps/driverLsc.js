@@ -4,6 +4,7 @@ import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
 import { useState } from "react";
 import { handleKYCVerify } from "@/app/userControllers/kycController";
 import load from "./assets/load.gif";
+import { useSnackbar } from "notistack";
 
 export default function DriverLsc({ goBack }) {
   const [loading, setLoading] = useState(false);
@@ -13,6 +14,8 @@ export default function DriverLsc({ goBack }) {
   const [id_front, setId_front] = useState("");
   const [id_back, setId_back] = useState("");
   const [id_number, setId_number] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
+
   const [errors, setErrors] = useState({});
 
   const validateFields = () => {
@@ -24,7 +27,15 @@ export default function DriverLsc({ goBack }) {
     if (!id_number) newErrors.id_number = "ID number is required";
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // If no errors, validation passed
+    if (Object.keys(newErrors).length > 0) {
+      enqueueSnackbar("Please fill all required fields", {
+        variant: "error",
+        autoHideDuration: 3000,
+      });
+      return false;
+    }
+
+    return true;
   };
 
   const handleImgFileSelect = (file, type) => {

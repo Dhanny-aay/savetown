@@ -5,15 +5,15 @@ import { useUserContext } from "../../UserContext";
 import open from "./assets/open.svg";
 import receipt from "./assets/receipt.svg";
 import { handleGetTransactionsWithParam } from "@/app/userControllers/transactionController";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import SkeletonTable from "@/app/utils/loadingTable";
+import DateFilter from "./dateFilter";
 
 export default function All() {
   const isDashboard = false;
   const { userStats, loading, toggleVisibility, isVisible } = useUserContext();
   const [loadingTransactions, setLoadingTransactions] = useState(true);
   const [transactions, setTransactions] = useState([]);
+  const [range, setRange] = useState("");
 
   const fetchTransactions = async () => {
     const params = {
@@ -26,7 +26,7 @@ export default function All() {
         setTransactions(data.data);
       }
     } catch (error) {
-      console.error("Error fetching transactions:", error);
+      console.log("Error fetching transactions:", error);
     } finally {
       setLoadingTransactions(false);
     }
@@ -69,6 +69,13 @@ export default function All() {
 
     // Combine date and time
     return `${formattedDate} at ${formattedTime}`;
+  };
+
+  const handleDateFilterChange = (dateRange) => {
+    // dateRange will be an array of [startDate, endDate]
+    console.log("Date range:", dateRange);
+    setRange(dateRange);
+    // Update your table data here
   };
 
   return (
@@ -117,6 +124,13 @@ export default function All() {
             Recent Transactions
           </h2>
           {/* Table Section with Fixed Height */}
+
+          {/* <div className=" flex items-center space-x-4">
+            <DateFilter onFilterChange={handleDateFilterChange} />
+            <div className=" text-center px-4 py-2 border rounded-md text-sm">
+              {range}
+            </div>
+          </div> */}
           <div className="overflow-auto mt-6 max-h-[100%] h-screen md:h-[55vh] border border-[#c2c4c686] rounded-[8px]">
             {/* Adjust the height to fit the screen */}
 
