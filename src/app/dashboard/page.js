@@ -56,17 +56,14 @@ export default function Page() {
   };
 
   const [isCopied, setIsCopied] = useState(false);
-const [selectedID, setSelectedID] = useState(null);
+  const [selectedID, setSelectedID] = useState(null);
 
-useEffect(() => {
+  useEffect(() => {
     // Check if userProfile and group_savings are defined before accessing them
     if (userProfile?.group_savings?.length > 0) {
       setSelectedID(userProfile.group_savings[0]);
     }
   }, [userProfile]);
-
-  
-
 
   // Function to copy the referral link
   const handleCopyReferral = async () => {
@@ -117,7 +114,10 @@ useEffect(() => {
   const closeGroupDepositDrawer = () => setGroupDepositDrawerVisible(false);
 
   useEffect(() => {
-    if (userProfile?.event_date_booking === false) {
+    if (
+      userProfile?.event_date_booking === false &&
+      userProfile?.id_status === "verified"
+    ) {
       // Set a timer to call showDinnerModal after 30 seconds (30,000 ms)
       const timer = setTimeout(showDinnerModal, 30000);
 

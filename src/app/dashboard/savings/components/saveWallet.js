@@ -17,6 +17,7 @@ import {
   handleGetUserTransactions,
 } from "@/app/userControllers/transactionController";
 import SkeletonTable from "@/app/utils/loadingTable";
+import TableFilter from "./dateFilter";
 
 export default function SaveWallet() {
   const [isLearnVisible, setLearnVisible] = useState(false);
@@ -25,6 +26,8 @@ export default function SaveWallet() {
   const [isVerifyDrawerVisible, setVerifyDrawerVisible] = useState(false);
   const [loadingTransactions, setLoadingTransactions] = useState(true);
   const [transactions, setTransactions] = useState([]);
+  const [filteredTransactions, setFilteredTransactions] =
+    useState(transactions);
 
   const fetchTransactions = async () => {
     const params = {
@@ -104,6 +107,23 @@ export default function SaveWallet() {
 
     // Combine date and time
     return `${formattedDate} at ${formattedTime}`;
+  };
+
+  const handleFilterChange = (filter) => {
+    if (filter.startDate && filter.endDate) {
+      const startDate = new Date(filter.startDate).setHours(0, 0, 0, 0);
+      const endDate = new Date(filter.endDate).setHours(23, 59, 59, 999);
+
+      const filtered = transactions.filter((tx) => {
+        const transactionDate = new Date(tx.created_at).getTime();
+        return transactionDate >= startDate && transactionDate <= endDate;
+      });
+
+      setFilteredTransactions(filtered);
+    } else {
+      // If no date range is provided, reset to all transactions
+      setFilteredTransactions(transactions);
+    }
   };
 
   return (
@@ -206,62 +226,78 @@ export default function SaveWallet() {
         </div>
       ) : (
         <>
-          <h2 className=" text-h55 md:text-h5 font-bold text-[#262626] mt-8 font-Manrope">
-            Recent Transactions
-          </h2>
+          <div className=" w-full mt-6 md:mt-8">
+            <div className=" flex flex-col space-y-6 md:space-y-0 md:flex-row items-start md:items-center w-full justify-between">
+              <h2 className="text-h55 md:text-h5 font-bold text-[#262626] font-Manrope">
+                Recent Transactions
+              </h2>
+
+              {/* Filter Section */}
+              <div className="flex items-center space-x-4">
+                <TableFilter
+                  transactions={transactions}
+                  onFilterChange={handleFilterChange}
+                />
+              </div>
+            </div>
+          </div>
           {/* Table Section with Fixed Height */}
           <div className="overflow-auto mt-6 max-h-[100%] h-screen md:h-[55vh] border border-[#c2c4c686] rounded-[8px]">
-            {/* Adjust the height to fit the screen */}
-
-            <table className="w-full bg-white shadow font-Manrope relative">
-              <thead className="sticky top-0 left-0 bg-white">
-                <tr className="text-left">
-                  <th className="p-4 w-[64px] font-medium text-sm">S/N</th>
-                  <th className="p-4 font-medium text-sm">Name</th>
-                  <th className="p-4 w-[148px] text-left font-medium text-sm">
-                    Payment ID
-                  </th>
-                  <th className="p-4 w-[99px] text-left font-medium text-sm">
-                    Amount
-                  </th>
-                  <th className="p-4 w-[149px] text-center font-medium text-sm">
-                    Payment Type
-                  </th>
-                  <th className="p-4 w-[149px] text-center font-medium text-sm">
-                    Date & Time
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {transactions
-                  .slice() // Create a copy to avoid mutating the original array
-                  .sort(
-                    (a, b) => new Date(b.created_at) - new Date(a.created_at)
-                  ) // Sort by most recent date
-                  .map((tx, index) => (
-                    <tr key={tx.id} className="border-t">
-                      <td className="p-4 text-[#5F6D7E] text-sm font-medium">
-                        {index + 1}
-                      </td>
-                      <td className="p-4 text-[#5F6D7E] text-sm font-medium">
-                        {tx.description}
-                      </td>
-                      <td className="p-4 text-[#5F6D7E] text-sm font-medium text-left">
-                        {tx.identifier}
-                      </td>
-                      <td className="p-4 text-[#5F6D7E] text-sm font-medium text-left">
-                        {tx.amount}
-                      </td>
-                      <td className="p-4 text-[#5F6D7E] text-sm capitalize font-medium text-center">
-                        {tx.type}
-                      </td>
-                      <td className="p-4 text-[#5F6D7E] text-sm font-medium text-center">
-                        {formatDateTime(tx.created_at)}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+            {filteredTransactions.length > 0 ? (
+              <table className="w-full bg-white shadow font-Manrope relative">
+                <thead className="sticky top-0 left-0 bg-white">
+                  <tr className="text-left">
+                    <th className="p-4 w-[64px] font-medium text-sm">S/N</th>
+                    <th className="p-4 font-medium text-sm">Name</th>
+                    <th className="p-4 w-[148px] text-left font-medium text-sm">
+                      Payment ID
+                    </th>
+                    <th className="p-4 w-[99px] text-left font-medium text-sm">
+                      Amount
+                    </th>
+                    <th className="p-4 w-[149px] text-center font-medium text-sm">
+                      Payment Type
+                    </th>
+                    <th className="p-4 w-[149px] text-center font-medium text-sm">
+                      Date & Time
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredTransactions
+                    .slice()
+                    .sort(
+                      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+                    )
+                    .map((tx, index) => (
+                      <tr key={tx.id} className="border-t">
+                        <td className="p-4 text-[#5F6D7E] text-sm font-medium">
+                          {index + 1}
+                        </td>
+                        <td className="p-4 text-[#5F6D7E] text-sm font-medium">
+                          {tx.description}
+                        </td>
+                        <td className="p-4 text-[#5F6D7E] text-sm font-medium text-left">
+                          {tx.identifier}
+                        </td>
+                        <td className="p-4 text-[#5F6D7E] text-sm font-medium text-left">
+                          {tx.amount}
+                        </td>
+                        <td className="p-4 text-[#5F6D7E] text-sm capitalize font-medium text-center">
+                          {tx.type}
+                        </td>
+                        <td className="p-4 text-[#5F6D7E] text-sm font-medium text-center">
+                          {formatDateTime(tx.created_at)}
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="p-4 text-center text-[#5F6D7E] text-sm w-full h-full justify-center items-center flex">
+                No transactions within this period.
+              </div>
+            )}
           </div>
         </>
       )}
