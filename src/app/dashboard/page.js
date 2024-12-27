@@ -115,8 +115,7 @@ export default function Page() {
 
   useEffect(() => {
     if (
-      userProfile?.event_date_booking === false &&
-      userProfile?.id_status === "verified"
+      userProfile?.event_date_booking === false 
     ) {
       // Set a timer to call showDinnerModal after 30 seconds (30,000 ms)
       const timer = setTimeout(showDinnerModal, 30000);

@@ -112,7 +112,7 @@ const api = async (method, uri, body = null) => {
     const response = await fetch(url, options);
     const res = await response.json();
 
-    if (response.ok) {
+    if (response.ok || response.status === 201) {
       // Handle access token if present
       if (res.access_token) {
         localStorage.setItem("savetown_token", res.access_token);
