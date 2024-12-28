@@ -148,12 +148,12 @@ export default function Headbar() {
               alt=""
             />
           </Link>
-          <img
+          {/* <img
             src={noti.src}
             className="cursor-pointer w-4 md:w-auto mt-0.5 md:mt-0"
             onClick={showNotiDrawer}
             alt=""
-          />
+          /> */}
           {loadingProfile ? (
             <Skeleton
               circle

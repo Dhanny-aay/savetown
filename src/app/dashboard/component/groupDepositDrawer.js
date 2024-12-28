@@ -30,7 +30,7 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
   const { userStats, triggerFetchDashboard, userProfile } = useUserContext();
   const [amountToReceive, setAmountToReceive] = useState("");
 
-  console.log(selectedID);
+  // console.log(selectedID);
 
   const resetStates = () => {
     setAmount(null);

@@ -88,7 +88,7 @@ export default function ResultInfo({
   updateFormData,
   result,
 }) {
-  console.log(result);
+  // console.log(result);
 
   // Destructure breakdown and monthly_payment from result
   const { breakdown, monthly_payment } = result || {};

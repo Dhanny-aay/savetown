@@ -20,7 +20,10 @@ import { useRouter } from "next/navigation";
 export default function Page() {
   const [currentStep, setCurrentStep] = useState(0); // Track the active step
 
-const savedEmail = typeof window !== "undefined" ? localStorage.getItem("savetown_signup_email") : null;
+  const savedEmail =
+    typeof window !== "undefined"
+      ? localStorage.getItem("savetown_signup_email")
+      : null;
 
   const [loadingSend, setLoadingSend] = useState(false);
   const [loadingRegister, setLoadingRegister] = useState(false);
@@ -85,6 +88,25 @@ const savedEmail = typeof window !== "undefined" ? localStorage.getItem("savetow
     setLoadingSend(true);
     const userData = { email: savedEmail, phone: formData.phone };
     handleSendOTPToPhone(userData, onSuccessSend, onErrorSend);
+  };
+
+  // For handlesendOtp
+  const onSuccessResend = (response) => {
+    setLoadingSend(false);
+
+    // Show success notification (uncomment if needed)
+    // enqueueSnackbar("OTP sent successfully", { variant: "success" });
+  };
+
+  const onErrorResend = () => {
+    setLoadingSend(false);
+  };
+
+  const handlResend = (e) => {
+    e.preventDefault();
+    setLoadingSend(true);
+    const userData = { email: savedEmail, phone: formData.phone };
+    handleSendOTPToPhone(userData, onSuccessResend, onErrorResend);
   };
 
   // For handleVerifyOtp
@@ -235,10 +257,7 @@ const savedEmail = typeof window !== "undefined" ? localStorage.getItem("savetow
 
                 <p className=" block mt-8 px-8 text-body14Regular font-Manrope text-[#595959] text-center">
                   Didn’t receive the code?
-                  <button
-                    // onClick={handleSend}
-                    className=" text-[#8133F1]"
-                  >
+                  <button onClick={handlResend} className=" text-[#8133F1]">
                     {loadingSend ? (
                       <img src={blckLoad.src} className=" w-5 ml-2" alt="" />
                     ) : (

@@ -2,6 +2,9 @@
 import { useState, useEffect } from "react";
 import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
 import stepper from "./assets/stepper.svg";
+import { handleGetCalculatorControl } from "@/app/userControllers/calculatorController";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function InputInfo({ updateFormData, formData, onClose }) {
   const [housePrice, setHousePrice] = useState(formData.house_price || 0);
@@ -13,12 +16,43 @@ export default function InputInfo({ updateFormData, formData, onClose }) {
   );
   const [houseType, setHouseType] = useState(formData.house_type || "");
   const [location, setLocation] = useState(formData.location || "");
+  const [calculatorAccess, setcalculatorAccess] = useState([]);
+  const [houseTypeOptions, setHouseTypeOptions] = useState([]);
+  const [houseLocationOptions, setHouseLocationOptions] = useState([]);
+  const [priceOptions, setPriceOptions] = useState({});
+
+  const [loading, setLoading] = useState(true);
+
+  const fetchCalculatorinputs = async () => {
+    setLoading(true);
+    try {
+      const data = await handleGetCalculatorControl();
+      if (data) {
+        setcalculatorAccess(data.data);
+        // Extract and save house location and house type options
+        setHouseLocationOptions(data.data.houseLocation);
+        setHouseTypeOptions(data.data.houseType);
+        setPriceOptions(data.data.price[0]);
+      }
+    } catch (error) {
+      console.error("Error fetching calc:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // console.log(houseLocationOptions);
+  // console.log(priceOptions);
+
+  useEffect(() => {
+    fetchCalculatorinputs();
+  }, []);
 
   const MIN_PRICE = 0;
-  const MAX_HOUSE_PRICE = 10000000;
-  const MAX_MONTHLY_COMMITMENT = 500000;
-  const MIN_SAVING_DURATION = 1;
-  const MAX_SAVING_DURATION = 15;
+  const MAX_HOUSE_PRICE = priceOptions?.max_house_price;
+  const MAX_MONTHLY_COMMITMENT = priceOptions?.max_monthly_commitment;
+  const MIN_SAVING_DURATION = priceOptions?.min_saving_period;
+  const MAX_SAVING_DURATION = priceOptions?.max_saving_period;
 
   // Format price and duration for display
   const formatPrice = (value, type = "currency") => {
@@ -106,116 +140,124 @@ export default function InputInfo({ updateFormData, formData, onClose }) {
         What can I save with my monthly payment
       </h3>
 
-      <div className="w-full mt-8">
-        {/* House Price Input and Range Slider */}
+      {loading ? (
         <div>
-          <label>
-            How much is the price of the house you’re looking to get?
-          </label>
-          <input
-            placeholder="₦ 0.00"
-            value={formatPrice(housePrice)}
-            onChange={handleHousePriceChange}
-            className="w-full border border-[#D5D7DA] rounded-[32px] mt-2 text-body14Regular font-Manrope px-6 py-3"
-          />
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={(housePrice / MAX_HOUSE_PRICE) * 100}
-            onChange={handleHousePriceRangeChange}
-            className="w-full h-[6px] bg-[#D5D7DA] rounded-lg appearance-none cursor-pointer range-slider"
-          />
+          <Skeleton count={10} height={40} className="mb-2 mt-6" />
         </div>
+      ) : (
+        <div className="w-full mt-8">
+          {/* House Price Input and Range Slider */}
+          <div>
+            <label>
+              How much is the price of the house you’re looking to get?
+            </label>
+            <input
+              placeholder="₦ 0.00"
+              value={formatPrice(housePrice)}
+              onChange={handleHousePriceChange}
+              className="w-full border border-[#D5D7DA] rounded-[32px] mt-2 text-body14Regular font-Manrope px-6 py-3"
+            />
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={(housePrice / MAX_HOUSE_PRICE) * 100}
+              onChange={handleHousePriceRangeChange}
+              className="w-full h-[6px] bg-[#D5D7DA] rounded-lg appearance-none cursor-pointer range-slider"
+            />
+          </div>
 
-        {/* Monthly Commitment Input and Range Slider */}
-        <div className="mt-4">
-          <label>How much are you willing to commit per month?</label>
-          <input
-            placeholder="₦ 0.00"
-            value={formatPrice(monthlyCommitment)}
-            onChange={handleMonthlyCommitmentChange}
-            className="w-full border border-[#D5D7DA] rounded-[32px] mt-2 text-body14Regular font-Manrope px-6 py-3"
-          />
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={(monthlyCommitment / MAX_MONTHLY_COMMITMENT) * 100}
-            onChange={handleMonthlyCommitmentRangeChange}
-            className="w-full h-[6px] bg-[#D5D7DA] rounded-lg appearance-none cursor-pointer range-slider"
-          />
-        </div>
+          {/* Monthly Commitment Input and Range Slider */}
+          <div className="mt-4">
+            <label>How much are you willing to commit per month?</label>
+            <input
+              placeholder="₦ 0.00"
+              value={formatPrice(monthlyCommitment)}
+              onChange={handleMonthlyCommitmentChange}
+              className="w-full border border-[#D5D7DA] rounded-[32px] mt-2 text-body14Regular font-Manrope px-6 py-3"
+            />
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={(monthlyCommitment / MAX_MONTHLY_COMMITMENT) * 100}
+              onChange={handleMonthlyCommitmentRangeChange}
+              className="w-full h-[6px] bg-[#D5D7DA] rounded-lg appearance-none cursor-pointer range-slider"
+            />
+          </div>
 
-        {/* Saving Duration Input and Range Slider */}
-        <div className="mt-4">
-          <label>How long do you want to save for your house?</label>
-          <input
-            placeholder="1 year"
-            value={formatPrice(savingDuration, "years")}
-            onChange={handleSavingDurationChange}
-            className="w-full border border-[#D5D7DA] rounded-[32px] mt-2 text-body14Regular font-Manrope px-6 py-3"
-          />
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={
-              ((savingDuration - MIN_SAVING_DURATION) /
-                (MAX_SAVING_DURATION - MIN_SAVING_DURATION)) *
-              100
-            }
-            onChange={handleSavingDurationRangeChange}
-            className="w-full h-[6px] bg-[#D5D7DA] rounded-lg appearance-none cursor-pointer range-slider"
-          />
-        </div>
+          {/* Saving Duration Input and Range Slider */}
+          <div className="mt-4">
+            <label>How long do you want to save for your house?</label>
+            <input
+              placeholder="1 year"
+              value={formatPrice(savingDuration, "years")}
+              onChange={handleSavingDurationChange}
+              className="w-full border border-[#D5D7DA] rounded-[32px] mt-2 text-body14Regular font-Manrope px-6 py-3"
+            />
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={
+                ((savingDuration - MIN_SAVING_DURATION) /
+                  (MAX_SAVING_DURATION - MIN_SAVING_DURATION)) *
+                100
+              }
+              onChange={handleSavingDurationRangeChange}
+              className="w-full h-[6px] bg-[#D5D7DA] rounded-lg appearance-none cursor-pointer range-slider"
+            />
+          </div>
 
-        {/* House Type Selection */}
-        <div className="mt-4">
-          <label>What type of house are you looking for?</label>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {[
-              "1 Bed room",
-              "2 Bed room",
-              "3 Bed room",
-              "4 Bed room",
-              "5 Bed room",
-              "Studio",
-              "Penthouse",
-            ].map((type) => (
-              <button
-                key={type}
-                onClick={() => handleHouseTypeChange(type)}
-                className={`border rounded-[10000px] py-2 px-3 text-xs 2xl:text-lg font-Manrope ${
-                  houseType === type
-                    ? "border-[#6200ee] text-[#8133f1] font-bold"
-                    : "border-[#595A5C] text-[#595A5C]"
-                }`}
-              >
-                {type}
-              </button>
-            ))}
+          {/* House Type Selection */}
+          <div className="mt-4">
+            <label>What type of house are you looking for?</label>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {houseTypeOptions.map((type, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleHouseTypeChange(type.value)}
+                  className={`border rounded-[10000px] py-2 px-3 text-xs 2xl:text-lg font-Manrope ${
+                    houseType === type.value
+                      ? "border-[#6200ee] text-[#8133f1] font-bold"
+                      : "border-[#595A5C] text-[#595A5C]"
+                  }`}
+                >
+                  {type.value}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Location Selection */}
+          <div className="mt-4">
+            <label>Where is the location?</label>
+            {loading ? (
+              <Skeleton
+                height={36}
+                width={"100%"}
+                containerClassName=" mt-2 w-full"
+              />
+            ) : (
+              <span className="block mt-2 bg-white border border-[#D5D7DA] rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]">
+                <select
+                  name="location"
+                  value={location}
+                  onChange={handleLocationChange}
+                  className="w-full bg-transparent"
+                >
+                  <option value="">Choose house location</option>
+                  {houseLocationOptions.map((item, index) => (
+                    <option key={index} value={item.value}>
+                      {item.value}
+                    </option>
+                  ))}
+                </select>
+              </span>
+            )}
           </div>
         </div>
-
-        {/* Location Selection */}
-        <div className="mt-4">
-          <label>Where is the location?</label>
-          <span className="block mt-2 bg-white border border-[#D5D7DA] rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]">
-            <select
-              name="location"
-              value={location}
-              onChange={handleLocationChange}
-              className="w-full bg-transparent"
-            >
-              <option value="">Choose house location</option>
-              <option value="Lagos">Lagos</option>
-              <option value="Abuja">Abuja</option>
-              <option value="Port Harcourt">Port Harcourt</option>
-            </select>
-          </span>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

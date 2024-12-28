@@ -61,9 +61,11 @@ export default function Page() {
   useEffect(() => {
     // Check if userProfile and group_savings are defined before accessing them
     if (userProfile?.group_savings?.length > 0) {
-      setSelectedID(userProfile.group_savings[0]);
+      setSelectedID(userProfile.group_savings[0].id);
     }
   }, [userProfile]);
+
+  // console.log(selectedID);
 
   // Function to copy the referral link
   const handleCopyReferral = async () => {
@@ -114,9 +116,7 @@ export default function Page() {
   const closeGroupDepositDrawer = () => setGroupDepositDrawerVisible(false);
 
   useEffect(() => {
-    if (
-      userProfile?.event_date_booking === false 
-    ) {
+    if (userProfile?.event_date_booking === false) {
       // Set a timer to call showDinnerModal after 30 seconds (30,000 ms)
       const timer = setTimeout(showDinnerModal, 30000);
 
@@ -324,9 +324,15 @@ export default function Page() {
         </div>
 
         <div className=" w-full mt-6 hidden lg:grid grid-cols-3 gap-6">
-          <div className="plansbg w-full h-[250px] bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]"></div>
-          <div className="plansbg w-full h-[250px] bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]"></div>
-          <div className="plansbg w-full h-[250px] bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]"></div>
+          <div className="plansbg w-full h-[250px] flex items-center justify-center bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]">
+            <img src={housemodel.src} alt="" />
+          </div>
+          <div className="plansbg w-full h-[250px] flex items-center justify-center bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]">
+            <img src={housemodel.src} alt="" />
+          </div>
+          <div className="plansbg w-full h-[250px] flex items-center justify-center bg-[#CEDEEE] border border-[#D5D7DA] rounded-[15px]">
+            <img src={housemodel.src} alt="" />
+          </div>
         </div>
 
         <div className=" w-full mt-6 block lg:hidden">

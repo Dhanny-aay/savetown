@@ -122,7 +122,7 @@ export default function All() {
       ) : transactions.length === 0 ? (
         <div className="w-full mt-8 flex flex-col items-center justify-center">
           <img
-            src="/receipt-placeholder.png"
+            src={receipt.src}
             className="w-[45px] md:w-auto"
             alt="No transactions"
           />
