@@ -26,6 +26,7 @@ export default function Calculator() {
   const [loadingCalculate, setLoadingCalculate] = useState(false);
   const [result, setResult] = useState(null);
   const [showResult, setShowResult] = useState(false);
+  const [durationOptions, setDurationOptions] = useState({});
 
   const validateFields = () => {
     const newErrors = {};
@@ -51,6 +52,7 @@ export default function Calculator() {
         // Extract and save house location and house type options
         setHouseLocationOptions(data.data.houseLocation);
         setHouseTypeOptions(data.data.houseType);
+        setDurationOptions(data.data.duration);
       }
     } catch (error) {
       console.error("Error fetching calc:", error);
@@ -69,6 +71,10 @@ export default function Calculator() {
 
   const handleLocationChange = (e) => {
     setHouseLocation(e.target.value);
+  };
+
+  const handleSavingDurationChange = (e) => {
+    setSaving_period(e.target.value);
   };
 
   const onSuccess = (response) => {
@@ -306,22 +312,45 @@ export default function Calculator() {
             </div>
           </div>
           <div className=" w-full mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className=" flex flex-col w-full">
-              <label htmlFor="duration">How long will you save?</label>
-              <input
+            {loading ? (
+              <Skeleton
+                height={36}
+                width={"100%"}
+                containerClassName=" mt-2 w-full"
+              />
+            ) : (
+              <div className=" flex flex-col w-full">
+                <label htmlFor="duration">How long will you save?</label>
+                <span className="mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]">
+                  <select
+                    name="duration"
+                    value={saving_period}
+                    onChange={handleSavingDurationChange}
+                    className="w-full bg-transparent"
+                  >
+                    <option value="">Choose saving duration</option>
+                    {durationOptions.map((item, index) => (
+                      <option key={index} value={item.value}>
+                        {item.value}
+                      </option>
+                    ))}
+                  </select>
+                </span>
+                {/* <input
                 type="number"
                 name="duration"
                 value={saving_period}
                 onChange={(e) => setSaving_period(e.target.value)}
                 className=" mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]"
                 placeholder="1 Year"
-              />
-              {errors.saving_period && (
-                <span className="text-[#DC3545] text-[10px] font-Manrope">
-                  {errors.saving_period}
-                </span>
-              )}
-            </div>
+              /> */}
+                {errors.saving_period && (
+                  <span className="text-[#DC3545] text-[10px] font-Manrope">
+                    {errors.saving_period}
+                  </span>
+                )}
+              </div>
+            )}
 
             {loading ? (
               <Skeleton
