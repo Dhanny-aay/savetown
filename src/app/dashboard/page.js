@@ -116,7 +116,10 @@ export default function Page() {
   const closeGroupDepositDrawer = () => setGroupDepositDrawerVisible(false);
 
   useEffect(() => {
-    if (userProfile?.event_date_booking === false) {
+    if (
+      userProfile?.event_date_booking === false ||
+      userProfile?.event_date_booking === null
+    ) {
       // Set a timer to call showDinnerModal after 30 seconds (30,000 ms)
       const timer = setTimeout(showDinnerModal, 30000);
 

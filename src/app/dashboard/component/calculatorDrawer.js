@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
 import InputInfo from "./calculatorSubComs/inputInfo";
 import EditInfo from "./calculatorSubComs/editInfo";
@@ -7,13 +7,15 @@ import ResultInfo from "./calculatorSubComs/resultInfo";
 import { useUserContext } from "../UserContext";
 import { handleCalculatorRequest } from "@/app/userControllers/calculatorController";
 import load from "./assets/load.gif";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function CalculatorDrawer({ isVisible, onClose }) {
   const [currentStep, setCurrentStep] = useState(0); // Track the active step
   const { userProfile, loadingProfile } = useUserContext();
-  const email = userProfile.email;
-  const first_name = userProfile.first_name;
-  const last_name = userProfile.last_name;
+  const email = userProfile?.email;
+  const first_name = userProfile?.first_name;
+  const last_name = userProfile?.last_name;
   const [result, setResult] = useState(null);
   const [formData, setFormData] = useState({
     house_price: "",
@@ -25,6 +27,18 @@ export default function CalculatorDrawer({ isVisible, onClose }) {
     saving_period: "",
   }); // Form data collected from steps
   const [loading, setLoading] = useState("");
+
+  // Sync formData with userProfile whenever userProfile changes
+  useEffect(() => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      email: userProfile?.email || "",
+      name: `${userProfile?.first_name || ""} ${userProfile?.last_name || ""}`,
+    }));
+  }, [userProfile]); // Triggered whenever userProfile changes
+
+  // console.log(userProfile);
+  // console.log(formData);
 
   // Go to the next step
   const handleNext = () => {
@@ -118,9 +132,40 @@ export default function CalculatorDrawer({ isVisible, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto h-full pb-16">
-          {CurrentStepComponent}
-        </div>
+
+        {loadingProfile ? (
+          <div className="flex-1 overflow-y-auto h-full pb-16">
+            <Skeleton
+              width="100%"
+              height={28}
+              containerClassName=" mt-1 opacity-50"
+            />
+            <Skeleton
+              width="100%"
+              height={28}
+              containerClassName=" mt-1 opacity-50"
+            />
+            <Skeleton
+              width="100%"
+              height={28}
+              containerClassName=" mt-1 opacity-50"
+            />
+            <Skeleton
+              width="100%"
+              height={28}
+              containerClassName=" mt-1 opacity-50"
+            />
+            <Skeleton
+              width="100%"
+              height={28}
+              containerClassName=" mt-1 opacity-50"
+            />
+          </div>
+        ) : (
+          <div className="flex-1 overflow-y-auto h-full pb-16">
+            {CurrentStepComponent}
+          </div>
+        )}
 
         {/* Fixed Navigation Buttons */}
         <div className="absolute bottom-0 left-0 w-full bg-white py-4 px-6 border-t border-gray-200">

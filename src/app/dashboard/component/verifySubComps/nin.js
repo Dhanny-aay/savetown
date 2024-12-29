@@ -5,8 +5,9 @@ import load from "./assets/load.gif";
 import { useState } from "react";
 import { handleKYCVerify } from "@/app/userControllers/kycController";
 import { useSnackbar } from "notistack";
+import { useUserContext } from "../../UserContext";
 
-export default function Nin({ goBack }) {
+export default function Nin({ goBack, onClose }) {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const id_type = "id_nin";
@@ -16,6 +17,7 @@ export default function Nin({ goBack }) {
   const [id_number, setId_number] = useState("");
   const [errors, setErrors] = useState({});
   const { enqueueSnackbar } = useSnackbar();
+  const { triggerFetchProfile } = useUserContext();
 
   const validateFields = () => {
     const newErrors = {};
@@ -58,6 +60,8 @@ export default function Nin({ goBack }) {
 
   const onSuccess = (response) => {
     setLoading(false);
+    triggerFetchProfile();
+    onClose();
     // Show success notification
     // enqueueSnackbar("Dinner Booked Successfully", { variant: "success" });
   };

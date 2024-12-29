@@ -5,6 +5,8 @@ import load from "./assets/load.gif";
 import { handleCreateGroup } from "@/app/userControllers/groupController";
 import { useSnackbar } from "notistack";
 import { useUserContext } from "../UserContext";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function GroupDrawer({ isVisible, onClose, triggerFetch }) {
   const [inputValue, setInputValue] = useState("");
@@ -69,6 +71,7 @@ export default function GroupDrawer({ isVisible, onClose, triggerFetch }) {
     setLoadingCreate(false);
     triggerFetch();
     triggerFetchProfile();
+    console.log("Success callback triggered");
     enqueueSnackbar("Group Created", {
       variant: "success",
     });
@@ -77,6 +80,7 @@ export default function GroupDrawer({ isVisible, onClose, triggerFetch }) {
   };
 
   const onError = () => {
+    console.error("Error callback triggered", error);
     setLoadingCreate(false);
     enqueueSnackbar("Failed to create group", {
       variant: "error",

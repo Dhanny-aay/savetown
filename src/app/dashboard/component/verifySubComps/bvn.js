@@ -4,8 +4,9 @@ import { useState } from "react";
 import load from "./assets/load.gif";
 import FileUploader from "@/app/utils/fileUploader";
 import { useSnackbar } from "notistack";
+import { useUserContext } from "../../UserContext";
 
-export default function Bvn({ goBack }) {
+export default function Bvn({ goBack, onClose }) {
   const [loading, setLoading] = useState(false);
   // const [step, setStep] = useState(1);
   const id_type = "id_bvn";
@@ -15,6 +16,7 @@ export default function Bvn({ goBack }) {
   const [id_number, setId_number] = useState("");
   const [errors, setErrors] = useState({});
   const { enqueueSnackbar } = useSnackbar();
+  const { triggerFetchProfile } = useUserContext();
 
   const validateFields = () => {
     const newErrors = {};
@@ -57,6 +59,8 @@ export default function Bvn({ goBack }) {
 
   const onSuccess = (response) => {
     setLoading(false);
+    triggerFetchProfile();
+    onClose();
     // Show success notification
     // enqueueSnackbar("Dinner Booked Successfully", { variant: "success" });
   };

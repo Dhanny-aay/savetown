@@ -20,23 +20,33 @@ export default function VerifyDrawer({ onClose, isVisible }) {
   const options = [
     {
       label: "Bank verification number(BVN)",
-      component: <Bvn goBack={() => setCurrentComponent(null)} />,
+      component: (
+        <Bvn onClose={onClose} goBack={() => setCurrentComponent(null)} />
+      ),
     },
     {
       label: "National Identification Number (NIN)",
-      component: <Nin goBack={() => setCurrentComponent(null)} />,
+      component: (
+        <Nin onClose={onClose} goBack={() => setCurrentComponent(null)} />
+      ),
     },
     {
       label: "International Passport",
-      component: <IntlPass goBack={() => setCurrentComponent(null)} />,
+      component: (
+        <IntlPass onClose={onClose} goBack={() => setCurrentComponent(null)} />
+      ),
     },
     {
       label: "Drivers License",
-      component: <DriverLsc goBack={() => setCurrentComponent(null)} />,
+      component: (
+        <DriverLsc onClose={onClose} goBack={() => setCurrentComponent(null)} />
+      ),
     },
     {
       label: "Voter’s Card",
-      component: <Voters goBack={() => setCurrentComponent(null)} />,
+      component: (
+        <Voters onClose={onClose} goBack={() => setCurrentComponent(null)} />
+      ),
     },
   ];
   return (

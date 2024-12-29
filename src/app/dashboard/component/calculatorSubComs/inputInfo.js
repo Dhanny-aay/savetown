@@ -11,15 +11,14 @@ export default function InputInfo({ updateFormData, formData, onClose }) {
   const [monthlyCommitment, setMonthlyCommitment] = useState(
     formData.monthly_commitment || 0
   );
-  const [savingDuration, setSavingDuration] = useState(
-    formData.saving_period || 1
-  );
+  const [savingDuration, setSavingDuration] = useState(formData.saving_period);
   const [houseType, setHouseType] = useState(formData.house_type || "");
   const [location, setLocation] = useState(formData.location || "");
   const [calculatorAccess, setcalculatorAccess] = useState([]);
   const [houseTypeOptions, setHouseTypeOptions] = useState([]);
   const [houseLocationOptions, setHouseLocationOptions] = useState([]);
   const [priceOptions, setPriceOptions] = useState({});
+  const [durationOptions, setDurationOptions] = useState({});
 
   const [loading, setLoading] = useState(true);
 
@@ -32,6 +31,7 @@ export default function InputInfo({ updateFormData, formData, onClose }) {
         // Extract and save house location and house type options
         setHouseLocationOptions(data.data.houseLocation);
         setHouseTypeOptions(data.data.houseType);
+        setDurationOptions(data.data.duration);
         setPriceOptions(data.data.price[0]);
       }
     } catch (error) {
@@ -103,20 +103,20 @@ export default function InputInfo({ updateFormData, formData, onClose }) {
     setMonthlyCommitment(calculatedCommitment);
   };
 
-  const handleSavingDurationChange = (e) => {
-    const numericValue = Number(e.target.value.replace(/[^0-9.-]+/g, ""));
-    setSavingDuration(
-      Math.min(Math.max(numericValue, MIN_SAVING_DURATION), MAX_SAVING_DURATION)
-    );
-  };
+  // const handleSavingDurationChange = (e) => {
+  //   const numericValue = Number(e.target.value.replace(/[^0-9.-]+/g, ""));
+  //   setSavingDuration(
+  //     Math.min(Math.max(numericValue, MIN_SAVING_DURATION), MAX_SAVING_DURATION)
+  //   );
+  // };
 
-  const handleSavingDurationRangeChange = (e) => {
-    const rangeValue = e.target.value;
-    const calculatedDuration =
-      MIN_SAVING_DURATION +
-      (rangeValue / 100) * (MAX_SAVING_DURATION - MIN_SAVING_DURATION);
-    setSavingDuration(Math.round(calculatedDuration));
-  };
+  // const handleSavingDurationRangeChange = (e) => {
+  //   const rangeValue = e.target.value;
+  //   const calculatedDuration =
+  //     MIN_SAVING_DURATION +
+  //     (rangeValue / 100) * (MAX_SAVING_DURATION - MIN_SAVING_DURATION);
+  //   setSavingDuration(Math.round(calculatedDuration));
+  // };
 
   const handleHouseTypeChange = (type) => {
     setHouseType(type);
@@ -124,6 +124,10 @@ export default function InputInfo({ updateFormData, formData, onClose }) {
 
   const handleLocationChange = (e) => {
     setLocation(e.target.value);
+  };
+
+  const handleSavingDurationChange = (e) => {
+    setSavingDuration(e.target.value);
   };
 
   return (
@@ -186,7 +190,7 @@ export default function InputInfo({ updateFormData, formData, onClose }) {
             />
           </div>
 
-          {/* Saving Duration Input and Range Slider */}
+          {/* Saving Duration Input and Range Slider
           <div className="mt-4">
             <label>How long do you want to save for your house?</label>
             <input
@@ -207,6 +211,34 @@ export default function InputInfo({ updateFormData, formData, onClose }) {
               onChange={handleSavingDurationRangeChange}
               className="w-full h-[6px] bg-[#D5D7DA] rounded-lg appearance-none cursor-pointer range-slider"
             />
+          </div> */}
+
+          {/* duration Selection */}
+          <div className="mt-4">
+            <label>How long do you want to save for your house?</label>
+            {loading ? (
+              <Skeleton
+                height={36}
+                width={"100%"}
+                containerClassName=" mt-2 w-full"
+              />
+            ) : (
+              <span className="block mt-2 bg-white border border-[#D5D7DA] rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]">
+                <select
+                  name="duration"
+                  value={savingDuration}
+                  onChange={handleSavingDurationChange}
+                  className="w-full bg-transparent"
+                >
+                  <option value="">Choose saving duration</option>
+                  {durationOptions.map((item, index) => (
+                    <option key={index} value={item.value}>
+                      {item.value}
+                    </option>
+                  ))}
+                </select>
+              </span>
+            )}
           </div>
 
           {/* House Type Selection */}
