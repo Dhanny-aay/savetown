@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import {
   handleGetUserProfile,
   handleGetUserStats,
+  handleGetUserStatsWithParam,
 } from "../userControllers/profileController";
 import { UserProvider } from "./UserContext";
 
@@ -18,6 +19,16 @@ export default function DashboardLayout({ children }) {
   const [trigger, setTrigger] = useState(false);
   const [triggerProfile, setTriggerProfile] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState({
+    name: "USD",
+    flag: "https://flagcdn.com/us.svg",
+    default_currency: "USD",
+  });
+
+  const updateCurrency = (currency) => {
+    setSelectedCurrency(currency);
+    setTrigger(!trigger); // Trigger `fetchUserStats` with the new currency
+  };
 
   // Toggle visibility function
   const toggleVisibility = () => {
@@ -43,17 +54,22 @@ export default function DashboardLayout({ children }) {
 
   const fetchUserStats = async () => {
     setLoading(true);
+
+    const params = {
+      default_currency: selectedCurrency.default_currency, // Use the selected currency
+    };
     try {
-      const data = await handleGetUserStats();
+      const data = await handleGetUserStatsWithParam(params);
       if (data) {
         setUserStats(data.data);
       }
     } catch (error) {
-      console.error("Error fetching stats:", error);
+      console.log("Error fetching stats:", error);
     } finally {
       setLoading(false);
     }
   };
+
   const fetchUserProfile = async () => {
     setLoadingProfile(true);
     try {
@@ -62,7 +78,7 @@ export default function DashboardLayout({ children }) {
         setUserProfile(data.data);
       }
     } catch (error) {
-      console.error("Error fetching profile:", error);
+      console.log("Error fetching profile:", error);
     } finally {
       setLoadingProfile(false);
     }
@@ -85,6 +101,8 @@ export default function DashboardLayout({ children }) {
     triggerFetchDashboard,
     triggerFetchProfile,
     toggleVisibility,
+    selectedCurrency,
+    updateCurrency, // Add this to the context
   };
 
   return (

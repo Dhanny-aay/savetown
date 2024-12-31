@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 // import PaymentDetail from "../settings/components/paymentDetail";
 import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
 import { useUserContext } from "../UserContext";
@@ -39,6 +39,7 @@ export default function WithdrawDrawer({ onClose, isVisible }) {
   const [loadingMethod, setLoadingMethod] = useState(true);
   const [trigger, setTrigger] = useState(false);
   const [selectedID, setSelectedID] = useState("");
+  const [loadingExchange, setLoadingExchange] = useState(false);
 
   const triggerFetch = () => {
     setTrigger(!trigger); // Toggle trigger to true or false
@@ -95,42 +96,60 @@ export default function WithdrawDrawer({ onClose, isVisible }) {
     setErrors({}); // Clear any errors
   };
 
-  const handleAmountChange = (e) => {
-    const rawValue = e.target.value.replace(/[^0-9]/g, "");
-    const intValue = rawValue ? parseInt(rawValue, 10) : "";
-    setAmount(intValue);
-  };
+  // const handleAmountChange = (e) => {
+  //   const rawValue = e.target.value.replace(/[^0-9]/g, "");
+  //   const intValue = rawValue ? parseInt(rawValue, 10) : "";
+  //   setAmount(intValue);
+  // };
 
   const formatWithCommas = (value) => {
     if (value === 0 || value == null) return "0.00"; // Handle 0, null, and undefined
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  const validateFields = () => {
-    const newErrors = {};
-    if (!amount || amount <= 0) newErrors.amount = "Valid amount is required";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  // const validateFields = () => {
+  //   const newErrors = {};
+  //   if (!amount || amount <= 0) newErrors.amount = "Valid amount is required";
+  //   setErrors(newErrors);
+  //   return Object.keys(newErrors).length === 0;
+  // };
 
-  const onSuccess = (response) => {
-    setLoading(false);
-    setConversion(response.data);
-  };
+  // const onSuccess = (response) => {
+  //   setLoading(false);
+  //   setConversion(response.data);
+  // };
 
-  const onError = () => {
-    setLoading(false);
-  };
+  // const onError = () => {
+  //   setLoading(false);
+  // };
 
-  const handleSend = (e) => {
-    if (validateFields()) {
-      e.preventDefault();
-      setLoading(true);
-      const userData = { amount };
-      handleGetExchangAmount(userData, onSuccess, onError);
-    }
-  };
+  const amountRef = useRef(amount);
 
+  // Update ref whenever state changes
+  useEffect(() => {
+    amountRef.current = amount;
+  }, [amount]);
+
+  const handleSend = () => {
+    setLoadingExchange(true); // Show loading
+    const userData = {
+      amount: amountRef.current,
+      source_currency: "NGN",
+      destination_currency: "USD",
+    }; // Use latest amount value
+    handleGetExchangAmount(
+      userData,
+      (response) => {
+        setLoadingExchange(false); // Clear loading state
+        setErrors({ amount: "" });
+        setConversion(response.data); // Update conversion result
+      },
+      () => {
+        setLoadingExchange(false); // Clear loading on error
+        setErrors({ amount: "Valid amount is required" });
+      }
+    );
+  };
   const debounce = (func, delay) => {
     let timer;
     return (...args) => {
@@ -139,7 +158,17 @@ export default function WithdrawDrawer({ onClose, isVisible }) {
     };
   };
 
-  const debouncedHandleSend = useCallback(debounce(handleSend, 500), [amount]);
+  const debouncedHandleSend = useCallback(debounce(handleSend, 500), []);
+
+  const handleAmountChange = (e) => {
+    const rawValue = e.target.value.replace(/[^0-9]/g, "");
+    const intValue = rawValue ? parseInt(rawValue, 10) : "";
+    if (!isNaN(intValue)) {
+      setAmount(intValue); // Update the state
+      setConversion(null); // Clear previous conversion while typing
+      debouncedHandleSend(); // Trigger debounced API call
+    }
+  };
 
   const onSuccessWithdraw = (response) => {
     setLoadingWithdraw(false);
@@ -189,7 +218,7 @@ export default function WithdrawDrawer({ onClose, isVisible }) {
 
           <div className=" mt-9 w-full">
             <div className="">
-              <label>Amount</label>
+              <label>Amount(₦)</label>
               <div className="mt-2 flex flex-col items-start ">
                 <input
                   placeholder="₦0.00"
@@ -212,7 +241,7 @@ export default function WithdrawDrawer({ onClose, isVisible }) {
                   <p className="text-[#8133F1] mt-3 text-body12Regular font-Manrope">
                     You will be withdrawing a total of (₦
                     {formatWithCommas(conversion?.sourceAmount)} = $
-                    {conversion?.destinationAmount})
+                    {conversion?.amountToReceive})
                   </p>
                   <p className="text-[#8133F1] mt-1 text-body12Regular font-Manrope">
                     At the rate of (₦1.00 = ${conversion?.rate})
@@ -326,11 +355,16 @@ export default function WithdrawDrawer({ onClose, isVisible }) {
               "Proceed"
             )}
           </button> */}
+
             {conversion && (
               <button
                 onClick={handleWithdraw}
-                disabled={loadingWithdraw}
-                className="bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center justify-center"
+                disabled={loadingExchange || !conversion || loadingWithdraw} // Disable if loading or no conversion
+                className={`bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center justify-center ${
+                  loadingExchange || !conversion || loadingWithdraw
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
               >
                 {loadingWithdraw ? (
                   <img src={load.src} className="w-5" alt="" />

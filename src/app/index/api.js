@@ -138,29 +138,28 @@ const api = async (method, uri, body = null) => {
           SnackbarUtils.error("Session expired. Redirecting to sign-in...");
           window.location = "/sign-in";
         }
-        return; // Stop further execution
+        return;
       }
 
-      // Handle other errors
+      // Get error message
       const errorMessage =
         res?.data?.error || res?.error || res?.message || "An error occurred";
 
+      // For specific status codes, throw error without showing snackbar
       if (
         response.status === 403 ||
         response.status === 409 ||
         response.status === 422
       ) {
-        SnackbarUtils.error(errorMessage);
         throw new Error(errorMessage);
       }
 
       // For all other errors
-      SnackbarUtils.error(errorMessage);
       throw new Error(errorMessage);
     }
   } catch (err) {
-    // Handle network or fetch errors
-    SnackbarUtils.error(err.message); // Only display the actual error message
+    // Show error message only once here
+    SnackbarUtils.error(err.message);
     throw err;
   }
 };

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import caretright from "./assets/caretright.svg";
 import Bvn from "./verifySubComps/bvn";
 import Nin from "./verifySubComps/nin";
@@ -8,47 +8,67 @@ import DriverLsc from "./verifySubComps/driverLsc";
 import Voters from "./verifySubComps/voters";
 import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
 import countryCodes from "country-codes-list";
+import { handleGetKYCSettings } from "@/app/userControllers/kycController";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function VerifyDrawer({ onClose, isVisible }) {
+  const [kycSettings, setKycSettings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentComponent, setCurrentComponent] = useState(null);
+
+  const fetchKycSettings = async () => {
+    setLoading(true);
+    try {
+      const data = await handleGetKYCSettings();
+      if (data) {
+        setKycSettings(data.data);
+      }
+    } catch (error) {
+      console.log("Error fetching settings:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchKycSettings();
+  }, []);
 
   // Extract a list of countries from the package
   const countryCodeList = countryCodes.all().map((country) => ({
     name: country.countryNameEn,
   }));
 
-  const options = [
+  // Define the IDs of the KYC options you care about
+  const requiredKycOptions = [
+    { type: "id_bvn", label: "Bank Verification Number (BVN)", component: Bvn },
     {
-      label: "Bank verification number(BVN)",
-      component: (
-        <Bvn onClose={onClose} goBack={() => setCurrentComponent(null)} />
-      ),
-    },
-    {
+      type: "id_nin",
       label: "National Identification Number (NIN)",
-      component: (
-        <Nin onClose={onClose} goBack={() => setCurrentComponent(null)} />
-      ),
+      component: Nin,
     },
     {
-      label: "International Passport",
-      component: (
-        <IntlPass onClose={onClose} goBack={() => setCurrentComponent(null)} />
-      ),
-    },
-    {
+      type: "id_drivers_license",
       label: "Drivers License",
-      component: (
-        <DriverLsc onClose={onClose} goBack={() => setCurrentComponent(null)} />
-      ),
+      component: DriverLsc,
     },
     {
-      label: "Voter’s Card",
-      component: (
-        <Voters onClose={onClose} goBack={() => setCurrentComponent(null)} />
-      ),
+      type: "id_passport",
+      label: "International Passport",
+      component: IntlPass,
     },
+    { type: "id_voters_card", label: "Voter’s Card", component: Voters },
   ];
+
+  // Filter to include only the required KYC options that are active in settings
+  const visibleOptions = requiredKycOptions.filter((option) =>
+    kycSettings.some(
+      (setting) =>
+        setting.backend_code_name === option.type && setting.active === 1
+    )
+  );
+
   return (
     <div
       className={`fixed top-0 right-0 z-[999] h-screen overflow-y-auto transition-transform transform ${
@@ -85,7 +105,7 @@ export default function VerifyDrawer({ onClose, isVisible }) {
               </div>
             </div>
 
-            <div className=" mt-6">
+            {/* <div className=" mt-6">
               <label htmlFor="Nationality">Nationality</label>
               <span className="rounded-[32px] border border-[#D5D7DA] block py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2] w-full mt-2">
                 <select
@@ -101,26 +121,52 @@ export default function VerifyDrawer({ onClose, isVisible }) {
                   ))}
                 </select>
               </span>
-            </div>
+            </div> */}
 
             <div className="mt-8">
               <h4 className="text-[#595A5C] font-Manrope text-body16Bold ">
                 Choose one of the following listed below to verify
               </h4>
-              <div className="mt-8 w-full ">
-                {options.map((item, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentComponent(item.component)} // Set the current component
-                    className="w-full flex items-center justify-between py-5 px-4 border-b border-[#C2C4C6]"
-                  >
-                    <p className="text-[#666666] text-body14Regular md:text-body14Bold font-Manrope">
-                      {item.label}
-                    </p>
-                    <img src={caretright.src} className="h-3" alt="" />
-                  </button>
-                ))}
-              </div>
+
+              {loading ? (
+                <div className=" w-full mt-8">
+                  <Skeleton
+                    width="100%"
+                    height={28}
+                    containerClassName=" mt-1 opacity-50"
+                  />
+                  <Skeleton
+                    width="100%"
+                    height={28}
+                    containerClassName=" mt-1 opacity-50"
+                  />
+                  <Skeleton
+                    width="100%"
+                    height={28}
+                    containerClassName=" mt-1 opacity-50"
+                  />
+                  <Skeleton
+                    width="100%"
+                    height={28}
+                    containerClassName=" mt-1 opacity-50"
+                  />
+                </div>
+              ) : (
+                <div className="mt-8 w-full ">
+                  {visibleOptions.map((item, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentComponent(item.component)} // Set the current component
+                      className="w-full flex items-center justify-between py-5 px-4 border-b border-[#C2C4C6]"
+                    >
+                      <p className="text-[#666666] text-body14Regular md:text-body14Bold font-Manrope">
+                        {item.label}
+                      </p>
+                      <img src={caretright.src} className="h-3" alt="" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}

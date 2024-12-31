@@ -57,7 +57,7 @@ export default function Works({ headings }) {
   const setDynamicHeading = () => {
     // Find the item with category "Features"
     const whyHeading = headings?.find(
-      (heading) => heading.category === "HowItWorks"
+      (heading) => heading.category === "Howitworks"
     );
 
     if (whyHeading) {

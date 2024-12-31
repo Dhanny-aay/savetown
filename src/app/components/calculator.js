@@ -251,7 +251,7 @@ export default function Calculator() {
                 name="Full-Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className=" mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]"
+                className=" mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-base placeholder:text-[#000000B2]"
                 placeholder="Enter full name"
               />
               {errors.name && (
@@ -267,7 +267,7 @@ export default function Calculator() {
                 name="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className=" mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]"
+                className=" mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-base placeholder:text-[#000000B2]"
                 placeholder="Enter email address"
               />
               {errors.email && (
@@ -285,7 +285,7 @@ export default function Calculator() {
                 name="targetPrice"
                 value={formatWithCommas(house_price)} // Display formatted value
                 onChange={handlePriceChange}
-                className=" mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]"
+                className=" mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-base placeholder:text-[#000000B2]"
                 placeholder="₦ 0.00"
               />
               {errors.house_price && (
@@ -301,7 +301,7 @@ export default function Calculator() {
                 name="commit"
                 value={formatWithCommas(monthly_commitment)} // Display formatted value
                 onChange={handleMonthlyPriceChange}
-                className=" mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]"
+                className=" mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-base placeholder:text-[#000000B2]"
                 placeholder="₦ 0.00"
               />
               {errors.monthly_commitment && (
@@ -321,7 +321,7 @@ export default function Calculator() {
             ) : (
               <div className=" flex flex-col w-full">
                 <label htmlFor="duration">How long will you save?</label>
-                <span className="mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]">
+                <span className="mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-base placeholder:text-[#000000B2]">
                   <select
                     name="duration"
                     value={saving_period}
@@ -341,7 +341,7 @@ export default function Calculator() {
                 name="duration"
                 value={saving_period}
                 onChange={(e) => setSaving_period(e.target.value)}
-                className=" mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]"
+                className=" mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-base placeholder:text-[#000000B2]"
                 placeholder="1 Year"
               /> */}
                 {errors.saving_period && (
@@ -362,7 +362,7 @@ export default function Calculator() {
               <div className=" flex flex-col w-full">
                 <label className="leading-none">Where is the location?</label>
 
-                <div className=" mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]">
+                <div className=" mt-2 bg-white rounded-[10000px] w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-base placeholder:text-[#000000B2]">
                   <select
                     name="location"
                     value={houseLocation}
@@ -400,7 +400,7 @@ export default function Calculator() {
                   <button
                     key={index}
                     onClick={() => handleHouseTypeChange(type.value)}
-                    className={`border rounded-[10000px] py-2 px-3 text-xs 2xl:text-lg font-Manrope ${
+                    className={`border rounded-[10000px] py-2 px-3 text-xs 2xl:text-base font-Manrope ${
                       houseType === type.value
                         ? "border-[#6200ee] text-[#8133f1] font-bold"
                         : "border-[#595A5C] text-[#595A5C]"
@@ -421,7 +421,7 @@ export default function Calculator() {
           <button
             onClick={handleCalculate}
             disabled={loadingCalculate}
-            className=" bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center justify-center"
+            className=" bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-base flex items-center justify-center"
           >
             {loadingCalculate ? (
               <img src={load.src} className="w-4" alt="" />

@@ -10,6 +10,31 @@ export const handleGetUserStats = async () => {
   }
 };
 
+// Function to get user notifications
+export const handleGetUserNotification = async () => {
+  try {
+    const response = await api("GET", "/user/notifications");
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const handleGetUserStatsWithParam = async (params = {}) => {
+  try {
+    const queryString = new URLSearchParams(params).toString();
+
+    const endpoint = `/user/dashboard/${queryString ? `?${queryString}` : ""}`;
+
+    const response = await api("GET", endpoint);
+
+    return response;
+  } catch (error) {
+    console.error("Error fetching dashboard with params:", error);
+    throw error; // Optionally re-throw the error
+  }
+};
+
 // Function to get user Profile
 export const handleGetUserProfile = async () => {
   try {

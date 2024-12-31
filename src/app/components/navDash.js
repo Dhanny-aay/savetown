@@ -45,38 +45,38 @@ export default function NavDash() {
         <div className="w-full flex flex-col justify-center items-center space-y-5">
           <Link
             href="/"
-            className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl"
+            className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg"
           >
             Home
           </Link>
 
           <Link
             href="/career"
-            className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl"
+            className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg"
           >
             Career
           </Link>
           <Link
             href="/media"
-            className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl"
+            className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg"
           >
             Media
           </Link>
           <Link
             href="/about"
-            className=" text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl"
+            className=" text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg"
           >
             About us
           </Link>
           <Link
             href="/blog"
-            className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl"
+            className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg"
           >
             Our Blogs
           </Link>
           <Link
             href="/faq"
-            className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl"
+            className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg"
           >
             Our Faqs
           </Link>
@@ -84,13 +84,13 @@ export default function NavDash() {
           <div className=" flex md:hidden space-x-3 z-50 items-center  mt-6">
             <Link
               href="/sign-up"
-              className="  font-Manrope px-6 py-3 font-semibold text-sm xl:text-lg 2xl:text-xl text-white"
+              className="  font-Manrope px-6 py-3 font-semibold text-sm xl:text-lg 2xl:text-lg text-white"
             >
               Sign Up
             </Link>
             <Link
               href="/sign-in"
-              className=" px-6 py-3 bg-btnPrimary rounded-[50px] font-Manrope font-semibold text-sm xl:text-lg 2xl:text-xl leading-[1] text-white"
+              className=" px-6 py-3 bg-btnPrimary rounded-[50px] font-Manrope font-semibold text-sm xl:text-lg 2xl:text-lg leading-[1] text-white"
             >
               Log In
             </Link>
@@ -112,7 +112,7 @@ export default function NavDash() {
           <div className=" hidden lg:flex items-center space-x-8">
             <Link
               href="/"
-              className=" text-black font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl"
+              className=" text-black font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg"
             >
               Home
             </Link>
@@ -121,7 +121,7 @@ export default function NavDash() {
             <div className="relative dropdown-container">
               <button
                 onClick={() => toggleDropdown("company")}
-                className="text-black font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl relative flex items-center space-x-1"
+                className="text-black font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg relative flex items-center space-x-1"
               >
                 <p>Company</p>
                 <img
@@ -136,19 +136,19 @@ export default function NavDash() {
                 <div className="w-[250px] py-4 px-6 bg-[#000000b4] rounded-xl swing-in-top-fwd absolute top-12 -left-4 flex flex-col text-left space-y-4">
                   <Link
                     href="/career"
-                    className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl"
+                    className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg"
                   >
                     Career
                   </Link>
                   <Link
                     href="/media"
-                    className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl"
+                    className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg"
                   >
                     Media
                   </Link>
                   <Link
                     href="/about"
-                    className=" text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl"
+                    className=" text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg"
                   >
                     About us
                   </Link>
@@ -157,7 +157,7 @@ export default function NavDash() {
             </div>
             <Link
               href="/"
-              className=" text-black font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl"
+              className=" text-black font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg"
             >
               Calculators
             </Link>
@@ -165,7 +165,7 @@ export default function NavDash() {
             <div className="relative dropdown-container">
               <button
                 onClick={() => toggleDropdown("learning")}
-                className="text-black font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl relative flex items-center space-x-1"
+                className="text-black font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg relative flex items-center space-x-1"
               >
                 <p>Learning Center</p>
                 <img
@@ -177,16 +177,16 @@ export default function NavDash() {
                 />
               </button>
               {activeDropdown === "learning" && (
-                <div className="w-[250px] py-4 px-6 bg-[#000000b4] rounded-xl swing-i 2xl:text-xl swing-in-top-fwd absolute top-12 -left-4 flex flex-col text-left space-y-4">
+                <div className="w-[250px] py-4 px-6 bg-[#000000b4] rounded-xl swing-i 2xl:text-lg swing-in-top-fwd absolute top-12 -left-4 flex flex-col text-left space-y-4">
                   <Link
                     href="/blog"
-                    className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl"
+                    className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg"
                   >
                     Our Blogs
                   </Link>
                   <Link
                     href="/faq"
-                    className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-xl"
+                    className="text-white font-Manrope font-medium text-sm xl:text-lg 2xl:text-lg"
                   >
                     Our Faqs
                   </Link>
@@ -198,13 +198,13 @@ export default function NavDash() {
             <div className=" hidden md:flex items-center space-x-3">
               <Link
                 href="/sign-up"
-                className="  font-Manrope px-6 py-3 font-semibold text-sm xl:text-lg 2xl:text-xl text-black"
+                className="  font-Manrope px-6 py-3 font-semibold text-sm xl:text-lg 2xl:text-lg text-black"
               >
                 Sign Up
               </Link>
               <Link
                 href="/sign-in"
-                className=" px-6 py-3 bg-btnPrimary rounded-[50px] font-Manrope font-semibold text-sm xl:text-lg 2xl:text-xl leading-[1] text-white"
+                className=" px-6 py-3 bg-btnPrimary rounded-[50px] font-Manrope font-semibold text-sm xl:text-lg 2xl:text-lg leading-[1] text-white"
               >
                 Log In
               </Link>

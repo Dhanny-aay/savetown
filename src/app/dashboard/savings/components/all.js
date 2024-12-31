@@ -107,7 +107,9 @@ export default function All() {
           </div>
           <h2 className=" text-h3 md:text-h1 font-Manrope font-bold mt-1 text-[#666666]">
             {isVisible
-              ? `$${formatWithCommas(userStats?.total_balance) ?? 0}`
+              ? `${userStats?.currency === "NGN" ? "₦" : "$"}${
+                  formatWithCommas(userStats?.total_balance) ?? 0
+                }`
               : "****"}
           </h2>
         </div>
@@ -190,6 +192,7 @@ export default function All() {
                           {tx.identifier}
                         </td>
                         <td className="p-4 text-[#5F6D7E] text-sm font-medium text-left">
+                          {tx.currency === "NGN" ? "₦" : "$"}
                           {tx.amount}
                         </td>
                         <td className="p-4 text-[#5F6D7E] text-sm capitalize font-medium text-center">

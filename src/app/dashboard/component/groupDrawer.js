@@ -18,6 +18,7 @@ export default function GroupDrawer({ isVisible, onClose, triggerFetch }) {
   const [loadingCreate, setLoadingCreate] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { triggerFetchProfile } = useUserContext();
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_USER_BASE_URL;
 
   // Regex for basic email validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -67,32 +68,58 @@ export default function GroupDrawer({ isVisible, onClose, triggerFetch }) {
 
   // console.log(emails);
 
-  const onSuccess = (response) => {
-    setLoadingCreate(false);
-    triggerFetch();
-    triggerFetchProfile();
-    console.log("Success callback triggered");
-    enqueueSnackbar("Group Created", {
-      variant: "success",
-    });
-    onClose();
-    //  setConversion(response.data);
-  };
-
-  const onError = () => {
-    console.error("Error callback triggered", error);
-    setLoadingCreate(false);
-    enqueueSnackbar("Failed to create group", {
-      variant: "error",
-    });
-  };
-
-  const handleCreate = (e) => {
+  const handleCreate = async () => {
     if (validateFields()) {
-      e.preventDefault();
       setLoadingCreate(true);
-      const userData = { name, description, target_amount, members: emails };
-      handleCreateGroup(userData, onSuccess, onError);
+
+      const userData = {
+        name,
+        description,
+        target_amount,
+        members: emails,
+      };
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/v1/user/group`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("savetown_token")}`,
+          },
+          body: JSON.stringify(userData),
+        });
+
+        // Parse the response JSON
+        const res = await response.json();
+
+        if (response.ok || response.status === 201) {
+          // Success logic
+          triggerFetch?.();
+          triggerFetchProfile();
+          enqueueSnackbar("Group Created", {
+            variant: "success",
+          });
+          onClose();
+        } else {
+          // Handle errors
+          const errorMessage =
+            res?.data?.error ||
+            res?.error ||
+            res?.message ||
+            "Failed to create group.";
+          enqueueSnackbar(errorMessage, {
+            variant: "error",
+          });
+        }
+      } catch (error) {
+        // Handle network or unexpected errors
+        console.log("Error creating group:", error);
+        enqueueSnackbar("An unexpected error occurred. Please try again.", {
+          variant: "error",
+        });
+      } finally {
+        setLoadingCreate(false); // Always stop loading
+      }
     }
   };
 

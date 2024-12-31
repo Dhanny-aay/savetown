@@ -214,7 +214,7 @@ export default function GroupSaving() {
             </div>
             <h2 className=" text-[32px] font-Manrope font-bold text-white mt-[6px]">
               {isVisible
-                ? `$${
+                ? `${userStats?.currency === "NGN" ? "₦" : "$"}${
                     formatWithCommas(userStats?.group_savings_balance) ?? "0.00"
                   }`
                 : "****"}
@@ -421,6 +421,7 @@ export default function GroupSaving() {
                           {tx.identifier}
                         </td>
                         <td className="p-4 text-[#5F6D7E] text-sm font-medium text-left">
+                          {tx.currency === "NGN" ? "₦" : "$"}
                           {tx.amount}
                         </td>
                         <td className="p-4 text-[#5F6D7E] text-sm capitalize font-medium text-center">

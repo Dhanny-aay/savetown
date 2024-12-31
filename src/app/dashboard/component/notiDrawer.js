@@ -1,11 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
 import settings from "./assets/settings.svg";
 import bell from "./assets/bell.svg";
 import NotiSettings from "./notiSettings";
+import { handleGetUserNotification } from "@/app/userControllers/profileController";
 
 export default function NotiDrawer({ onClose, isVisible }) {
   const [showSettings, setShowSettings] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchNoti = async () => {
+    setLoading(true);
+    try {
+      const data = await handleGetUserNotification();
+      if (data) {
+        setNotifications(data.data);
+      }
+    } catch (error) {
+      console.log("Error fetching notifications:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNoti();
+  }, []);
 
   // Function to switch back to the Notifications view
   const goToNotifications = () => {

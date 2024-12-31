@@ -11,3 +11,12 @@ export const handleKYCVerify = async (userData, onSuccess, onError) => {
     }
   }
 };
+
+export const handleGetKYCSettings = async () => {
+  try {
+    const response = await api("GET", "/user/kyc-settings");
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};

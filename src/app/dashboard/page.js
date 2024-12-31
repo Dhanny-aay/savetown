@@ -160,7 +160,9 @@ export default function Page() {
           ) : (
             <h2 className="text-h3 md:text-h1 text-[#666666] font-Manrope font-bold mt-1">
               {isVisible
-                ? `$${formatWithCommas(userStats?.total_balance) ?? 0}`
+                ? `${userStats?.currency === "NGN" ? "₦" : "$"}${
+                    formatWithCommas(userStats?.total_balance) ?? 0
+                  }`
                 : "****"}
             </h2>
           )}

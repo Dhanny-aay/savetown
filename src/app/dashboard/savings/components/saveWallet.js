@@ -149,7 +149,9 @@ export default function SaveWallet() {
             </div>
             <h2 className=" text-2xl md:text-[32px] font-Manrope font-bold text-white mt-[6px]">
               {isVisible
-                ? `$${formatWithCommas(userStats?.wallet_balance) ?? "0.00"}`
+                ? `${userStats?.currency === "NGN" ? "₦" : "$"}${
+                    formatWithCommas(userStats?.wallet_balance) ?? "0.00"
+                  }`
                 : "****"}
             </h2>
           </div>
@@ -281,6 +283,7 @@ export default function SaveWallet() {
                           {tx.identifier}
                         </td>
                         <td className="p-4 text-[#5F6D7E] text-sm font-medium text-left">
+                          {tx.currency === "NGN" ? "₦" : "$"}
                           {tx.amount}
                         </td>
                         <td className="p-4 text-[#5F6D7E] text-sm capitalize font-medium text-center">

@@ -13,11 +13,14 @@ export const handleGetUserGroups = async () => {
 export const handleCreateGroup = async (userData, onSuccess, onError) => {
   try {
     const response = await api("POST", "/user/group", userData);
+
     if (response) {
+      console.log(response);
       onSuccess(response); // Call onSuccess if the response is valid
     }
-  } catch (err) {
-    onError(err); // Call onError if there's an error
+  } catch (error) {
+    console.log(error);
+    onError(error); // Call onError if there's an error
   }
 };
 

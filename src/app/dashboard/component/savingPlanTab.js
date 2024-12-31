@@ -64,7 +64,7 @@ export default function SavingPlanTab({ isDashboard }) {
               ) : (
                 <h2 className="text-[32px] font-Manrope font-bold text-white mt-1">
                   {isVisible
-                    ? `$${
+                    ? `${userStats?.currency === "NGN" ? "₦" : "$"}${
                         formatWithCommas(userStats?.wallet_balance) ?? "0.00"
                       }`
                     : "****"}
@@ -109,7 +109,7 @@ export default function SavingPlanTab({ isDashboard }) {
               ) : (
                 <h2 className="text-[32px] font-Manrope font-bold text-white mt-1">
                   {isVisible
-                    ? `$${
+                    ? `${userStats?.currency === "NGN" ? "₦" : "$"}${
                         formatWithCommas(userStats?.group_savings_balance) ??
                         "0.00"
                       }`
@@ -182,7 +182,7 @@ export default function SavingPlanTab({ isDashboard }) {
                   ) : (
                     <h2 className="text-[32px] font-Manrope font-bold text-white mt-1">
                       {isVisible
-                        ? `$${
+                        ? `${userStats?.currency === "NGN" ? "₦" : "$"}${
                             formatWithCommas(userStats?.wallet_balance) ??
                             "0.00"
                           }`
@@ -234,7 +234,7 @@ export default function SavingPlanTab({ isDashboard }) {
                   ) : (
                     <h2 className="text-[32px] font-Manrope font-bold text-white mt-1">
                       {isVisible
-                        ? `$${
+                        ? `${userStats?.currency === "NGN" ? "₦" : "$"}${
                             formatWithCommas(
                               userStats?.group_savings_balance
                             ) ?? "0.00"

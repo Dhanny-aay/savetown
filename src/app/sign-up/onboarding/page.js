@@ -173,20 +173,20 @@ export default function Page() {
         />
       ),
     },
+    // {
+    //   id: 2,
+    //   component: (
+    //     <VerifyStep2
+    //       formData={formData}
+    //       updateFormData={updateFormData}
+    //       handleBack={handleBack}
+    //       code={code}
+    //       setCode={setCode}
+    //     />
+    //   ),
+    // },
     {
       id: 2,
-      component: (
-        <VerifyStep2
-          formData={formData}
-          updateFormData={updateFormData}
-          handleBack={handleBack}
-          code={code}
-          setCode={setCode}
-        />
-      ),
-    },
-    {
-      id: 3,
       component: (
         <StepThree
           formData={formData}
@@ -196,7 +196,7 @@ export default function Page() {
       ),
     },
     {
-      id: 4,
+      id: 3,
       component: (
         <StepFour
           formData={formData}
@@ -229,63 +229,67 @@ export default function Page() {
             {CurrentStepComponent}
 
             {/* Navigation buttons */}
-            {currentStep === 1 ? (
-              <button
-                onClick={handleSend} // Call handleSend for Step Two
-                className="bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex justify-center items-center"
-                disabled={loadingSend} // Disable button when loading
-              >
-                {loadingSend ? (
-                  <img src={load.src} className=" w-5" alt="" />
-                ) : (
-                  "Send OTP"
-                )}
-              </button>
-            ) : currentStep === 2 ? (
-              <>
+            {
+              // currentStep === 1 ? (
+              //   <button
+              //     onClick={handleSend} // Call handleSend for Step Two
+              //     className="bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex justify-center items-center"
+              //     disabled={loadingSend} // Disable button when loading
+              //   >
+              //     {loadingSend ? (
+              //       <img src={load.src} className=" w-5" alt="" />
+              //     ) : (
+              //       "Send OTP"
+              //     )}
+              //   </button>
+              // ) :
+              // currentStep === 2 ? (
+              //   <>
+              //     <button
+              //       onClick={handleVerify} // Call handleVerify verify step 2
+              //       className="bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex justify-center items-center"
+              //       disabled={loadingVerify} // Disable button when loading
+              //     >
+              //       {loadingVerify ? (
+              //         <img src={load.src} className=" w-5" alt="" />
+              //       ) : (
+              //         "Verify"
+              //       )}
+              //     </button>
+
+              //     <p className=" block mt-8 px-8 text-body14Regular font-Manrope text-[#595959] text-center">
+              //       Didn’t receive the code?
+              //       <button onClick={handlResend} className=" text-[#8133F1]">
+              //         {loadingSend ? (
+              //           <img src={blckLoad.src} className=" w-5 ml-2" alt="" />
+              //         ) : (
+              //           " Send again"
+              //         )}
+              //       </button>
+              //     </p>
+              //   </>
+              // ) :
+              currentStep < steps.length - 1 ? (
                 <button
-                  onClick={handleVerify} // Call handleVerify verify step 2
-                  className="bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex justify-center items-center"
-                  disabled={loadingVerify} // Disable button when loading
+                  onClick={handleNext}
+                  className="bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg"
                 >
-                  {loadingVerify ? (
+                  Continue
+                </button>
+              ) : (
+                <button
+                  onClick={handleRegister}
+                  disabled={loadingRegister}
+                  className="bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center justify-center"
+                >
+                  {loadingRegister ? (
                     <img src={load.src} className=" w-5" alt="" />
                   ) : (
-                    "Verify"
+                    " Sign up"
                   )}
                 </button>
-
-                <p className=" block mt-8 px-8 text-body14Regular font-Manrope text-[#595959] text-center">
-                  Didn’t receive the code?
-                  <button onClick={handlResend} className=" text-[#8133F1]">
-                    {loadingSend ? (
-                      <img src={blckLoad.src} className=" w-5 ml-2" alt="" />
-                    ) : (
-                      " Send again"
-                    )}
-                  </button>
-                </p>
-              </>
-            ) : currentStep < steps.length - 1 ? (
-              <button
-                onClick={handleNext}
-                className="bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg"
-              >
-                Continue
-              </button>
-            ) : (
-              <button
-                onClick={handleRegister}
-                disabled={loadingRegister}
-                className="bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center justify-center"
-              >
-                {loadingRegister ? (
-                  <img src={load.src} className=" w-5" alt="" />
-                ) : (
-                  " Sign up"
-                )}
-              </button>
-            )}
+              )
+            }
           </div>
         </div>
       </div>

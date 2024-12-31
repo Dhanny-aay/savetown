@@ -12,28 +12,43 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 export default function Headbar() {
   const [isNotiDrawerVisible, setNotiDrawerVisible] = useState(false);
-  const { userProfile, loadingProfile } = useUserContext();
+  const [preventClose, setPreventClose] = useState(false);
+  const { userProfile, loadingProfile, updateCurrency, selectedCurrency } =
+    useUserContext();
 
   const currencies = [
-    { name: "USD", flag: "https://flagcdn.com/us.svg" },
-    { name: "NGN", flag: "https://flagcdn.com/ng.svg" },
+    {
+      name: "USD",
+      flag: "https://flagcdn.com/us.svg",
+      default_currency: "USD",
+    },
+    {
+      name: "NGN",
+      flag: "https://flagcdn.com/ng.svg",
+      default_currency: "NGN",
+    },
   ];
 
-  const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
+
   const selectCurrency = (currency) => {
-    setSelectedCurrency(currency);
+    updateCurrency(currency); // Update currency in the context
     setIsOpen(false);
   };
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
+      if (preventClose) {
+        setPreventClose(false); // Reset the flag
+        return; // Skip closing
+      }
+
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
+        setIsOpen(false); // Close the dropdown
       }
     };
 
@@ -41,7 +56,7 @@ export default function Headbar() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [preventClose]);
 
   const showNotiDrawer = () => setNotiDrawerVisible(true);
   const closeNotiDrawer = () => setNotiDrawerVisible(false);
@@ -103,11 +118,6 @@ export default function Headbar() {
                 }}
                 className=" w-6 h-6 bg-[#f1f1f1] rounded-full"
               ></span>
-              {/* <img
-                src={selectedCurrency.flag}
-                alt={selectedCurrency.name}
-                className="w-6 h-6 rounded-full"
-              /> */}
               <span className="ml-2">
                 <svg className="w-4 h-4" viewBox="0 0 20 20">
                   <path fill="currentColor" d="M5 7l5 5 5-5H5z" />
@@ -121,7 +131,11 @@ export default function Headbar() {
                 {currencies.map((currency, index) => (
                   <div
                     key={index}
-                    onClick={() => selectCurrency(currency)}
+                    onMouseDown={(e) => {
+                      e.stopPropagation();
+                      setPreventClose(true); // Prevent handleClickOutside from closing the dropdown
+                    }}
+                    onClick={() => selectCurrency(currency)} // Handle currency selection
                     className="flex items-center p-2 cursor-pointer hover:bg-gray-100"
                   >
                     <span
@@ -130,9 +144,9 @@ export default function Headbar() {
                         backgroundPosition: "center",
                         backgroundSize: "cover",
                       }}
-                      className=" mr-2 w-5 h-5 bg-[#f1f1f1] rounded-full"
+                      className="mr-2 w-5 h-5 bg-[#f1f1f1] rounded-full"
                     ></span>
-                    <span className=" font-Manrope text-body14Regular">
+                    <span className="font-Manrope text-body14Regular">
                       {currency.name}
                     </span>
                   </div>
@@ -148,12 +162,12 @@ export default function Headbar() {
               alt=""
             />
           </Link>
-          {/* <img
+          <img
             src={noti.src}
             className="cursor-pointer w-4 md:w-auto mt-0.5 md:mt-0"
             onClick={showNotiDrawer}
             alt=""
-          /> */}
+          />
           {loadingProfile ? (
             <Skeleton
               circle

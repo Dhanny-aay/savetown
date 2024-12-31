@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ArrowRightBlk from "./assets/ArrowRightBlk.svg";
 import copy from "./assets/copy.svg";
 import load from "./assets/load.gif";
@@ -12,6 +12,7 @@ import { useUserContext } from "../UserContext";
 export default function WalletDepositDrawer({ onClose, isVisible }) {
   const [amount, setAmount] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingExchange, setLoadingExchange] = useState(false);
   const [loadingInitiate, setLoadingInitiate] = useState(false);
   const [loadingPaid, setLoadingPaid] = useState(false);
   const [errors, setErrors] = useState({});
@@ -37,42 +38,54 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
     setSelectedID("");
   };
 
-  const handleAmountChange = (e) => {
-    const rawValue = e.target.value.replace(/[^0-9]/g, "");
-    const intValue = rawValue ? parseInt(rawValue, 10) : "";
-    setAmount(intValue);
-  };
-
   const formatWithCommas = (value) => {
     if (value === 0 || value == null) return "0.00"; // Handle 0, null, and undefined
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
-  const validateFields = () => {
-    const newErrors = {};
-    if (!amount || amount <= 0) newErrors.amount = "Valid amount is required";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  // const validateFields = () => {
+  //   const newErrors = {};
+  //   if (!amount || amount <= 0) newErrors.amount = "Valid amount is required";
+  //   setErrors(newErrors);
+  //   return Object.keys(newErrors).length === 0;
+  // };
 
-  const onSuccess = (response) => {
-    setLoading(false);
-    setConversion(response.data);
-  };
+  // const onSuccess = (response) => {
+  //   setLoading(false);
+  //   setConversion(response.data);
+  // };
 
-  const onError = () => {
-    setLoading(false);
-  };
+  // const onError = () => {
+  //   setLoading(false);
+  // };
 
-  const handleSend = (e) => {
-    if (validateFields()) {
-      e.preventDefault();
-      setLoading(true);
-      const userData = { amount };
-      handleGetExchangAmount(userData, onSuccess, onError);
-    }
-  };
+  const amountRef = useRef(amount);
 
+  // Update ref whenever state changes
+  useEffect(() => {
+    amountRef.current = amount;
+  }, [amount]);
+
+  const handleSend = () => {
+    setLoadingExchange(true); // Show loading
+    const userData = {
+      amount: amountRef.current,
+      source_currency: "NGN",
+      destination_currency: "USD",
+    }; // Use latest amount value
+    handleGetExchangAmount(
+      userData,
+      (response) => {
+        setLoadingExchange(false); // Clear loading state
+        setErrors({ amount: "" });
+        setConversion(response.data); // Update conversion result
+      },
+      () => {
+        setLoadingExchange(false); // Clear loading on error
+        setErrors({ amount: "An error occurred" });
+      }
+    );
+  };
   const debounce = (func, delay) => {
     let timer;
     return (...args) => {
@@ -81,7 +94,19 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
     };
   };
 
-  const debouncedHandleSend = useCallback(debounce(handleSend, 500), [amount]);
+  const debouncedHandleSend = useCallback(debounce(handleSend, 500), []);
+
+  const handleAmountChange = (e) => {
+    const rawValue = e.target.value.replace(/[^0-9]/g, "");
+    const intValue = rawValue ? parseInt(rawValue, 10) : "";
+    if (!isNaN(intValue)) {
+      setAmount(intValue); // Update the state
+      setConversion(null); // Clear previous conversion while typing
+      debouncedHandleSend(); // Trigger debounced API call
+    }
+  };
+
+  // console.log(amount);
 
   const onSuccessInitiate = (response) => {
     setLoadingInitiate(false);
@@ -98,7 +123,7 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
     e.preventDefault();
     setLoadingInitiate(true);
     const userData = {
-      amount: conversion?.amountToCharge,
+      amount: conversion?.sourceAmount,
       category: "personal_savings",
     };
     handleInitiateDeposit(userData, onSuccessInitiate, onErrorInitiate);
@@ -254,7 +279,7 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
                 <p className="text-[#8133F1] mt-3 text-body12Regular font-Manrope">
                   You will be depositing a total of (₦
                   {formatWithCommas(conversion?.sourceAmount)} = $
-                  {conversion?.destinationAmount})
+                  {conversion?.amountToReceive})
                 </p>
                 <p className="text-[#8133F1] mt-1 text-body12Regular font-Manrope">
                   At the rate of (₦1.00 = ${conversion?.rate})
@@ -265,8 +290,12 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
             {conversion && (
               <button
                 onClick={handleInitiate}
-                disabled={loadingInitiate}
-                className="bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center justify-center"
+                disabled={loadingExchange || !conversion || loadingInitiate} // Disable if loading or no conversion
+                className={`bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center justify-center ${
+                  loadingExchange || !conversion || loadingInitiate
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
               >
                 {loadingInitiate ? (
                   <img src={load.src} className="w-5" alt="" />
