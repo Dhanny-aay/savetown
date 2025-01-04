@@ -41,7 +41,7 @@ export default function DinnerDrawer({ isVisible, onClose }) {
         setDinnerDates(data.data);
       }
     } catch (error) {
-      console.error("Error fetching stats:", error);
+      console.log("Error fetching stats:", error);
     } finally {
       setLoading(false);
     }

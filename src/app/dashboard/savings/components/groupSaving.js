@@ -124,7 +124,7 @@ export default function GroupSaving() {
         }
       }
     } catch (error) {
-      console.error("Error fetching bank details:", error);
+      console.log("Error fetching bank details:", error);
     } finally {
       setLoadingGroups(false);
     }

@@ -15,7 +15,7 @@ export default function Faq({ headings }) {
         setItems(data.data);
       }
     } catch (error) {
-      console.error("Error fetching items:", error);
+      console.log("Error fetching items:", error);
     } finally {
       setLoading(false);
     }

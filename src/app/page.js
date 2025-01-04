@@ -39,7 +39,7 @@ export default function Home() {
         setHeadings(data.data);
       }
     } catch (error) {
-      console.error("Error fetching events:", error);
+      console.log("Error fetching events:", error);
     } finally {
       setLoadingHeading(false);
     }

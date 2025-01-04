@@ -140,7 +140,7 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
         resetState(); // Reset all state values
       }
     } catch (error) {
-      console.error("Error fetching personal saving details:", error);
+      console.log("Error fetching personal saving details:", error);
     } finally {
       setLoadingPaid(false);
     }

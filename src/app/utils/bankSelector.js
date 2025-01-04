@@ -16,7 +16,7 @@ const BankSelector = ({ setBank_id }) => {
           setBanks(data.data);
         }
       } catch (error) {
-        console.error("Error fetching banks:", error);
+        console.log("Error fetching banks:", error);
       } finally {
         setLoading(false);
       }

@@ -55,7 +55,7 @@ export default function Calculator() {
         setDurationOptions(data.data.duration);
       }
     } catch (error) {
-      console.error("Error fetching calc:", error);
+      console.log("Error fetching calc:", error);
     } finally {
       setLoading(false);
     }

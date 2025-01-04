@@ -46,7 +46,7 @@ export default function PaymentDetail({ isWithdrawal }) {
         setMethodAdded(data.data.length > 0);
       }
     } catch (error) {
-      console.error("Error fetching bank details:", error);
+      console.log("Error fetching bank details:", error);
     } finally {
       setLoading(false);
     }

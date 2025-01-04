@@ -66,7 +66,7 @@ export default function WithdrawDrawer({ onClose, isVisible }) {
         setMethodAdded(data.data.length > 0);
       }
     } catch (error) {
-      console.error("Error fetching bank details:", error);
+      console.log("Error fetching bank details:", error);
     } finally {
       setLoadingMethod(false);
     }

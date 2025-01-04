@@ -175,7 +175,7 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
         resetStates(); // Reset the states after a successful verify pay
       }
     } catch (error) {
-      console.error("Error fetching personal saving details:", error);
+      console.log("Error fetching personal saving details:", error);
     } finally {
       setLoadingPaid(false);
     }

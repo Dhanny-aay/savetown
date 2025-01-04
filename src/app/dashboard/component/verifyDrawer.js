@@ -40,27 +40,48 @@ export default function VerifyDrawer({ onClose, isVisible }) {
     name: country.countryNameEn,
   }));
 
+  const goBack = () => {
+    setCurrentComponent(null); // Reset to show the options list
+  };
+
   // Define the IDs of the KYC options you care about
   const requiredKycOptions = [
-    { type: "id_bvn", label: "Bank Verification Number (BVN)", component: Bvn },
+    {
+      type: "id_bvn",
+      label: "Bank Verification Number (BVN)",
+      component: (props) => (
+        <Bvn {...props} goBack={goBack} onClose={onClose} />
+      ),
+    },
     {
       type: "id_nin",
       label: "National Identification Number (NIN)",
-      component: Nin,
+      component: (props) => (
+        <Nin {...props} goBack={goBack} onClose={onClose} />
+      ),
     },
     {
       type: "id_drivers_license",
       label: "Drivers License",
-      component: DriverLsc,
+      component: (props) => (
+        <DriverLsc {...props} goBack={goBack} onClose={onClose} />
+      ),
     },
     {
       type: "id_passport",
       label: "International Passport",
-      component: IntlPass,
+      component: (props) => (
+        <IntlPass {...props} goBack={goBack} onClose={onClose} />
+      ),
     },
-    { type: "id_voters_card", label: "Voter’s Card", component: Voters },
+    {
+      type: "id_voters_card",
+      label: "Voter's Card",
+      component: (props) => (
+        <Voters {...props} goBack={goBack} onClose={onClose} />
+      ),
+    },
   ];
-
   // Filter to include only the required KYC options that are active in settings
   const visibleOptions = requiredKycOptions.filter((option) =>
     kycSettings.some(

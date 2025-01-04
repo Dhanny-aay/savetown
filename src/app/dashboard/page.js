@@ -79,7 +79,7 @@ export default function Page() {
         setIsCopied(false);
       }, 3000);
     } catch (err) {
-      console.error("Failed to copy referral link:", err);
+      console.log("Failed to copy referral link:", err);
     }
   };
 

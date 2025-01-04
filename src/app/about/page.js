@@ -80,7 +80,7 @@ export default function Home() {
         setHeadings(data.data);
       }
     } catch (error) {
-      console.error("Error fetching events:", error);
+      console.log("Error fetching events:", error);
     } finally {
       setLoadingHeading(false);
     }
@@ -96,7 +96,7 @@ export default function Home() {
         setStats(data.data);
       }
     } catch (error) {
-      console.error("Error fetching stats:", error);
+      console.log("Error fetching stats:", error);
     } finally {
       setLoadingStats(false);
     }
@@ -112,7 +112,7 @@ export default function Home() {
         setAparts(data.data);
       }
     } catch (error) {
-      console.error("Error fetching aparts:", error);
+      console.log("Error fetching aparts:", error);
     } finally {
       setLoadingApart(false);
     }
@@ -128,7 +128,7 @@ export default function Home() {
         setTeams(data.data);
       }
     } catch (error) {
-      console.error("Error fetching teams:", error);
+      console.log("Error fetching teams:", error);
     } finally {
       setLoadingTeam(false);
     }

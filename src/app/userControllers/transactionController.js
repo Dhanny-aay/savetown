@@ -77,7 +77,7 @@ export const handleGetTransactionsWithParam = async (params = {}) => {
 
     return response;
   } catch (error) {
-    console.error("Error fetching items with params:", error);
+    console.log("Error fetching items with params:", error);
     throw error; // Optionally re-throw the error
   }
 };

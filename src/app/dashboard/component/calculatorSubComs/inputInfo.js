@@ -35,7 +35,7 @@ export default function InputInfo({ updateFormData, formData, onClose }) {
         setPriceOptions(data.data.price[0]);
       }
     } catch (error) {
-      console.error("Error fetching calc:", error);
+      console.log("Error fetching calc:", error);
     } finally {
       setLoading(false);
     }

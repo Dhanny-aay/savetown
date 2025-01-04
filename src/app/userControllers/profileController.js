@@ -30,7 +30,7 @@ export const handleGetUserStatsWithParam = async (params = {}) => {
 
     return response;
   } catch (error) {
-    console.error("Error fetching dashboard with params:", error);
+    console.log("Error fetching dashboard with params:", error);
     throw error; // Optionally re-throw the error
   }
 };

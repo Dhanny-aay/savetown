@@ -17,7 +17,7 @@ export default function Features({ headings }) {
         setItems(data.data);
       }
     } catch (error) {
-      console.error("Error fetching events:", error);
+      console.log("Error fetching events:", error);
     } finally {
       setLoading(false);
     }
