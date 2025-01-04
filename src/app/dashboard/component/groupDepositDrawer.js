@@ -270,7 +270,9 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
                       Savetown Wallet
                     </p>
                     <p className=" mt-3 text-[#595A5C] text-body14Regular">
-                      ${userStats?.wallet_balance ?? "0.00"}
+                      {`${userStats?.currency === "NGN" ? "₦" : "$"}${
+                        userStats?.wallet_balance
+                      } ` ?? "0.00"}
                     </p>
                   </div>
                 </div>

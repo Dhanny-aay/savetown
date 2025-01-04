@@ -13,18 +13,15 @@ export default function All() {
   const { userStats, loading, toggleVisibility, isVisible } = useUserContext();
   const [loadingTransactions, setLoadingTransactions] = useState(true);
   const [transactions, setTransactions] = useState([]);
-  const [filteredTransactions, setFilteredTransactions] =
-    useState(transactions);
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
 
   const fetchTransactions = async () => {
-    const params = {
-      // type: "PageTitle",
-      // page: "Home",
-    };
+    const params = {};
     try {
       const data = await handleGetTransactionsWithParam(params);
       if (data) {
         setTransactions(data.data);
+        setFilteredTransactions(data.data); // Initialize filtered transactions with all transactions
       }
     } catch (error) {
       console.log("Error fetching transactions:", error);
@@ -38,17 +35,13 @@ export default function All() {
   }, []);
 
   const formatWithCommas = (value) => {
-    if (value === 0 || value == null) return "0.00"; // Handle 0, null, and undefined
+    if (value === 0 || value == null) return "0.00";
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   const formatDateTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
-
-    // Date options
     const dateOptions = { year: "numeric", month: "long", day: "numeric" };
-
-    // Get the day and determine the appropriate suffix
     const day = date.getDate();
     const daySuffix =
       day === 1 || day === 21 || day === 31
@@ -59,45 +52,28 @@ export default function All() {
         ? "rd"
         : "th";
 
-    // Format the date with the suffix
     const formattedDate = date
       .toLocaleDateString("en-US", dateOptions)
       .replace(/\d+/, day + daySuffix);
 
-    // Time options
     const timeOptions = { hour: "2-digit", minute: "2-digit", hour12: true };
     const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
 
-    // Combine date and time
     return `${formattedDate} at ${formattedTime}`;
   };
 
-  const handleFilterChange = (filter) => {
-    if (filter.startDate && filter.endDate) {
-      const startDate = new Date(filter.startDate).setHours(0, 0, 0, 0);
-      const endDate = new Date(filter.endDate).setHours(23, 59, 59, 999);
-
-      const filtered = transactions.filter((tx) => {
-        const transactionDate = new Date(tx.created_at).getTime();
-        return transactionDate >= startDate && transactionDate <= endDate;
-      });
-
-      setFilteredTransactions(filtered);
-    } else {
-      // If no date range is provided, reset to all transactions
-      setFilteredTransactions(transactions);
-    }
+  const handleFilterChange = (filtered) => {
+    setFilteredTransactions(filtered);
   };
 
   return (
     <>
-      <div className=" shadowDB w-full bg-white rounded-[32px] p-8 flex items-center justify-between">
-        <div className=" w-full ">
-          <div className=" flex items-center space-x-3">
-            <p className=" text-body14Bold md:text-body16Bold font-Manrope text-[#595A5C]">
+      <div className="shadowDB w-full bg-white rounded-[32px] p-8 flex items-center justify-between">
+        <div className="w-full">
+          <div className="flex items-center space-x-3">
+            <p className="text-body14Bold md:text-body16Bold font-Manrope text-[#595A5C]">
               Total Balance
             </p>
-
             <img
               src={open.src}
               className="w-4 md:w-5 cursor-pointer"
@@ -105,7 +81,7 @@ export default function All() {
               onClick={toggleVisibility}
             />
           </div>
-          <h2 className=" text-h3 md:text-h1 font-Manrope font-bold mt-1 text-[#666666]">
+          <h2 className="text-h3 md:text-h1 font-Manrope font-bold mt-1 text-[#666666]">
             {isVisible
               ? `${userStats?.currency === "NGN" ? "₦" : "$"}${
                   formatWithCommas(userStats?.total_balance) ?? 0
@@ -114,7 +90,8 @@ export default function All() {
           </h2>
         </div>
       </div>
-      <h2 className=" text-h55 md:text-h5 font-bold text-[#262626] mt-8 font-Manrope">
+
+      <h2 className="text-h55 md:text-h5 font-bold text-[#262626] mt-8 font-Manrope">
         My Savings Plan
       </h2>
       <SavingPlanTab isDashboard={isDashboard} />
@@ -137,22 +114,18 @@ export default function All() {
         </div>
       ) : (
         <>
-          <div className=" w-full mt-6 md:mt-8">
-            <div className=" flex flex-col space-y-6 md:space-y-0 md:flex-row items-start md:items-center w-full justify-between">
+          <div className="w-full mt-6 md:mt-8">
+            <div className="flex flex-col space-y-6 md:space-y-0 md:flex-row items-start md:items-center w-full justify-between">
               <h2 className="text-h55 md:text-h5 font-bold text-[#262626] font-Manrope">
                 Recent Transactions
               </h2>
-
-              {/* Filter Section */}
-              <div className="flex items-center space-x-4">
-                <TableFilter
-                  transactions={transactions}
-                  onFilterChange={handleFilterChange}
-                />
-              </div>
+              <TableFilter
+                transactions={transactions}
+                onFilterChange={handleFilterChange}
+              />
             </div>
           </div>
-          {/* Table Section */}
+
           <div className="overflow-auto mt-6 max-h-[100%] h-screen md:h-[55vh] border border-[#c2c4c686] rounded-[8px]">
             {filteredTransactions.length > 0 ? (
               <table className="w-full bg-white shadow font-Manrope relative">

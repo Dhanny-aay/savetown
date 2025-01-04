@@ -112,7 +112,7 @@ export default function ChangeMeth({
                 type="text"
                 value={bank_account_name}
                 disabled
-                placeholder="Enter Account Name"
+                placeholder="Account Name"
                 name=""
                 className="w-full border border-[#D5D7DA] rounded-[32px] mt-1 text-body14Regular font-Manrope px-6 py-3"
                 id=""

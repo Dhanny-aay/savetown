@@ -79,7 +79,7 @@ export default function GroupWithdraw({ onClose, isVisible, selectedID }) {
           onClick={onClose}
         />
 
-        <h3 className="text-h55 md:text-h5 font-Manrope font-bold text-[#595A5C] mt-9">
+        <h3 className="text-h6 md:text-h55 font-Manrope font-bold text-[#595A5C] mt-9">
           Withdraw from your group balance to your personal balance
         </h3>
 
@@ -99,7 +99,9 @@ export default function GroupWithdraw({ onClose, isVisible, selectedID }) {
                   Group savings Wallet
                 </p>
                 <p className="mt-3 text-[#595A5C] text-body14Regular">
-                  ${userStats?.group_savings_balance ?? "0.00"}
+                  {` ${userStats?.currency === "NGN" ? "₦" : "$"}${
+                    userStats?.group_savings_balance
+                  }` ?? "0.00"}
                 </p>
               </div>
             </div>

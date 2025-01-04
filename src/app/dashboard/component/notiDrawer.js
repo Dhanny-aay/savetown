@@ -28,7 +28,6 @@ export default function NotiDrawer({ onClose, isVisible }) {
     fetchNoti();
   }, []);
 
-  // Function to switch back to the Notifications view
   const goToNotifications = () => {
     setShowSettings(false);
   };
@@ -41,43 +40,67 @@ export default function NotiDrawer({ onClose, isVisible }) {
       onClick={onClose}
     >
       <div
-        className="bg-white w-full md:w-[70%] lg:w-[600px] h-full py-8 px-4 md:px-6 plansbg border overflow-auto border-[#D5D7DA] relative ml-auto"
+        className="bg-white w-full md:w-[70%] lg:w-[600px] h-full py-8 px-4 md:px-6 border overflow-auto border-[#D5D7DA] relative ml-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {showSettings ? (
-          // Render the NotiSettings component
           <NotiSettings goBack={goToNotifications} />
         ) : (
-          // Render the Notification view
           <>
             <img
               src={ArrowRightBlk.src}
               className="cursor-pointer"
-              alt=""
+              alt="Back"
               onClick={onClose}
             />
 
             <div className="w-full flex items-center justify-between mt-9">
-              <h3 className=" text-h55 md:text-h5 font-Manrope font-bold text-[#595A5C]">
-                Notification
+              <h3 className="text-h55 md:text-h5 font-Manrope font-bold text-[#595A5C]">
+                Notifications
               </h3>
               <img
                 src={settings.src}
                 className="cursor-pointer w-5 md:w-auto"
-                alt="settings"
-                onClick={() => setShowSettings(true)} // Switch to Settings view
+                alt="Settings"
+                onClick={() => setShowSettings(true)}
               />
             </div>
 
-            <div className="w-full mt-16 flex items-center flex-col justify-center">
-              <img src={bell.src} alt="" />
-              <h6 className="text-center text-body16Regular font-Manrope text-[#666666] mt-6">
-                No notifications yet
-              </h6>
-              <p className="text-body12Regular font-Manrope text-[#666666] mt-2 text-center">
-                Your notifications will appear here
-              </p>
-            </div>
+            {loading ? (
+              <div className="w-full mt-16 flex items-center justify-center">
+                <p className="text-center text-body16Regular font-Manrope text-[#666666]">
+                  Loading notifications...
+                </p>
+              </div>
+            ) : notifications.length > 0 ? (
+              <ul className="mt-8 space-y-4">
+                {notifications.map((noti) => (
+                  <li
+                    key={noti.id}
+                    className="flex items-start justify-between bg-[#F8F9FA] p-4 rounded-lg shadow-sm"
+                  >
+                    <div>
+                      <p className="text-body14Regular font-Manrope font-medium text-[#262626]">
+                        {noti.data.comment.body}
+                      </p>
+                      <p className="text-body12Regular font-Manrope text-[#666666] mt-2">
+                        {new Date(noti.created_at).toLocaleString()}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="w-full mt-16 flex items-center flex-col justify-center">
+                <img src={bell.src} alt="No notifications" />
+                <h6 className="text-center text-body16Regular font-Manrope text-[#666666] mt-6">
+                  No notifications yet
+                </h6>
+                <p className="text-body12Regular font-Manrope text-[#666666] mt-2 text-center">
+                  Your notifications will appear here
+                </p>
+              </div>
+            )}
           </>
         )}
       </div>

@@ -46,8 +46,7 @@ export default function GroupSaving() {
   const [isVerifyDrawerVisible, setVerifyDrawerVisible] = useState(false);
   const [loadingTransactions, setLoadingTransactions] = useState(true);
   const [transactions, setTransactions] = useState([]);
-  const [filteredTransactions, setFilteredTransactions] =
-    useState(transactions);
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
 
   const fetchTransactions = async () => {
     const params = {
@@ -172,24 +171,9 @@ export default function GroupSaving() {
     // Combine date and time
     return `${formattedDate} at ${formattedTime}`;
   };
-
-  const handleFilterChange = (filter) => {
-    if (filter.startDate && filter.endDate) {
-      const startDate = new Date(filter.startDate).setHours(0, 0, 0, 0);
-      const endDate = new Date(filter.endDate).setHours(23, 59, 59, 999);
-
-      const filtered = transactions.filter((tx) => {
-        const transactionDate = new Date(tx.created_at).getTime();
-        return transactionDate >= startDate && transactionDate <= endDate;
-      });
-
-      setFilteredTransactions(filtered);
-    } else {
-      // If no date range is provided, reset to all transactions
-      setFilteredTransactions(transactions);
-    }
+  const handleFilterChange = (filtered) => {
+    setFilteredTransactions(filtered);
   };
-
   return (
     <>
       <h2 className=" text-h55 md:text-h5 font-bold text-[#262626] font-Manrope">

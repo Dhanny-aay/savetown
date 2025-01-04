@@ -13,8 +13,6 @@ const TableFilter = ({ transactions, onFilterChange }) => {
     },
   ]);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [filteredTransactions, setFilteredTransactions] =
-    useState(transactions);
   const datePickerRef = useRef(null);
 
   const calculateDateRange = (option) => {
@@ -22,73 +20,43 @@ const TableFilter = ({ transactions, onFilterChange }) => {
     let startDate, endDate;
 
     if (option === "Previous Month") {
-      const firstDayOfPreviousMonth = new Date(
-        today.getFullYear(),
-        today.getMonth() - 1,
-        1
-      );
-      const lastDayOfPreviousMonth = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        0
-      );
-      startDate = firstDayOfPreviousMonth;
-      endDate = lastDayOfPreviousMonth;
+      startDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+      endDate = new Date(today.getFullYear(), today.getMonth(), 0);
     } else if (option === "This Month") {
-      const firstDayOfThisMonth = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        1
-      );
-      const lastDayOfThisMonth = new Date(
-        today.getFullYear(),
-        today.getMonth() + 1,
-        0
-      );
-      startDate = firstDayOfThisMonth;
-      endDate = lastDayOfThisMonth;
+      startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+      endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
     } else if (option === "This Week") {
-      const firstDayOfWeek = new Date(today);
-      firstDayOfWeek.setDate(today.getDate() - today.getDay() + 1); // Assuming week starts on Monday
-      const lastDayOfWeek = new Date(firstDayOfWeek);
-      lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6);
-      startDate = firstDayOfWeek;
-      endDate = lastDayOfWeek;
+      startDate = new Date(today);
+      startDate.setDate(today.getDate() - today.getDay());
+      endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 6);
     }
 
     return { startDate, endDate };
   };
 
-  const handleFilterChange = (filter) => {
-    if (filter.startDate && filter.endDate) {
-      const startDate = new Date(filter.startDate).setHours(0, 0, 0, 0);
-      const endDate = new Date(filter.endDate).setHours(23, 59, 59, 999);
+  const applyFilter = (startDate, endDate) => {
+    const start = new Date(startDate).setHours(0, 0, 0, 0);
+    const end = new Date(endDate).setHours(23, 59, 59, 999);
 
-      const filtered = transactions.filter((tx) => {
-        const transactionDate = new Date(tx.created_at).getTime();
-        return transactionDate >= startDate && transactionDate <= endDate;
-      });
+    const filtered = transactions.filter((tx) => {
+      const transactionDate = new Date(tx.created_at).getTime();
+      return transactionDate >= start && transactionDate <= end;
+    });
 
-      setFilteredTransactions(filtered);
-    } else {
-      // If no date range is provided, reset to all transactions
-      setFilteredTransactions(transactions);
-    }
+    onFilterChange(filtered);
   };
 
   useEffect(() => {
-    const { startDate, endDate } = calculateDateRange(selectedOption);
-    handleFilterChange({ startDate, endDate });
-  }, [transactions, selectedOption]);
-
-  useEffect(() => {
-    onFilterChange(filteredTransactions);
-  }, [filteredTransactions]);
+    if (selectedOption !== "Custom") {
+      const { startDate, endDate } = calculateDateRange(selectedOption);
+      applyFilter(startDate, endDate);
+    }
+  }, [selectedOption, transactions]);
 
   const handleDropdownChange = (event) => {
     const value = event.target.value;
     setSelectedOption(value);
-
     if (value === "Custom") {
       setShowDatePicker(true);
     } else {
@@ -98,10 +66,21 @@ const TableFilter = ({ transactions, onFilterChange }) => {
 
   const handleDateRangeChange = (ranges) => {
     setCustomDateRange([ranges.selection]);
-    handleFilterChange({
-      startDate: ranges.selection.startDate,
-      endDate: ranges.selection.endDate,
-    });
+  };
+
+  const handleDateRangeComplete = () => {
+    const { startDate, endDate } = customDateRange[0];
+    applyFilter(startDate, endDate);
+    setShowDatePicker(false);
+  };
+
+  const handleCancel = () => {
+    // If there was a previous custom range, revert to it
+    if (selectedOption !== "Custom") {
+      const { startDate, endDate } = calculateDateRange(selectedOption);
+      applyFilter(startDate, endDate);
+    }
+    setShowDatePicker(false);
   };
 
   const handleClickOutside = (event) => {
@@ -109,29 +88,38 @@ const TableFilter = ({ transactions, onFilterChange }) => {
       datePickerRef.current &&
       !datePickerRef.current.contains(event.target)
     ) {
-      setShowDatePicker(false);
+      handleDateRangeComplete();
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" || event.key === "Escape") {
+      handleDateRangeComplete();
     }
   };
 
   useEffect(() => {
     if (showDatePicker) {
       document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleKeyDown);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [showDatePicker]);
+  }, [showDatePicker, customDateRange]);
 
   const currentRange = calculateDateRange(selectedOption);
 
   return (
-    <div className="flex items-center space-x-4">
-      <div className="relative ">
+    <div className="relative flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+      <div className="relative w-full sm:w-auto">
         <select
-          className="appearance-none  bg-[#F2F3F4] font-Manrope w-[158px] font-medium px-4 py-2 rounded-lg text-sm text-[#595A5C] shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+          className="appearance-none bg-[#F2F3F4] font-Manrope w-full sm:w-[158px] font-medium px-4 py-2 rounded-lg text-sm text-[#595A5C] shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
           value={selectedOption}
           onChange={handleDropdownChange}
         >
@@ -157,22 +145,59 @@ const TableFilter = ({ transactions, onFilterChange }) => {
       </div>
 
       {!showDatePicker && (
-        <div className=" bg-[#F2F3F4] font-Manrope font-medium px-4 py-2 rounded-lg text-sm text-[#595A5C] shadow-sm">
-          {currentRange.startDate?.toLocaleDateString() || "N/A"} -{" "}
-          {currentRange.endDate?.toLocaleDateString() || "N/A"}
+        <div className="w-full sm:w-auto bg-[#F2F3F4] font-Manrope font-medium px-4 py-2 rounded-lg text-sm text-[#595A5C] shadow-sm">
+          {selectedOption === "Custom"
+            ? `${customDateRange[0].startDate.toLocaleDateString()} - ${customDateRange[0].endDate.toLocaleDateString()}`
+            : `${currentRange.startDate?.toLocaleDateString()} - ${currentRange.endDate?.toLocaleDateString()}`}
         </div>
       )}
 
       {showDatePicker && (
         <div
           ref={datePickerRef}
-          className="absolute z-50 bg-white shadow-md p-4 rounded-md"
+          className="fixed z-50 bg-white shadow-lg rounded-lg p-4 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] sm:w-auto"
         >
-          <DateRangePicker
-            ranges={customDateRange}
-            onChange={handleDateRangeChange}
-            rangeColors={["#4F46E5"]}
-          />
+          <div className="relative">
+            <button
+              onClick={handleCancel}
+              className="absolute right-0 top-0 text-gray-500 hover:text-gray-700 p-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+            <DateRangePicker
+              ranges={customDateRange}
+              onChange={handleDateRangeChange}
+              rangeColors={["#4F46E5"]}
+              months={1}
+              direction="vertical"
+              className="w-full overflow-auto"
+            />
+            <div className="flex justify-end space-x-2 mt-4">
+              <button
+                onClick={handleCancel}
+                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 bg-gray-100 rounded-md hover:bg-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDateRangeComplete}
+                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
