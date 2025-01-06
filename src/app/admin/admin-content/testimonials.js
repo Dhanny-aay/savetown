@@ -2,44 +2,43 @@ import edit from "./assets/edit.svg";
 import Image from "next/image";
 import trash from './assets/trash.svg'
 import search from './assets/search.svg'
+import { useEffect, useState } from "react";
+import { fetchBlog } from "../adminControllers/blogController";
 
 export default function Testimonials (first){
-  const headlines = [
-    {
-      id: 1,
-      heading: "Message from our CEO",
-      subheading:
-        "Kicking Off Success: Innovative Strategies for Football Coaching",
-      type: "CEO's Message",
-    },
-    {
-      id: 2,
-      heading: "Our Partner's",
-      subheading: "Game Changers: A Comprehensive Guide to Football Tactics",
-      type: "Our Partners",
-    },
-    {
-      id: 3,
-      heading: "Why Savetown",
-      subheading:
-        "Creating Thrilling Match Experiences: Tips for Football Events",
-      type: "Why Savetown",
-    },
-    {
-      id: 4,
-      heading: "Our Features",
-      subheading: "Engaging Fans: Creative Ways to Boost Football Attendance",
-      type: "Our Features",
-    },
-    {
-      id: 5,
-      heading: "How it Works",
-      subheading: "Roadmap to Victory: Insights from Elite Football Coaches",
-      type: "How it Works",
-    },
-  ];
+const [testimonials, setTestimonials] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  return (
+ const loadTestimonials = async () => {
+     setLoading(true);
+     await fetchBlog(
+       { page: 1, 
+         type: "Testimonials", 
+         // category: "testimonials", 
+         page: "landing" },
+       (response) => {
+         // console.log(response);
+         setTestimonials(response?.data || []);
+         setLoading(false);
+       },
+       (err) => {
+         console.error("unable to load testimonials", err);
+       }
+     );
+   };
+ 
+   useEffect(() => {
+     loadTestimonials();
+   }, []);
+   return (
+     <>
+       {loading ? (
+         <div>Loading information......</div>
+       ) : !testimonials || testimonials.length === 0 ? (
+         <div className="text-center text-gray-500">
+           No information available to display.
+         </div>
+       ) : (
     <div>
          {/* Search bar and Add new slider */}
          <div className="mb-4">
@@ -81,17 +80,17 @@ export default function Testimonials (first){
         <thead className="bg-white text-[13px]">
           <tr>
             <th className="p-4 text-gray-500">S/N</th>
-            <th className="p-4 w-[400px]">Name</th>
+            <th className="p-4 w-[100px]">Name</th>
             <th className="p-4">Description</th>
             <th className="p-4">Action</th>
           </tr>
         </thead>
         <tbody>
-          {headlines.map((row, index) => (
-            <tr key={row.id} className="border-t text-sm">
+          {testimonials && testimonials.map && testimonials.map((testimonial, index) => (
+            <tr key={testimonial.id} className="border-t text-sm">
               <td className="p-4 text-gray-500">{index + 1}</td>
-              <td className="p-4 w-[400px] text-gray-500">{row.heading}</td>
-              <td className="p-4">{row.subheading}</td>
+              <td className="p-4 w-[100px] text-gray-500">{testimonial.title}</td>
+              <td className="p-4">{testimonial.description}</td>
               <td className="p-4 flex items-center justify-center gap-2">
                 <button className="text-gray-500 hover:text-gray-800">
                   <Image
@@ -118,5 +117,7 @@ export default function Testimonials (first){
         </tbody>
       </table>
     </div>
+       )}
+    </>
   );
 }

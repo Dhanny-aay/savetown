@@ -4,21 +4,48 @@ import Link from "next/link";
 import React, { useState } from "react"; // Import useState for state management
 import logo from "../assets/logo.svg";
 import eye from "../assets/eye.svg";
+import { handleAdminLogin } from "../adminControllers/authController"; // Import the login function
+import { useRouter } from 'next/navigation';
 
 export default function AdminLogin() {
-  // State to toggle password visibility
   const [showPassword, setShowPassword] = useState(false);
-
-  // Function to toggle password visibility
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  
+  const router = useRouter(); // Router hook for redirection
+  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const userData = {
+      email,
+      password,
+    };
+
+    handleAdminLogin(
+      userData,
+      (response) => {
+        // On successful login, redirect to the dashboard
+        if (response?.status === 200) {
+          router.push("/admin"); // Redirect to your dashboard or the appropriate page
+        }
+      },
+      (error) => {
+        // Handle error (display error message if login fails)
+        setErrorMessage("Invalid email or password.");
+      }
+    );
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
-      {/* Card container */}
-      <div className="w-full max-w-md p-3 bg-white ">
-        {/* Logo or Title */}
+      <div className="w-full max-w-md p-3 bg-white">
         <div className="flex items-center justify-center">
           <Link href="/">
             <Image
@@ -38,12 +65,12 @@ export default function AdminLogin() {
         </p>
 
         {/* Login form */}
-        <form className="mt-6">
+        <form className="mt-6" onSubmit={handleSubmit}>
           {/* Email Input */}
           <h5 className="mb-4">
             <label
               htmlFor="email"
-              className="block text-base  font-normal font-Yeseva text-black md:text-xl"
+              className="block text-base font-normal font-Yeseva text-black md:text-xl"
             >
               Email
             </label>
@@ -52,6 +79,8 @@ export default function AdminLogin() {
               id="email"
               placeholder="Enter Email Address"
               className="mt-1 block w-full px-6 py-[20px] rounded-[32px] border font-Manrope border-[#D5D7DA] focus:outline-none focus:border-[#ED1450] sm:text-sm"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </h5>
@@ -70,9 +99,10 @@ export default function AdminLogin() {
                 id="password"
                 placeholder="Enter Password"
                 className="block w-full px-6 py-[20px] rounded-[32px] border font-Manrope border-[#D5D7DA] focus:outline-none focus:border-[#ED1450] sm:text-sm"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              {/* Show Password Icon */}
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
@@ -100,6 +130,11 @@ export default function AdminLogin() {
             </div>
           </h5>
 
+          {/* Error Message */}
+          {errorMessage && (
+            <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
+          )}
+
           {/* Remember me and Forgot Password */}
           <div className="flex items-center justify-between">
             <label className="flex items-center">
@@ -111,12 +146,12 @@ export default function AdminLogin() {
                 Remember for 30 days
               </span>
             </label>
-            <a
+            <Link
               href="#"
               className="text-sm text-[#ED1450] font-bold font-Manrope hover:underline"
             >
               Forgot Password?
-            </a>
+            </Link>
           </div>
 
           {/* Submit Button */}

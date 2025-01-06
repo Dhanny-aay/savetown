@@ -1,121 +1,139 @@
-import Image from 'next/image';
-import edit from '../assets/edit.svg'
-import trash from '../assets/trash.svg'
+"use client";
+import Image from "next/image";
+import edit from "../assets/edit.svg";
+import trash from "../assets/trash.svg";
+import { useEffect, useState } from "react";
+import CreateNotificationModal from "./createNotificationModal";
+import { pushNotificationsDisplay } from "./../../adminControllers/pushController";
+import EditNotificationModal from "./editNotificationModal";
 
 export default function Pending() {
+  const [notificationList, setNotificationList] = useState({
+    id: null,
+    title: "",
+    body: "",
+    scheduled_date: "",
+  });
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [refresh,setRefresh] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
-  const jobList = [
-    {
-      id: 1,
-      title: "Esther Howard",
-      location: "You've got a new message waiting for you!",
-      datePosted: "October 25, 2024, 12:00 PM",
-    },
-    {
-      id: 2,
-      title: "Brooklyn Simmons",
-      location: "Check out your latest updates!",
-      datePosted: "October 25, 2024, 12:00 PM",
-    },
-    {
-      id: 3,
-      title: "Arlene McCoy",
-      location: "Don't miss out on what's happening!",
-      datePosted: "October 25, 2024, 12:00 PM",
-    },
-    {
-      id: 4,
-      title: "Albert Flores",
-      location: "New notifications are here for you!",
-      datePosted: "October 25, 2024, 12:00 PM",
-    },
-    {
-      id: 5,
-      title: "Eleanor Pena",
-      location: "You have new alerts to review!",
-      datePosted: "October 25, 2024, 12:00 PM",
-    },
-    {
-      id: 6,
-      title: "Annette Black",
-      location: "Take a look at your recent messages!",
-      datePosted: "October 25, 2024, 12:00 PM",
-    },
-    {
-      id: 7,
-      title: "Kristin Watson",
-      location: "There's something new for you to see!",
-      datePosted: "October 25, 2024, 12:00 PM",
-    },
-    {
-      id: 8,
-      title: "Kristin Watson",
-      location: "Updates are waiting for your attention!",
-      datePosted: "October 25, 2024, 12:00 PM",
-    },
-    {
-      id: 9,
-      title: "Kristin Watson",
-      location: "New activity has been recorded!",
-      datePosted: "October 25, 2024, 12:00 PM",
-    },
-    {
-      id: 10,
-      title: "Kristin Watson",
-      location: "Your inbox has new notifications!",
-      datePosted: "October 25, 2024, 12:00 PM",
-    },
-    {
-      id: 11,
-      title: "Kristin Watson",
-      location: "You have new messages to check out!",
-      datePosted: "October 25, 2024, 12:00 PM",
-    },
-  ];
+  const fetchNotifications = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await pushNotificationsDisplay({});
+      setNotificationList(response?.data || []);
+      if (!response?.data || response?.data.length === 0) {
+        setError("No notifications available.");
+      }
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      setError("Failed to load notifications. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [refresh]);
+
+  const formatDateTime = (dateTime) => {
+    const date = new Date(dateTime);
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23", // 24-hour clock
+    });
+  }
+
+  const openEditModal = (notif) =>{
+    setShowEditModal(true)
+    setSelectedUser(notif);
+  }
+
+  
+
+  if (loading) return <div>Loading notifications...</div>; // Loading state
 
   return (
-    <table className="w-full text-left border rounded-lg font-Manrope shadow">
-      <thead className="bg-white text-[13px]">
-        <tr>
-          <th className="p-4 text-gray-500">S/N</th>
-          <th className="p-4">Title</th>
-          <th className="p-4">Body</th>
-          <th className="p-4">Date</th>
-          <th className="p-4">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {jobList.map((job) => (
-          <tr key={job.id} className="border-t text-sm">
-            <td className="p-4 text-gray-500">
-              {job.id.toString().padStart(2, "0")}
-            </td>
-            <td className="p-4">{job.title}</td>
-            <td className="p-4 text-gray-500">{job.location}</td>
-            <td className="p-4 text-gray-500">{job.datePosted}</td>
-            <td className="p-4 flex items-center justify-center gap-2">
-              <button className="text-gray-500 hover:text-gray-800">
-                <Image
-                  src={edit.src} // Replace with your actual edit icon source
-                  alt="edit icon"
-                  width={20}
-                  height={20}
-                  priority
-                />
-              </button>
-              <button className="text-gray-500 hover:text-gray-800">
-                <Image
-                  src={trash.src} // Replace with your actual delete icon source
-                  alt="delete icon"
-                  width={20}
-                  height={20}
-                  priority
-                />
-              </button>
-            </td>
+    <div>
+      {error && <p className="text-red-500">{error}</p>} {/* Error message */}
+      {showCreateModal ? (
+        <CreateNotificationModal
+          onClose={setShowCreateModal}
+          onPermissionChange={() => setRefresh(!refresh)}
+        />
+      ) : null}
+      {showEditModal ? (
+        <EditNotificationModal notifInfo={selectedUser} onClose={setShowEditModal} />
+      ) : null}
+      {/* Button container */}
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="px-6 py-2 bg-[#ED1450] text-white rounded-full font-Manrope"
+        >
+          {"\u002B"} Add new Notification
+        </button>
+      </div>
+      <table className="verflow-auto w-full md:h-[100%] text-left font-Manrope">
+        <thead className="bg-white text-[13px]">
+          <tr>
+            <th className="p-4 text-gray-500">S/N</th>
+            <th className="p-4">Title</th>
+            <th className="p-4">Body</th>
+            <th className="p-4">Date</th>
+            <th className="p-4">Action</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {notificationList.length > 0 ? (
+            notificationList.map((notifs, index) => (
+              <tr key={notifs.id || index} className="border-t text-sm">
+                <td className="p-4 text-gray-500">{index + 1}</td>
+                <td className="p-4">{notifs.title}</td>
+                <td className="p-4 text-gray-500">{notifs.body}</td>
+                <td className="p-4 text-gray-500">{formatDateTime(notifs.scheduled_date)}</td>
+                <td className="p-4 flex items-center justify-center gap-2">
+                  <button onClick={() => openEditModal(notifs)}
+                   className="text-gray-500 hover:text-gray-800">
+                    <Image
+                      src={edit.src}
+                      alt="edit icon"
+                      width={20}
+                      height={20}
+                      priority
+                    />
+                  </button>
+                  <button className="text-gray-500 hover:text-gray-800">
+                    <Image
+                      src={trash.src}
+                      alt="delete icon"
+                      width={20}
+                      height={20}
+                      priority
+                    />
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="5" className="p-4 text-center text-gray-500">
+                No notifications available.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 }

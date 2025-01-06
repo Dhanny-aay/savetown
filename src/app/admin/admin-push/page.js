@@ -2,13 +2,14 @@
 import { useState } from "react";
 import Pending from "./components/pending";
 import Sent from "./components/sent";
+import { useRouter } from "next/navigation";
 
 export default function PushNotifications(second) {
   const notification = [
     { name: "Pending Notification", id: "pending" },
     { name: "Sent Notification", id: "sent" },
   ];
-
+const router = useRouter();
   const [activeTab, setActiveTab] = useState("Pending Notification");
 
   return (
@@ -18,7 +19,7 @@ export default function PushNotifications(second) {
         <div className="flex items-center space-x-2">
           {/* Back Button */}
           <button
-            // onClick={() => router.back()} // Navigates to the previous page
+            onClick={() => router.back()} // Navigates to the previous page
             className="text-[#ED1450] hover:underline text-base font-normal"
           >
             &lt; Back
@@ -45,11 +46,6 @@ export default function PushNotifications(second) {
             </button>
           ))}
         </div>
-
-        {/* Add new Notification Button */}
-        <button className="px-6 py-2 bg-[#ED1450] text-white rounded-full font-Manrope">
-          {"\u002B"} Add new Notification
-        </button>
       </div>
 
       {activeTab === "Pending Notification" ? (

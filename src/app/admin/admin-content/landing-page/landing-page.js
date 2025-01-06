@@ -23,7 +23,7 @@ export default function LandingPage(first) {
         {contentNav.map((item) => (
           <button
             key={item.id}
-            className={`pb-2 text-lg font-semibold ${
+            className={`pb-2 text-sm md:text-base font-semibold ${
               secondActiveTab === item.name
                 ? "border-b-4 border-[#ED1450] text-[#ED1450]"
                 : "text-gray-500"
@@ -43,8 +43,7 @@ export default function LandingPage(first) {
       </div>
 
       {/* Dynamic Table Section */}
-      <div className="overflow-auto">
-        <div className="overflow-auto">
+      <div className="w-full">
           {secondActiveTab === "Headlines" ? (
             <Headline />
           ) : secondActiveTab === "Hero Section" ? (
@@ -57,7 +56,6 @@ export default function LandingPage(first) {
             <HowItWorks />
           ) : null}
         </div>
-      </div>
     </div>
   );
 }

@@ -44,11 +44,11 @@ const api = async (method, uri, body = null) => {
         localStorage.removeItem("savetown_admin_token");
 
         // Check if the current page is already the sign-in page
-        if (window.location.pathname === "/sign-in") {
+        if (window.location.pathname === "/admin-login") {
           SnackbarUtils.error("Please check your account details.");
         } else {
           SnackbarUtils.error("Session expired. Redirecting to sign-in...");
-          window.location = "/sign-in";
+          window.location = "/admin-login";
         }
         return; // Stop further execution
       }

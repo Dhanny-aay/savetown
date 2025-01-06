@@ -1,141 +1,119 @@
-export default function Recents(second) {
-    const events = [
-      {
-        id: 1,
-        name: "Esther Howard",
-        email: "estherhoward@gmail.com",
-        location: "Lagos",
-        date: "October 25, 2024",
-        action: "Remind",
-      },
-      {
-        id: 2,
-        name: "Brooklyn Simmons",
-        email: "brooklynsimmons@gmail.com",
-        location: "Lagos",
-        date: "October 25, 2024",
-        action: "Remind",
-      },
-      {
-        id: 3,
-        name: "Arlene McCoy",
-        email: "arlenemccoy@gmail.com",
-        location: "Lagos",
-        date: "October 25, 2024",
-        action: "Remind",
-      },
-      {
-        id: 4,
-        name: "Albert Flores",
-        email: "albertflores@gmail.com",
-        location: "Lagos",
-        date: "October 25, 2024",
-        action: "Remind",
-      },
-      {
-        id: 5,
-        name: "Eleanor Pena",
-        email: "eleanorpena@gmail.com",
-        location: "Lagos",
-        date: "October 25, 2024",
-        action: "Remind",
-      },
-      {
-        id: 6,
-        name: "Annette Black",
-        email: "annetteblack@gmail.com",
-        location: "Lagos",
-        date: "October 25, 2024",
-        action: "Remind",
-      },
-      {
-        id: 7,
-        name: "Kristin Watson",
-        email: "kristinwatson@gmail.com",
-        location: "Lagos",
-        date: "October 25, 2024",
-        action: "Remind",
-      },
-      {
-        id: 8,
-        name: "Kristin Watson",
-        email: "kristinwatson@gmail.com",
-        location: "Lagos",
-        date: "October 25, 2024",
-        action: "Remind",
-      },
-      {
-        id: 9,
-        name: "Kristin Watson",
-        email: "kristinwatson@gmail.com",
-        location: "Lagos",
-        date: "October 25, 2024",
-        action: "Remind",
-      },
-      {
-        id: 10,
-        name: "Kristin Watson",
-        email: "kristinwatson@gmail.com",
-        location: "Lagos",
-        date: "October 25, 2024",
-        action: "Remind",
-      },
-      {
-        id: 11,
-        name: "Kristin Watson",
-        email: "kristinwatson@gmail.com",
-        location: "Lagos",
-        date: "October 25, 2024",
-        action: "Remind",
-      },
-    ];
-  
-    return (
-      <div className="overflow-auto max-h-[100%] h-screen md:h-[55vh]">
-        {/* Table Section with Fixed Height */}{" "}
-        {/* Adjust the height to fit the screen */}
-        <table className="w-full mt-4 bg-white rounded shadow ">
-        <thead>
-          <tr className="text-left bg-gray-50 font-Manrope">
-            <th className="p-4 w-[64px] font-semibold">S/N</th>
-            <th className="p-4 font-semibold">Name</th>
-            <th className="p-4 w-[250px] font-semibold">Email</th>
-            <th className="p-4 w-[120px] font-semibold">Location</th>
-            <th className="p-4 w-[148px] text-center font-semibold">Date</th>
-            <th className="p-4 w-[100px] text-center font-semibold">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {events.map((event) => (
-            <tr key={event.id} className="border-t ">
-              <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium">
-                {event.id.toString().padStart(2, "0")}
-              </td>
-              <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium">
-                {event.name}
-              </td>
-              <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium">
-                {event.email}
-              </td>
-              <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium">
-                {event.location}
-              </td>
-              <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium text-center">
-                {event.date}
-              </td>
-              <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium text-center">
-                <span
-                  className="cursor-pointer text-[#ED1450] hover:text-[#ED1450]"
-                  onClick={() => alert(`Reminder sent to ${event.name}`)}
-                >
-                  {event.action}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      </div>
-    );
+import EditDayModal from "./editDayModal";
+import { useEffect, useState } from "react";
+import { showAvailableAttendees } from "./../../adminControllers/eventsController";
+
+export default function Recents() {
+
+  const [attendees, setAttendees] = useState([
+    {
+      id: "",
+      date: "",
+      email: "",
+      // location: "",
+      first_name: "",
+      last_name: "",
+      updated_at: "",
+    },
+  ]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const formatDateTime = (dateTime) => {
+    const date = new Date(dateTime);
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23", // 24-hour clock
+    });
   }
-  
+
+  // const handleEditModal = () => {
+  //   setModalOpen(true);
+  // };
+
+  const displayAvailableAttendees = async () => {
+    setLoading(true);
+    try {
+      const response = await showAvailableAttendees({});
+      const attending = response?.data || [];
+      setAttendees(attending);
+      setLoading(false);
+    } catch (error) {
+      console.error("error displaying dates", error);
+    }
+  };
+  useEffect(() => {
+    displayAvailableAttendees();
+  }, []);
+
+
+  return (
+    <>
+      {loading ? (
+        <div> Loading users.....</div>
+      ) : !attendees || attendees.length === 0 ? (
+        <div className="text-center text-gray-500">
+          No attendees available to display.
+        </div>
+      ) : (
+        <div className="overflow-auto w-full md:h-[100%] ">
+          {modalOpen ? (
+            <EditDayModal
+              onClose={setModalOpen}
+            />
+          ) : null}
+        
+          {/* Adjust the height to fit the screen */}
+          <table className="w-full mt-4 bg-white rounded shadow ">
+            <thead>
+              <tr className="text-left bg-gray-50 font-Manrope">
+                <th className="p-4 w-[64px] font-semibold">S/N</th>
+                <th className="p-4 font-semibold">Name</th>
+                <th className="p-4 w-[250px] font-semibold">Email</th>
+                {/* <th className="p-4 w-[120px] font-semibold">Location</th> */}
+                <th className="p-4 w-[148px] text-center font-semibold">
+                  Date
+                </th>
+                <th className="p-4 w-[100px] text-center font-semibold">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {attendees.map((attend) => (
+                <tr key={attend.id} className="border-t ">
+                  <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium">
+                    {attend.id}
+                  </td>
+                  <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium">
+                    {attend.first_name}  {attend.last_name}
+                  </td>
+                  <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium">
+                    {attend.email}
+                  </td>
+                  {/* <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium">
+                    {attend.location}
+                  </td> */}
+                  <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium text-center">
+                    {formatDateTime(attend.date)}
+                  </td>
+                  <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium text-center">
+                    <span
+                      className="cursor-pointer text-[#ED1450] hover:text-[#ED1450]"
+                      onClick={() => alert(`Reminder sent to ${attend.name}`)}
+                    >
+                      {formatDateTime(attend.updated_at)}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </>
+  );
+}

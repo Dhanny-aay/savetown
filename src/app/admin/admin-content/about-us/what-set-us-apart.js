@@ -1,43 +1,42 @@
+import { useEffect, useState } from "react";
 import edit from "../assets/edit.svg";
 import Image from "next/image";
+import { fetchBlog } from "../../adminControllers/blogController";
 
-export default function WhatSetUsApart(first) {
-  const headlines = [
-    {
-      id: 1,
-      heading: "Message from our CEO",
-      subheading:
-        "Kicking Off Success: Innovative Strategies for Football Coaching",
-      type: "CEO's Message",
-    },
-    {
-      id: 2,
-      heading: "Our Partner's",
-      subheading: "Game Changers: A Comprehensive Guide to Football Tactics",
-      type: "Our Partners",
-    },
-    {
-      id: 3,
-      heading: "Why Savetown",
-      subheading:
-        "Creating Thrilling Match Experiences: Tips for Football Events",
-      type: "Why Savetown",
-    },
-    {
-      id: 4,
-      heading: "Our Features",
-      subheading: "Engaging Fans: Creative Ways to Boost Football Attendance",
-      type: "Our Features",
-    },
-    {
-      id: 5,
-      heading: "How it Works",
-      subheading: "Roadmap to Victory: Insights from Elite Football Coaches",
-      type: "How it Works",
-    },
-  ];
+export default function WhatSetUsApart() {
+  const [apart, setApart] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  return (
+ const loadWhatSetsUsApart = async () => {
+     setLoading(true);
+     await fetchBlog(
+       { page: 1, 
+         type: "WhatSetsUsApart", 
+         // category: "Partners", 
+         page: "About" },
+       (response) => {
+         // console.log(response);
+         setApart(response?.data || []);
+         setLoading(false);
+       },
+       (err) => {
+         console.error("unable to load what sets us apart", err);
+       }
+     );
+   };
+ 
+   useEffect(() => {
+     loadWhatSetsUsApart();
+   }, []);
+   return (
+     <>
+       {loading ? (
+         <div>Loading information......</div>
+       ) : !apart || apart.length === 0 ? (
+         <div className="text-center text-gray-500">
+           No information available to display.
+         </div>
+       ) : (
     <div>
       <table className="w-full text-left border rounded-lg font-Manrope shadow">
         <thead className="bg-white text-[13px]">
@@ -49,11 +48,11 @@ export default function WhatSetUsApart(first) {
           </tr>
         </thead>
         <tbody>
-          {headlines.map((row, index) => (
-            <tr key={row.id} className="border-t text-sm">
+          {apart && apart.map && apart.map((setUsApart, index) => (
+            <tr key={setUsApart.id} className="border-t text-sm">
               <td className="p-4 text-gray-500">{index + 1}</td>
-              <td className="p-4 w-[400px] text-gray-500">{row.heading}</td>
-              <td className="p-4">{row.subheading}</td>
+              <td className="p-4 w-[400px] text-gray-500">{setUsApart.title}</td>
+              <td className="p-4">{setUsApart.excerpt}</td>
               <td className="p-4 flex items-center justify-center gap-2">
                 <button className="text-gray-500 hover:text-gray-800">
                   <Image
@@ -70,5 +69,7 @@ export default function WhatSetUsApart(first) {
         </tbody>
       </table>
     </div>
+       )}
+    </>
   );
 }

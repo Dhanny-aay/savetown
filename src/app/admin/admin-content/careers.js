@@ -2,82 +2,34 @@ import edit from "./assets/edit.svg";
 import Image from "next/image";
 import trash from "./assets/trash.svg";
 import search from "./assets/search.svg";
+import { useEffect, useState } from "react";
+import { fetchBlog } from "../adminControllers/blogController";
 
 export default function Careers(first) {
-  const jobList = [
-    {
-      id: 1,
-      title: "Product Designer",
-      location: "Lagos",
-      datePosted: "October 25, 2024",
-      applications: 10,
-      status: "Open",
-    },
-    {
-      id: 2,
-      title: "Marketing Manager",
-      location: "Remote",
-      datePosted: "October 25, 2024",
-      applications: 10,
-      status: "Close",
-    },
-    {
-      id: 3,
-      title: "Software Engineer",
-      location: "Remote",
-      datePosted: "October 25, 2024",
-      applications: 10,
-      status: "Open",
-    },
-    {
-      id: 4,
-      title: "Marketing Manager",
-      location: "Remote",
-      datePosted: "October 25, 2024",
-      applications: 10,
-      status: "Open",
-    },
-    {
-      id: 5,
-      title: "Marketing Manager",
-      location: "Remote",
-      datePosted: "October 25, 2024",
-      applications: 10,
-      status: "Open",
-    },
-    {
-      id: 6,
-      title: "Marketing Manager",
-      location: "Lagos",
-      datePosted: "October 25, 2024",
-      applications: 10,
-      status: "Open",
-    },
-    {
-      id: 7,
-      title: "Marketing Manager",
-      location: "Lagos",
-      datePosted: "October 25, 2024",
-      applications: 10,
-      status: "Open",
-    },
-    {
-      id: 8,
-      title: "Marketing Manager",
-      location: "Lagos",
-      datePosted: "October 25, 2024",
-      applications: 10,
-      status: "Open",
-    },
-    {
-      id: 9,
-      title: "Marketing Manager",
-      location: "Lagos",
-      datePosted: "October 25, 2024",
-      applications: 10,
-      status: "Open",
-    },
-  ];
+ const [jobList, setJobList] = useState({});
+  const [loading, setLoading] = useState(false);
+
+   const loadCareers = async () => {
+       setLoading(true);
+       await fetchBlog(
+         { page: 1, 
+           type: "Careers", 
+           // category: "Partners", 
+           page: "Careers" },
+         (response) => {
+           // console.log(response);
+           setJobList(response?.data || []);
+           setLoading(false);
+         },
+         (err) => {
+           console.error("unable to load careers", err);
+         }
+       );
+     };
+   
+     useEffect(() => {
+       loadCareers();
+     }, []);
 
   return (
     <div>
@@ -119,37 +71,40 @@ export default function Careers(first) {
 
       <div>
         {/* Table Section */}
+        {loading ? (
+        <div>Loading careers....</div>
+      ) : (
         <table className="w-full text-left border rounded-lg font-Manrope shadow">
           <thead className="bg-white text-[13px]">
             <tr>
               <th className="p-4 text-gray-500">S/N</th>
               <th className="p-4">Job Title</th>
-              <th className="p-4">Location</th>
+              <th className="p-4">Employment Type</th>
               <th className="p-4">Date Posted</th>
-              <th className="p-4">Applications Received</th>
+              {/* <th className="p-4">Applications Received</th> */}
               <th className="p-4">Status</th>
               <th className="p-4">Action</th>
             </tr>
           </thead>
           <tbody>
-            {jobList.map((job) => (
+            {jobList && jobList.map && jobList.map((job) => (
               <tr key={job.id} className="border-t text-sm">
                 <td className="p-4 text-gray-500">
                   {job.id.toString().padStart(2, "0")}
                 </td>
                 <td className="p-4">{job.title}</td>
-                <td className="p-4 text-gray-500">{job.location}</td>
-                <td className="p-4 text-gray-500">{job.datePosted}</td>
-                <td className="p-4 text-center text-gray-500">{job.applications}</td>
+                <td className="p-4 text-gray-500">{job.excerpt}</td>
+                <td className="p-4 text-gray-500">{job.time === null ? 'N/A' : job.time}</td>
+                {/* <td className="p-4 text-center text-gray-500">{job.applications}</td> */}
                 <td className="p-4 text-center">
                   <span
                     className={`px-2 py-1 rounded-full text-xs ${
                       job.status === "Open"
                         ? "bg-green-100 text-green-600"
-                        : "bg-red-100 text-red-600"
+                        : "bg-red-100 text-red-600" 
                     }`}
                   >
-                    {job.status}
+                    {job.status === null ? 'N/A' : job.status }
                   </span>
                 </td>
                 <td className="p-4 flex items-center justify-center gap-2">
@@ -176,6 +131,7 @@ export default function Careers(first) {
             ))}
           </tbody>
         </table>
+  )}
         {/* Pagination Section */}
         <div className="flex justify-between items-center mt-4">
           <button className="px-4 py-2 text-gray-600 rounded font-Manrope hover:underline">
