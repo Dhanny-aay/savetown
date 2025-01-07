@@ -187,7 +187,7 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
             <div className="mt-9">
               <div>
                 <p className="text-[#878787] font-Manrope text-body14Regular">
-                  House Tax
+                  Amount
                 </p>
                 <span className="font-Manrope text-h55 md:text-h5 font-semibold block text-black mt-4">
                   ₦ {details?.amount?.toLocaleString() || "0"}
