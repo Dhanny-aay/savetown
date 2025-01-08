@@ -26,6 +26,8 @@ export default function Page() {
 
   const onSuccess = (response) => {
     setLoading(false);
+    setBody("");
+    setSubject("");
     // Show success notification
     // enqueueSnackbar("Dinner Booked Successfully", { variant: "success" });
   };
