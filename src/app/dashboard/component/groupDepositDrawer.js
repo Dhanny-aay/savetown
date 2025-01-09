@@ -384,7 +384,7 @@ export default function GroupDepositDrawer({ onClose, isVisible, selectedID }) {
               Deposit Funds to Group
             </h3>
             <label className="mt-9 block ">
-              How much will you like to deposit?
+              How much will you like to deposit?(₦)
             </label>
             <div className="mt-2 flex flex-col">
               <input

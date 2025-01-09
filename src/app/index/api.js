@@ -89,6 +89,9 @@
 import SnackbarUtils from "../utils/snackbarUtils";
 import config from "../config";
 
+// Create a global variable to track redirection state
+let isRedirecting = false;
+
 const api = async (method, uri, body = null) => {
   const url = config.baseURL + uri;
   const token = localStorage.getItem("savetown_token");
@@ -129,14 +132,22 @@ const api = async (method, uri, body = null) => {
     } else {
       // Handle 401 Unauthorized status
       if (response.status === 401) {
-        localStorage.removeItem("savetown_token");
+        if (!isRedirecting) {
+          isRedirecting = true; // Set flag to prevent multiple redirects
+          localStorage.removeItem("savetown_token");
 
-        // Check if the current page is already the sign-in page
-        if (window.location.pathname === "/sign-in") {
-          SnackbarUtils.error("Please check your account details.");
-        } else {
-          SnackbarUtils.error("Session expired. Redirecting to sign-in...");
-          window.location = "/sign-in";
+          // Check if the current page is already the sign-in page
+          if (window.location.pathname === "/sign-in") {
+            SnackbarUtils.error("Please check your account details.");
+          } else {
+            SnackbarUtils.error("Session expired. Redirecting to sign-in...");
+            window.location = "/sign-in";
+          }
+
+          // Reset redirection state after some time (e.g., 5 seconds)
+          setTimeout(() => {
+            isRedirecting = false;
+          }, 5000);
         }
         return;
       }
