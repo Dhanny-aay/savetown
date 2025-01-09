@@ -44,6 +44,18 @@ export const fetchUsers = async (params, onSuccess, onError) => {
   }
 };
 
+export const showUsersTransactions = async (id, onSuccess, onError) => {
+  try {
+    // Call the API function
+    const response = await api("GET", `/user-transactions/${id}`);
+    onSuccess(response);
+  } catch (error) {
+    if (onError) {
+      onError(error);
+    }
+  }
+};
+
 // /// Function to delete user note
 // export const handleDeleteNote = async (noteId, onSuccess, onError) => {
 //   try {

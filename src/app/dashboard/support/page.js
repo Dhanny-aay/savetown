@@ -26,6 +26,8 @@ export default function Page() {
 
   const onSuccess = (response) => {
     setLoading(false);
+    setBody("");
+    setSubject("");
     // Show success notification
     // enqueueSnackbar("Dinner Booked Successfully", { variant: "success" });
   };
@@ -54,33 +56,42 @@ export default function Page() {
         You can contact us via Email or Call Us
       </h3>
       <div className=" mt-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-        <div className=" border border-[#C2C4C6] rounded-[15px] px-6 py-3 flex items-center justify-between">
-          <div className=" flex items-center space-x-4">
-            <span className=" w-12 h-12 rounded-full flex items-center justify-center bg-[#F2F3F4]">
+        <div
+          className="border border-[#C2C4C6] rounded-[15px] px-6 py-3 flex items-center justify-between cursor-pointer"
+          onClick={() => (window.location.href = "tel:08116789053")}
+        >
+          <div className="flex items-center space-x-4">
+            <span className="w-12 h-12 rounded-full flex items-center justify-center bg-[#F2F3F4]">
               <img src={phone.src} alt="" />
             </span>
-            <div className="">
-              <h6 className=" text-body14Medium font-Manrope text-black">
+            <div>
+              <h6 className="text-body14Medium font-Manrope text-black">
                 Phone Number
               </h6>
-              <p className=" font-Manrope text-body12Regular text-[#666666] mt-2 leading-none">
-                O8116789053
+              <p className="font-Manrope text-body12Regular text-[#666666] mt-2 leading-none">
+                08116789053
               </p>
             </div>
           </div>
           <img src={forward.src} alt="" />
         </div>
-        <div className=" border border-[#C2C4C6] rounded-[15px] px-6 py-3 flex items-center justify-between">
-          <div className=" flex items-center space-x-4">
-            <span className=" w-12 h-12 rounded-full flex items-center justify-center bg-[#F2F3F4]">
+
+        <div
+          className="border border-[#C2C4C6] rounded-[15px] px-6 py-3 flex items-center justify-between cursor-pointer"
+          onClick={() =>
+            (window.location.href = "mailto:savetownsupport@gmail.com")
+          }
+        >
+          <div className="flex items-center space-x-4">
+            <span className="w-12 h-12 rounded-full flex items-center justify-center bg-[#F2F3F4]">
               <img src={mail.src} alt="" />
             </span>
-            <div className="">
-              <h6 className=" text-body14Medium font-Manrope text-black">
+            <div>
+              <h6 className="text-body14Medium font-Manrope text-black">
                 Email Address
               </h6>
-              <p className=" font-Manrope text-body12Regular text-[#666666] mt-2 leading-none">
-                Savetownsupport@gmail.com
+              <p className="font-Manrope text-body12Regular text-[#666666] mt-2 leading-none">
+                savetownsupport@gmail.com
               </p>
             </div>
           </div>

@@ -14,10 +14,10 @@ export default function AdminKyc() {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col px-3 h-full space-y-4">
+    <div className="flex flex-col h-full px-3 space-y-4">
       {/* Header with Back Button */}
 
-      <div className="flex justify-between items-center mb-4 font-Manrope">
+      <div className="flex items-center justify-between mb-4 font-Manrope">
         <div className="flex items-center space-x-2">
           {/* Back Button */}
           <button
@@ -26,7 +26,7 @@ export default function AdminKyc() {
           >
             &lt; Back
           </button>
-          <h3 className="text-xl md:text-2xl font-bold text-black">KYC Verification</h3>
+          <h3 className="text-xl font-bold text-black md:text-2xl">KYC Verification</h3>
         </div>
       </div>
 

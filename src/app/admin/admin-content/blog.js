@@ -20,9 +20,12 @@ export default function Blog() {
     setLoading(true);
     await fetchBlog(
       { page: 1, 
-        type: "", 
-        category: "Partners", 
-        page: "Home" },
+        // type: "PageTitle", 
+        // category: "LatestBlogs", 
+        // page: "Home" 
+        page: "landing" 
+
+      },
       (response) => {
         // console.log(response);
         setBlog(response?.data || []);
@@ -88,9 +91,6 @@ export default function Blog() {
                 <th className="p-4 text-gray-500">S/N</th>
                 <th className="p-4">Name</th>
                 <th className="p-4">Description</th>
-                <th className="p-4">Type</th>
-                <th className="p-4">Page</th>
-                <th className="p-4">Category</th>
                 <th className="p-4">Action</th>
               </tr>
             </thead>
@@ -102,9 +102,6 @@ export default function Blog() {
                     <td className="p-4 text-gray-500">{index + 1}</td>
                     <td className="p-4 text-gray-500">{blog.title}</td>
                     <td className="p-4">{blog.excerpt}</td>
-                    <td className="p-4 text-gray-500">{blog.type}</td>
-                    <td className="p-4 text-gray-500">{blog.page}</td>
-                    <td className="p-4 text-gray-500">{blog.category}</td>
                     <td className="p-4 flex items-center justify-center gap-2">
                       <button className="text-gray-500 hover:text-gray-800">
                         <Image

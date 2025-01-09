@@ -7,7 +7,7 @@ import Image from "next/image";
 import edit from "./assets/edit.svg";
 import trash from "./assets/trash.svg";
 import CreatePermissionsModal from "./components/createPermission";
-import DeletePermissionsModal from "./components/deletePermission";
+import DeletePermissionsModal from "../admin-push/components/deletePermission";
 import EditPermissionsModal from "./components/editPermissions";
 
 export default function AdminPermissions() {

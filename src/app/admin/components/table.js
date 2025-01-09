@@ -25,24 +25,24 @@ export default function Table(second) {
 
   return (
     <>
-      <div className="overflow-auto w-full md:h-[100%] ">
+      <div className="overflow-auto w-full md:h-[100%] text-[#5F6D7E]">
         {loading ? (
           <div>Loading transactions...</div>
         ) : (
-          <table className="w-full mt-4 bg-white rounded shadow font-Manrope">
+          <table className="w-full mt-4 bg-white rounded font-Manrope">
             <thead>
               <tr className="text-left bg-gray-50">
-                <th className="p-4 w-[64px] max-sm:w-[30px] max-sm:p-2 font-semibold">
+                <th className="p-4 text-sm w-[64px] max-sm:w-[30px] max-sm:p-2 font-semibold">
                   S/N
                 </th>
-                <th className="p-4 max-sm:p-2 font-semibold">Name</th>
-                <th className="p-4 max-sm:p-2 w-[103px] max-lg:w-[155px] text-left max-lg:text-left font-semibold">
+                <th className="p-4 max-sm:p-2 text-sm text-[#262626]  font-semibold">Name</th>
+                <th className="p-4 text-sm text-[#262626] max-sm:p-2 w-[103px] max-lg:w-[155px] text-left max-lg:text-left font-semibold">
                   Amount
                 </th>
-                <th className="p-4 w-[148px] max-sm:p-2 text-right font-semibold max-[768px]:hidden">
+                <th className="p-4 w-[148px] text-sm text-[#262626]  max-sm:p-2 text-right font-semibold max-[768px]:hidden">
                   Transaction ID
                 </th>
-                <th className="p-4 w-[149px] max-sm:p-2 text-center font-semibold">
+                <th className="p-4 w-[149px] text-sm max-sm:p-2 text-center font-semibold">
                   Status
                 </th>
               </tr>
@@ -54,16 +54,16 @@ export default function Table(second) {
                     {index + 1}
                   </td>
 
-                  <td className="max-sm:p-2 max-sm:text-xs max-lg:text-black max-lg:font-bold p-4 text-[#5F6D7E] text-sm font-medium max-lg:text-left">
+                  <td className="max-sm:p-2 max-sm:text-xs max-lg:text-[#262626] max-lg:font-semibold p-4 text-[#5F6D7E] text-sm font-medium max-lg:text-left">
                     <div className="max-lg:flex max-lg:flex-col">
-                      {tx.description}
+                      {tx.user.first_name}  {tx.user.last_name}
                       <span className="lg:hidden max-sm:text-xs max-lg:text-[#5F6D7E] max-lg:font-medium">
                         Savetown Wallet
                       </span>
                     </div>
                   </td>
 
-                  <td className="max-sm:p-2 max-sm:text-xs max-lg:text-black max-lg:font-bold p-4 text-[#5F6D7E] text-sm font-medium text-left max-lg:text-left">
+                  <td className="max-sm:p-2 max-sm:text-xs max-lg:text-[#262626]  max-lg:font-semibold p-4 text-[#5F6D7E] text-sm font-medium text-left max-lg:text-left">
                     <div className="max-lg:flex max-lg:flex-col">
                       {tx.currency === 'USD' ? '$' : '₦'} {tx.amount}
                       <span className="lg:hidden max-sm:text-xs max-lg:text-[#5F6D7E] max-lg:font-medium">

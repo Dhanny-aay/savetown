@@ -37,12 +37,12 @@ export default function Card() {
   return (
     <div className=''>
       {/* Analysis Header */}
-      <h3 className="text-2xl font-bold text-black mb-4">Analysis</h3>
+      <h3 className="text-2xl font-bold text-[#262626] mb-4">Analysis</h3>
 
       {/* Cards Container */}
       <div
         ref={containerRef}
-        className="max-sm:overflow-x-auto max-sm:flex max-sm:gap-4
+        className="relative max-sm:overflow-x-auto max-sm:flex max-sm:gap-4
         grid grid-cols-4 md:grid-cols-2 xl:grid-cols-4 gap-4"
       >
         {cardsData.map(({ title, value, icon, subtext }, index) => (
@@ -52,9 +52,9 @@ export default function Card() {
             flex max-sm:w-[70%] max-sm:flex-shrink-0 justify-between gap-4 bg-white rounded-[10px] py-4 px-5 border border-[#EAEBF0]"
           >
             <div className="font-Manrope text-left flex flex-col gap-4">
-              <h4 className="text-black text-base font-medium">{title}</h4>
-              <h2 className="text-[28px] font-bold font-Manrope">{value}</h2>
-              <p className="font-medium text-sm">{subtext}</p>
+              <h4 className="text-[#262626] text-base font-medium">{title}</h4>
+              <h2 className="text-[28px] text-[#262626] font-bold font-Manrope">{value}</h2>
+              <p className="font-medium text-[#262626] text-sm">{subtext}</p>
             </div>
             <div>
               <Image
@@ -71,7 +71,7 @@ export default function Card() {
 
      {/* Pagination Dots */}
      
-<div className="flex justify-center items-center p-2 bg-[#FF0044] rounded-full w-fit mt-4 max-sm:flex md:hidden">
+<div className="absolute left-[35%] flex justify-center items-center p-2 bg-[#FF0044] rounded-full w-fit mt-4 max-sm:flex md:hidden">
   {cardsData.map((_, index) => (
     <span
       key={index}

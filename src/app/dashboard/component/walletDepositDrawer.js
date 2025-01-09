@@ -187,7 +187,7 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
             <div className="mt-9">
               <div>
                 <p className="text-[#878787] font-Manrope text-body14Regular">
-                  House Tax
+                  Amount
                 </p>
                 <span className="font-Manrope text-h55 md:text-h5 font-semibold block text-black mt-4">
                   ₦ {details?.amount?.toLocaleString() || "0"}
@@ -255,7 +255,9 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
             <h3 className="text-h55 md:text-h5 font-Manrope font-bold text-[#595A5C] mt-9">
               Deposit Funds
             </h3>
-            <label className="mt-9">How much will you like to deposit?</label>
+            <label className="mt-9">
+              How much will you like to deposit(₦)?
+            </label>
             <div className="mt-2 flex flex-col items-start">
               <input
                 placeholder="₦0.00"

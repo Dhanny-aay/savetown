@@ -35,7 +35,7 @@ export default function Logout() {
               alt=""
             />
             <h5 className=" mt-5 text-h55 md:text-h5 font-semibold font-Manrope text-black">
-              Are you sure you want to delete?
+              Are you sure you want to logout?
             </h5>
             <div className=" grid grid-cols-1 mt-6 w-full md:grid-cols-2 gap-4">
               <button

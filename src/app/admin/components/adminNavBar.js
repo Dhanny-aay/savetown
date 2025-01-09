@@ -17,12 +17,16 @@ export default function AdminNavBar() {
         return "User";
       case "/admin/admin-kyc":
         return "KYC Verification";
+        case "/admin/admin-calculator":
+          return "Calculator";
       case "/admin/admin-transactions":
         return "Transactions";
       case "/admin/admin-event":
         return "Events";
       case "/admin/admin-push":
         return "Push Notification";
+        case "/admin/admin-wallet":
+        return "Fincra Wallet";
       case "/admin/admin-roles":
         return "Roles";
         case "/admin/admin-permission":
@@ -48,7 +52,7 @@ export default function AdminNavBar() {
     <div className="flex fixed w-full z-[99] md:left-[10.2%] md:w-[90%] lg:w-[80%] lg:left-[18%] top-0 justify-between items-center bg-white py-4 px-8 border-b border-b-[#EAEBF0] md:px-8 md:py-4">
       {/* Left-side content */}
       <div>
-        <h1 className="text-xl font-bold text-black font-Manrope hidden md:block">
+        <h1 className="hidden text-xl font-bold text-black font-Manrope md:block">
           {getPageTitle()}
         </h1>
 
@@ -62,7 +66,7 @@ export default function AdminNavBar() {
         />
       </div>
       {/* Right-side content */}
-      <div className="flex items-center md:justify-end gap-4">
+      <div className="flex items-center gap-4 md:justify-end">
         <Image src={bell.src} alt="Bell icon" width={24} height={24} priority />
         <span className="w-12 h-12 rounded-full bg-[#FFF6E6] text-center font-Manrope font-bold text-base flex items-center justify-center text-btnPrimary">
           VD

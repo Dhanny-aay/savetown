@@ -92,12 +92,12 @@ export default function Profile() {
   return (
     <div>
       {/* Header */}
-      <div className="flex flex-row items-center justify-between sapce-x-4 gap-4 border-b pb-4">
+      <div className="flex flex-row items-center justify-between gap-4 pb-4 border-b sapce-x-4">
         <div className="space-y-3">
           <h3 className="text-[18px] md:text-[18px] font-bold text-black">
             Personal info
           </h3>
-          <p className="text-gray-600 text-sm md:text-sm">
+          <p className="text-sm text-gray-600 md:text-sm">
             Update your personal details here.
           </p>
         </div>
@@ -138,7 +138,7 @@ export default function Profile() {
           <div className="flex flex-col w-full">
             <label
               htmlFor="firstName"
-              className="text-sm font-medium text-gray-700 mb-1"
+              className="mb-1 text-sm font-medium text-gray-700"
             >
               {/* First Name */} Full Name
             </label>
@@ -157,7 +157,7 @@ export default function Profile() {
 
           {/* Last Name */}
           {/* <div className="flex flex-col">
-          <label htmlFor="lastName" className="text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="lastName" className="mb-1 text-sm font-medium text-gray-700">
             Last Name
           </label>
           <input
@@ -175,7 +175,7 @@ export default function Profile() {
 
           {/* Middle Name */}
           {/* <div className="flex flex-col">
-          <label htmlFor="middleName" className="text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="middleName" className="mb-1 text-sm font-medium text-gray-700">
             Middle Name
           </label>
           <input
@@ -195,7 +195,7 @@ export default function Profile() {
           <div className="flex flex-col">
             <label
               htmlFor="email"
-              className="text-sm font-medium text-gray-700 mb-1"
+              className="mb-1 text-sm font-medium text-gray-700"
             >
               Email Address
             </label>
@@ -216,7 +216,7 @@ export default function Profile() {
           <div className="flex flex-col">
             <label
               htmlFor="phone"
-              className="text-sm font-medium text-gray-700 mb-1"
+              className="mb-1 text-sm font-medium text-gray-700"
             >
               Phone Number
             </label>

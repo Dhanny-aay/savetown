@@ -30,3 +30,16 @@ export const pushNotificationsDisplay = async ( onError) => {
       }
     }
   };
+
+  export const deleteNotifications = async (id, onSuccess, onError) => {
+    try {
+      const response = await api("DELETE", `/push-notifications-content/${id}`);
+      if (onSuccess) {
+        onSuccess(response);
+      }
+    } catch (error) {
+      if (onError) {
+        onError(error);
+      }
+    }
+  };

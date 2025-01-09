@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import CreateNotificationModal from "./createNotificationModal";
 import { pushNotificationsDisplay } from "./../../adminControllers/pushController";
 import EditNotificationModal from "./editNotificationModal";
+import DeleteNotificationsModal from "./deleteNotifications";
 
 export default function Pending() {
   const [notificationList, setNotificationList] = useState({
@@ -18,6 +19,7 @@ export default function Pending() {
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [refresh,setRefresh] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -59,13 +61,16 @@ export default function Pending() {
     setSelectedUser(notif);
   }
 
+  const openDeleteModal = (notif) =>{
+    setShowDeleteModal(true)
+    setSelectedUser(notif);
+  }
   
-
-  if (loading) return <div>Loading notifications...</div>; // Loading state
+  if (loading) return <div>Loading notifications...</div>; 
 
   return (
     <div>
-      {error && <p className="text-red-500">{error}</p>} {/* Error message */}
+      {error && <p className="text-red-500">{error}</p>} 
       {showCreateModal ? (
         <CreateNotificationModal
           onClose={setShowCreateModal}
@@ -75,11 +80,14 @@ export default function Pending() {
       {showEditModal ? (
         <EditNotificationModal notifInfo={selectedUser} onClose={setShowEditModal} />
       ) : null}
+        {showDeleteModal ? (
+        <DeleteNotificationsModal notifInfo={selectedUser} onClose={setShowDeleteModal}  onPermissionChange={() => setRefresh(!refresh)} />
+      ) : null}
       {/* Button container */}
       <div className="flex justify-end mb-4">
         <button
           onClick={() => setShowCreateModal(true)}
-          className="px-6 py-2 bg-[#ED1450] text-white rounded-full font-Manrope"
+          className="px-6 py-2 bg-[#ED1450] text-sm text-white rounded-full font-Manrope"
         >
           {"\u002B"} Add new Notification
         </button>
@@ -89,7 +97,7 @@ export default function Pending() {
           <tr>
             <th className="p-4 text-gray-500">S/N</th>
             <th className="p-4">Title</th>
-            <th className="p-4">Body</th>
+            <th className="p-4 hidden md:block">Body</th>
             <th className="p-4">Date</th>
             <th className="p-4">Action</th>
           </tr>
@@ -99,8 +107,17 @@ export default function Pending() {
             notificationList.map((notifs, index) => (
               <tr key={notifs.id || index} className="border-t text-sm">
                 <td className="p-4 text-gray-500">{index + 1}</td>
-                <td className="p-4">{notifs.title}</td>
-                <td className="p-4 text-gray-500">{notifs.body}</td>
+                <td className="p-4">
+                  <div className="flex flex-col justify-center">
+                  {notifs.title}
+                  <span className="md:hidden text-gray-500">
+                  {notifs.body}
+                  </span>
+                  </div>
+                  </td>
+                <td className="p-4 text-gray-500 hidden md:block">
+                  {notifs.body}
+                  </td>
                 <td className="p-4 text-gray-500">{formatDateTime(notifs.scheduled_date)}</td>
                 <td className="p-4 flex items-center justify-center gap-2">
                   <button onClick={() => openEditModal(notifs)}
@@ -113,7 +130,8 @@ export default function Pending() {
                       priority
                     />
                   </button>
-                  <button className="text-gray-500 hover:text-gray-800">
+                  <button onClick={() => openDeleteModal(notifs.id)}
+                  className="text-gray-500 hover:text-gray-800">
                     <Image
                       src={trash.src}
                       alt="delete icon"
