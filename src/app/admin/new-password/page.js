@@ -42,7 +42,6 @@ export default function Page() {
 
             <div className=" mt-6">
               <PasswordCreate onPasswordValid={handlePasswordValid} />
-
               <button className=" bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg">
                 Reset Password
               </button>
