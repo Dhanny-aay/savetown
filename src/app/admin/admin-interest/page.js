@@ -1,21 +1,51 @@
-'use client'
-import { useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
+import {
+  editInterest,
+  showInterest,
+} from "../adminControllers/interestController";
 
 export default function InterestRate() {
   const [isEditing, setIsEditing] = useState(false);
-  const [interestRate, setInterestRate] = useState("12%"); // Default value
-  const [tempRate, setTempRate] = useState(interestRate); // Temporary value for editing
+  const [data, setData] = useState({ id: 1, interestRate: "N/A" }); // Default value
+  const [tempRate, setTempRate] = useState(data); // Temporary value for editing
 
-  const handleSave = () => {
-    setInterestRate(tempRate);
+  const handleSave = async () => {
+    setData(tempRate);
     setIsEditing(false);
     console.log("Saved Interest Rate:", tempRate);
+    let id = 1;
+    await editInterest(
+      `${id}`,
+      { tempRate },
+      (response) => {
+        console.log(response);
+      },
+      (err) => {
+        console.error("unable to edit interest", err);
+      }
+    );
   };
 
   const handleCancel = () => {
-    setTempRate(interestRate);
+    setTempRate(data);
     setIsEditing(false);
   };
+
+  const fetchInterest = async () => {
+    let response = await showInterest({});
+    let interest = response.data;
+    // console.log(interest);
+    if (interest.length === 0) {
+      setData("N/A");
+    } else {
+      setData(interest);
+    }
+  };
+
+  useEffect(() => {
+    fetchInterest();
+  }, []);
 
   return (
     <div className="px-4 py-6 space-y-6">
@@ -68,8 +98,9 @@ export default function InterestRate() {
           <input
             id="interest-rate"
             type="text"
+            placeholder=""
             className="w-full border rounded-[32px] px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#ED1450]"
-            value={isEditing ? tempRate : interestRate}
+            value={isEditing ? tempRate.interestRate : data.interestRate}
             onChange={(e) => setTempRate(e.target.value)}
             readOnly={!isEditing}
           />

@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import edit from "../assets/edit.svg";
 import Image from "next/image";
-import { fetchBlog } from "../../adminControllers/blogController";
+import { fetchBlog, updateBlog } from "../../adminControllers/blogController";
 
 export default function Headline() {
   const [headlines, setHeadlines] = useState({
     id: "",
-    heading: "",
-    subheading: "",
+    title: "",
+    excerpt: "",
     type: "",
   });
   const [editHeadline, setEditHeadline] = useState(null);
@@ -19,26 +19,46 @@ export default function Headline() {
     setShowEditModal(true);
   };
 
-  const handleSaveEdit = () => {
-    if (editHeadline) {
-      const updatedHeadlines = headlines.map((headline) =>
-        headline.id === editHeadline.id ? editHeadline : headline
-      );
-      setHeadlines(updatedHeadlines);
-      setShowEditModal(false);
-    }
+  const handleSaveEdit = async () => {
+
+    const updatedHeadlines = {
+      ...editHeadline,
+    };
+    let id = updatedHeadlines.id;
+    // console.log(updatedHeadlines);
+    await updateBlog(
+      `${id}`,
+      {
+        title: `${updatedHeadlines.title}`,
+        type: "Slider",
+        link: "http://langosh.com/",
+        category: `${updatedHeadlines.category}`,
+        location: "pariatur",
+        date: "2025-01-08T14:57:42",
+        time: "accusamus",
+        author: "debitis",
+        excerpt: `${updatedHeadlines.excerpt}`,
+        description: "Nisi vero dolorem ut.",
+      },
+      (response) => {
+        console.log(response);
+      },
+      (err) => {
+        console.error("unable to edit headline", err);
+      }
+    );
+    // setHeadlines(updatedHeadlines);
+    setShowEditModal(false);
   };
 
   const loadHeadlines = async () => {
     setLoading(true);
     await fetchBlog(
-      { page: 1, 
-        type: "PageTitle", 
-        // category: "Partners", 
-        page: "Home" },
+      { page: 1, type: "PageTitle", category: "CEOMessage", page: "Home" },
       (response) => {
         // console.log(response);
         setHeadlines(response?.data || []);
+        setEditHeadline(response?.data || []);
         setLoading(false);
       },
       (err) => {
@@ -50,6 +70,12 @@ export default function Headline() {
   useEffect(() => {
     loadHeadlines();
   }, []);
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditHeadline({ ...editHeadline, [name]: value });
+  };
+  
   return (
     <>
       {loading ? (
@@ -59,45 +85,46 @@ export default function Headline() {
           No information available to display.
         </div>
       ) : (
-    <div className="overflow-auto w-full md:h-[100%]">
-      <table className="w-full text-left border rounded-lg font-Manrope shadow">
-        <thead className="bg-white text-[13px]">
-          <tr>
-            <th className="p-4 text-gray-500">S/N</th>
-            <th className="p-4">Heading</th>
-            <th className="p-4">Subheading</th>
-            {/* <th className="p-4">Type</th> */}
-            <th className="p-4">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {headlines &&
-                headlines.map &&headlines.map((headline, index) => (
-            <tr key={headline.id} className="border-t text-sm">
-              <td className="p-4 text-gray-500">{index + 1}</td>
-              <td className="p-4 text-gray-500">{headline.title}</td>
-              <td className="p-4">{headline.excerpt}</td>
-              {/* <td className="p-4 text-gray-500">{headline.type}</td> */}
-              <td className="p-4">
-                <button
-                  onClick={() => handleShowEditModal(headline)}
-                  className="text-gray-500 hover:text-gray-800"
-                >
-                  <Image
-                    src={edit.src}
-                    alt="edit icon"
-                    width={20}
-                    height={20}
-                    priority
-                  />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-    )}
+        <div className="overflow-auto w-full md:h-[100%]">
+          <table className="w-full text-left border rounded-lg font-Manrope shadow">
+            <thead className="bg-white text-[13px]">
+              <tr>
+                <th className="p-4 text-gray-500">S/N</th>
+                <th className="p-4">Heading</th>
+                <th className="p-4">Subheading</th>
+                {/* <th className="p-4">Type</th> */}
+                <th className="p-4">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {headlines &&
+                headlines.map &&
+                headlines.map((headline, index) => (
+                  <tr key={headline.id} className="border-t text-sm">
+                    <td className="p-4 text-gray-500">{index + 1}</td>
+                    <td className="p-4 text-gray-500">{headline.title}</td>
+                    <td className="p-4">{headline.excerpt}</td>
+                    {/* <td className="p-4 text-gray-500">{headline.type}</td> */}
+                    <td className="p-4">
+                      <button
+                        onClick={() => handleShowEditModal(headline)}
+                        className="text-gray-500 hover:text-gray-800"
+                      >
+                        <Image
+                          src={edit.src}
+                          alt="edit icon"
+                          width={20}
+                          height={20}
+                          priority
+                        />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {showEditModal && (
         <div
@@ -115,12 +142,11 @@ export default function Headline() {
               </label>
               <input
                 type="text"
+                name="title"
                 placeholder="Enter Heading"
-                value={editHeadline?.heading || ""}
-                onChange={(e) =>
-                  setEditHeadline({ ...editHeadline, heading: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-[32px]"
+                value={editHeadline?.title || ""}
+                onChange={handleEditChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-[30px]  text-sm text-[#919BA7] "
               />
             </div>
             <div>
@@ -128,15 +154,11 @@ export default function Headline() {
                 Sub Heading
               </label>
               <textarea
+                name="excerpt"
                 placeholder="Enter sub heading"
-                value={editHeadline?.subheading || ""}
-                onChange={(e) =>
-                  setEditHeadline({
-                    ...editHeadline,
-                    subheading: e.target.value,
-                  })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-[32px] h-32 resize-none"
+                value={editHeadline?.excerpt || ""}
+                onChange={handleEditChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl text-[#919BA7] text-sm h-32 resize-none"
               />
             </div>
             <div>
@@ -145,22 +167,20 @@ export default function Headline() {
                 type="text"
                 placeholder="Enter type"
                 value={editHeadline?.type || ""}
-                onChange={(e) =>
-                  setEditHeadline({ ...editHeadline, type: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-[32px]"
+                onChange={handleEditChange}
+                className="w-full px-3 py-2 text-[#919BA7] border text-sm border-gray-300 rounded-[30px]"
               />
             </div>
             <div className="flex justify-between items-center w-full space-x-2">
               <button
                 onClick={() => setShowEditModal(false)}
-                className="px-3 py-[18px] w-1/2 border bg-white border-gray-300 rounded-[32px]"
+                className="px-3 py-[11px] w-1/2 border bg-white border-gray-300 rounded-[32px]"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveEdit}
-                className="px-3 py-[18px] w-1/2 bg-[#ED1450] text-white rounded-[32px]"
+                className="px-3 py-[11px] w-1/2 bg-[#ED1450] text-white rounded-[32px]"
               >
                 Save
               </button>

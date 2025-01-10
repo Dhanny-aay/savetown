@@ -30,6 +30,10 @@ import homeActv from "../assets/homeActv.svg";
 import signoutActv from "../assets/signoutActv.svg";
 import kycIcon from '../assets/kycIcon.svg';
 import kycActv from '../assets/kycActv.svg';
+import calcIcon from '../assets/calcIcon.svg'
+import calcActv from '../assets/calcActv.svg'
+import walletIcon from '../assets/walletIcon.svg'
+import walletActv from '../assets/walletActv.svg'
 
 
 export default function Sidebar() {
@@ -59,6 +63,13 @@ export default function Sidebar() {
       activImg: kycActv,
     },
     {
+      name: "Calculator",
+      icon: calcIcon,
+      url: "/admin/admin-calculator",
+      page: "/admin/admin-calculator",
+      activImg: calcActv,
+    },
+    {
       name: "Transactions",
       icon: transactions,
       url: "/admin/admin-transactions",
@@ -78,6 +89,13 @@ export default function Sidebar() {
       url: "/admin/admin-push",
       page: "/admin/admin-push",
       activImg: pushActv,
+    },
+    {
+      name: "Fincra Wallet",
+      icon: walletIcon,
+      url: "/admin/admin-wallet",
+      page: "/admin/admin-wallet",
+      activImg: walletActv,
     },
     {
       name: "Roles ",
@@ -164,7 +182,7 @@ export default function Sidebar() {
           </Link>
         </div>
 
-        <ul className="space-y-4 mt-6">
+        <ul className="mt-6 space-y-4">
           {menuItems.map((item, index) => (
             <Link
               href={item.url}
@@ -172,7 +190,7 @@ export default function Sidebar() {
             >
               <li
                 key={item.name}
-                className={`flex flex-col text-sm font-Manrope max-[768px]:gap-0 max-[768px]:p-3 lg:flex-row items-center lg:text-xs lg:items-start gap-3 p-4 cursor-pointer transition-colors  ${
+                className={`flex flex-col hover:bg-white text-sm font-Manrope max-[768px]:gap-0 max-[768px]:p-3 lg:flex-row items-center lg:text-xs lg:items-start gap-3 p-4 cursor-pointer transition-colors  ${
                   currentPath === item.page
                     ? "bg-white text-[#ED1450] border-l-4 border-[#ED1450]"
                     : "hover:text-[#ED1450]"
@@ -192,7 +210,7 @@ export default function Sidebar() {
       </div>
       . {/* Bottom Navbar for small screens */}
       <div className="fixed bottom-0 left-0 w-full z-[99] bg-pink-50 border-t md:hidden">
-        <div className="flex justify-between items-center p-2">
+        <div className="flex items-center justify-between p-2">
           {visibleItems.map((item, index) => (
             <Link
               key={index}
@@ -232,7 +250,7 @@ export default function Sidebar() {
       {/* Popup for hidden items */}
       {isMoreOpen && (
         <div
-          className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50 md:hidden font-Manrope"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 md:hidden font-Manrope"
           onClick={() => setIsMoreOpen(false)} // Close popup when clicking anywhere
         >
           <div
@@ -240,7 +258,7 @@ export default function Sidebar() {
             onClick={(e) => e.stopPropagation()} // Prevent click events inside the popup from closing it
           >
             <button
-              className="absolute top-3 right-4 text-2xl font-bold"
+              className="absolute text-2xl font-bold top-3 right-4"
               onClick={() => setIsMoreOpen(false)}
             >
               &times;

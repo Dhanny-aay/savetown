@@ -1,19 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createRoles } from "../../adminControllers/rolesController";
+import { permissionsDisplay } from "../../adminControllers/permissionController";
 
 export default function CreateRolesModal({ onClose }) {
   const [createRole, setCreateRole] = useState({
     name: "",
-    permissions:[],
+    permissions: [],
   });
-
-  const [selectedPermission, setSelectedPermission] = useState("");
-  const [permissions, setPermissions] = useState([
-    "Open Accounts for New Users",
-    "View Group Member Balances",
-    "Monitor Group Savings Progress",
-  ]);
+  const [permissions, setPermissions] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,16 +19,16 @@ export default function CreateRolesModal({ onClose }) {
     }));
   };
 
-  const handleAddAdmin = async () => {
+  const handleAddRoles = async () => {
     const newRole = {
       ...createRole,
     };
-    console.log(newRole);
+    console.log(newRole.permissions);
 
     await createRoles(
       {
-        name: `${newRole.name}`,
-        permissions: 'yjpmploygzyxi',
+        name: `iyoxxrq`,
+        permissions: [`${createRole.permissions}`],
       },
       (response) => {
         console.log("Role created successfully", response);
@@ -76,6 +72,18 @@ export default function CreateRolesModal({ onClose }) {
   //   setSelectedPermission("");
   // };
 
+  const displayPermissions = async () => {
+    setLoading(true);
+    const response = await permissionsDisplay({});
+    const permissionNames = response?.data?.map((perm) => perm.name);
+    setPermissions(permissionNames || []);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    displayPermissions();
+  }, []);
+
   return (
     <div
       className="fixed inset-0 z-[999] bg-black bg-opacity-50 flex justify-center items-center"
@@ -86,6 +94,7 @@ export default function CreateRolesModal({ onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-bold font-Manrope">Add New Roles</h2>
+
         <div>
           <label className="block text-sm font-semibold mb-1">Name</label>
           <input
@@ -102,25 +111,31 @@ export default function CreateRolesModal({ onClose }) {
           <label className="block text-sm font-semibold mb-1">
             Permissions
           </label>
-          <ul className="space-y-3 mb-6 w-full">
-            {permissions.map((permission, index) => (
-              <li key={index} className="flex items-center">
-                <input
-                  type="checkbox"
-                  id={permission}
-                  checked={createRole.permissions.includes(permission)}
-                  onChange={() => handleCheckboxChange(permission)}
-                  className="w-4 h-4 text-[#ED1450] accent-[#ED1450] cursor-pointer"
-                />
-                <label
-                  htmlFor={permission}
-                  className="ml-3 text-[14px] font-normal text-[#272D37] cursor-pointer"
-                >
-                  {permission}
-                </label>
-              </li>
-            ))}
-          </ul>
+          {loading ? (
+            <div>loading permissions..</div>
+          ) : (
+            <ul className="space-y-3 mb-6 w-full">
+              {permissions &&
+                permissions.map &&
+                permissions.map((permission, index) => (
+                  <li key={index} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id={permission}
+                      checked={createRole.permissions.includes(permission)}
+                      onChange={() => handleCheckboxChange(permission)}
+                      className="w-4 h-4 text-[#ED1450] accent-[#ED1450] cursor-pointer"
+                    />
+                    <label
+                      htmlFor={permission}
+                      className="ml-3 text-[14px] font-normal text-[#272D37] cursor-pointer"
+                    >
+                      {permission}
+                    </label>
+                  </li>
+                ))}
+            </ul>
+          )}
 
           {/* <label className="block text-sm font-semibold mb-1">
             Add New Permissions
@@ -151,7 +166,7 @@ export default function CreateRolesModal({ onClose }) {
             Cancel
           </button>
           <button
-            onClick={handleAddAdmin}
+            onClick={handleAddRoles}
             className="px-3 py-[13px] w-1/2 text-sm bg-[#ED1450] text-white rounded-[32px]"
           >
             Save

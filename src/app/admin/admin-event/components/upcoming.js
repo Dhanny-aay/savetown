@@ -3,17 +3,15 @@ import { useEffect, useState } from "react";
 import { showAvailableAttendees } from "./../../adminControllers/eventsController";
 
 export default function Upcoming() {
-
   const [attendees, setAttendees] = useState([
-    {
-      id: "",
-      date: "",
-      email: "",
-      // location: "",
-      first_name: "",
-      last_name: "",
-      updated_at: "",
-    },
+    // {
+    //   id: "",
+    //   date: "",
+    //   email: "",
+    //   first_name: "",
+    //   last_name: "",
+    //   updated_at: "",
+    // },
   ]);
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -28,7 +26,7 @@ export default function Upcoming() {
       minute: "2-digit",
       hourCycle: "h23", // 24-hour clock
     });
-  }
+  };
 
   // const handleEditModal = () => {
   //   setModalOpen(true);
@@ -39,36 +37,39 @@ export default function Upcoming() {
     try {
       const response = await showAvailableAttendees({});
       const attending = response?.data || [];
+      // if (attending.attended === 'false') {
+      //   console.log('false')
+      // }else {
+      //   console.log('response?.data.attended:', attending.attended);
+      // }
       setAttendees(attending);
       setLoading(false);
     } catch (error) {
       console.error("error displaying dates", error);
     }
   };
+
+
   useEffect(() => {
     displayAvailableAttendees();
   }, []);
-
-  const onSave = () => {
-    // console.log(selectedDay)
-  };
 
   return (
     <>
       {loading ? (
         <div> Loading users.....</div>
-      ) : !attendees || attendees.length === 0 ? (
+      ) : !attendees ||
+        attendees.length === 0 
+        // ||
+        // attendees.attended === true 
+        ? (
         <div className="text-center text-gray-500">
           No attendees available to display.
         </div>
       ) : (
         <div className="overflow-auto w-full md:h-[100%] ">
-          {modalOpen ? (
-            <EditDayModal
-              onClose={setModalOpen}
-            />
-          ) : null}
-        
+          {modalOpen ? <EditDayModal onClose={setModalOpen} /> : null}
+
           {/* Adjust the height to fit the screen */}
           <table className="w-full mt-4 bg-white rounded shadow ">
             <thead>
@@ -81,7 +82,7 @@ export default function Upcoming() {
                   Date
                 </th>
                 <th className="p-4 w-[100px] text-center font-semibold">
-                  Action
+                  Time
                 </th>
               </tr>
             </thead>
@@ -92,7 +93,7 @@ export default function Upcoming() {
                     {attend.id}
                   </td>
                   <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium">
-                    {attend.first_name}  {attend.last_name}
+                    {attend.first_name} {attend.last_name}
                   </td>
                   <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium">
                     {attend.email}
@@ -101,14 +102,14 @@ export default function Upcoming() {
                     {attend.location}
                   </td> */}
                   <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium text-center">
-                    {formatDateTime(attend.date)}
+                    {formatDateTime(attend.date_time)}
                   </td>
                   <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium text-center">
                     <span
                       className="cursor-pointer text-[#ED1450] hover:text-[#ED1450]"
-                      onClick={() => alert(`Reminder sent to ${attend.name}`)}
+                      // onClick={() => alert(`Reminder sent to ${attend.name}`)}
                     >
-                      {formatDateTime(attend.updated_at)}
+                     {attend.time}
                     </span>
                   </td>
                 </tr>

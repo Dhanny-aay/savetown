@@ -7,7 +7,7 @@ import Image from "next/image";
 import mail from "../assets/mail.svg";
 import phone from "../assets/phone.svg";
 import UserTransactions from "../components/users-transactions";
-import OngoingPlans from "../components/ongoing-plans";
+// import OngoingPlans from "../components/ongoing-plans";
 
 const UserProfile = () => {
   const [activeTab, setActiveTab] = useState("User Information");
@@ -41,7 +41,7 @@ const UserProfile = () => {
 
   const navItems = [
     { name: "User Information", id: "User" },
-    { name: "Ongoing Plans", id: "Ongoing" },
+    // { name: "Ongoing Plans", id: "Ongoing" },
     { name: "Transactions", id: "Transactions" },
   ];
 
@@ -182,9 +182,11 @@ const UserProfile = () => {
               </p>
             </div>
           </div>
-        ) : activeTab === "Ongoing Plans" ? (
-          <OngoingPlans />
-        ) : (
+        )
+        //  : activeTab === "Ongoing Plans" ? (
+        //   <OngoingPlans />
+        // ) 
+        : (
           <div>
             <h3 className="font-semibold text-lg">Transactions</h3>
             {/* <p className="text-[#979797] text-sm mt-2">

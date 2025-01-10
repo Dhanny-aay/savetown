@@ -19,6 +19,7 @@ export default function CreatePermissionsModal({ onClose, onPermissionChange}) {
     const newPermission = {
       ...createPermissions,
     };
+    console.log(newPermission.name)
     await createPermissions(
       {
         name: `${newPermission.name}`,

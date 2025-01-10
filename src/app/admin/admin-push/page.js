@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 export default function PushNotifications(second) {
   const notification = [
     { name: "Pending Notification", id: "pending" },
-    { name: "Sent Notification", id: "sent" },
+    // { name: "Sent Notification", id: "sent" },
   ];
 const router = useRouter();
   const [activeTab, setActiveTab] = useState("Pending Notification");
@@ -35,7 +35,7 @@ const router = useRouter();
           {notification.map((item) => (
             <button
               key={item.id}
-              className={`pb-2 text-lg font-semibold ${
+              className={`pb-2 text-sm font-semibold md:text-lg ${
                 activeTab === item.name
                   ? "border-b-4 border-[#ED1450] text-[#ED1450]"
                   : "text-gray-500"
@@ -50,9 +50,11 @@ const router = useRouter();
 
       {activeTab === "Pending Notification" ? (
         <Pending />
-      ) : activeTab === "Sent Notification" ? (
-        <Sent />
-      ) : null}
+      ) 
+      // : activeTab === "Sent Notification" ? (
+      //   <Sent />
+      // ) 
+      : null}
     </div>
   );
 }

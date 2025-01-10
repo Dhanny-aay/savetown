@@ -3,7 +3,7 @@ import { editNotifications } from "../../adminControllers/pushController";
 
 const EditNotificationModal = ({ onClose, notifInfo }) => {
   const [editNotification, setEditNotification] = useState({
-   ...notifInfo
+    ...notifInfo
   });
 
   const handleChange = (e) => {
@@ -33,32 +33,38 @@ const EditNotificationModal = ({ onClose, notifInfo }) => {
       `${id}`,
       {
         body: `${newNotif.body}`,
-       name:`${newNotif.title}`,
-       permissions:[
-        'yjpmploygzyxi'
-       ],
+        name: `${newNotif.title}`,
+        permissions: [
+          'yjpmploygzyxi'
+        ],
       },
       (response) => {
-        console.log("i am successful", response);
+        console.log("I am successful", response);
       },
       (err) => {
-        console.error("unable to create notification", err);
+        console.error("Unable to create notification", err);
       }
     );
     onClose(false);
   };
-  
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSaveNotification(); // Trigger save when Enter is pressed
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 z-[999] bg-black bg-opacity-50 flex justify-center items-center"
       onClick={() => onClose(false)}
     >
       <div
-        className="bg-white rounded-2xl p-6 w-[600px] space-y-5 font-Manrope"
+        className="bg-white rounded-2xl p-6 w-[600px] max-md:mx-5 space-y-5 font-Manrope"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl font-bold font-Manrope">
-         Edit Notification
+          Edit Notification
         </h2>
 
         {/* Title Input */}
@@ -70,6 +76,7 @@ const EditNotificationModal = ({ onClose, notifInfo }) => {
             placeholder="Enter Title"
             value={editNotification.title}
             onChange={handleChange}
+            onKeyPress={handleKeyPress} // Trigger save on Enter
             className="w-full px-3 py-2 border border-gray-300 rounded-lg"
           />
         </div>
@@ -82,6 +89,7 @@ const EditNotificationModal = ({ onClose, notifInfo }) => {
             name="body"
             value={editNotification.body}
             onChange={handleChange}
+            onKeyPress={handleKeyPress} // Trigger save on Enter
             className="w-full px-3 py-2 border border-gray-300 rounded-lg h-32 resize-none"
           />
         </div>
@@ -94,6 +102,7 @@ const EditNotificationModal = ({ onClose, notifInfo }) => {
             name="scheduled_date"
             value={formatDate(notifInfo.scheduled_date)}
             onChange={handleChange}
+            onKeyPress={handleKeyPress} // Trigger save on Enter
             className="w-full px-3 py-2 border border-gray-300 rounded-lg"
           />
         </div>

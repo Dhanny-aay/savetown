@@ -17,22 +17,22 @@ export default function ContentManagement() {
   const navItems = [
     { name: "Landing Page", id: "Landing-page" },
     { name: "About Us", id: "about-us" },
-    { name: "Partner's", id: "partners" },
+    { name: "Partners", id: "partners" },
     { name: "Testimonial", id: "testimonial" },
     { name: "FAQ's", id: "faqs" },
     { name: "Blog", id: "blog" },
-    { name: "Media's", id: "medias" },
-    { name: "Career", id: "careers" },
+    { name: "Media", id: "media" },
+    { name: "Careers", id: "careers" },
   ];
 
-  const router = useRouter;
+  const router = useRouter();
 
   return (
     <div className="flex flex-col h-full w-full ">
       {/* Header with Back Button */}
       <div className="flex justify-between items-center mb-4 font-Manrope">
         <div className="flex items-center space-x-2">
-          <button onClick={()=>router.back()}  className="text-[#ED1450] hover:underline text-base font-normal">
+          <button onClick={()=> router.back()}  className="text-[#ED1450] hover:underline text-base font-normal">
             &lt; Back
           </button>
           <h3 className="text-xl md:text-2xl font-bold text-black">
@@ -71,7 +71,7 @@ export default function ContentManagement() {
             <LandingPage />
           ) : activeTab === "About Us" ? (
             <AboutUs />
-          ) : activeTab === "Partner's" ? (
+          ) : activeTab === "Partners" ? (
             <Partners />
           ) : activeTab === "Testimonial" ? (
             <Testimonials />
@@ -79,9 +79,9 @@ export default function ContentManagement() {
             <Faq />
           ) : activeTab === "Blog" ? (
             <Blog />
-          ) : activeTab === "Media's" ? (
+          ) : activeTab === "Media" ? (
             <Media />
-          ) : activeTab === "Career" ? (
+          ) : activeTab === "Careers" ? (
             <Careers />
           ) : null}
         </div>

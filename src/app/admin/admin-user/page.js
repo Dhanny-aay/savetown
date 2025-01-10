@@ -5,11 +5,10 @@ import search from "../admin-transactions/assets/search.svg";
 import edit from "./assets/edit.svg";
 import eye from "./assets/eye.svg";
 import trash from "./assets/trash.svg";
-import { fetchUsers, showUsers } from "../adminControllers/usersController";
+import { fetchUsers } from "../adminControllers/usersController";
 import EditUserModal from "./components/editUserModal";
 import DeleteUserModal from "./components/deleteUserModal";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 export default function AdminUser() {
   const [users, setUsers] = useState([]);
@@ -27,12 +26,12 @@ export default function AdminUser() {
     // Fetch users on component mount
     const fetchData = async () => {
       setLoading(true);
-      setError(null); // Reset error state before fetching
+      setError(null);
       await fetchUsers(
         { page: 1, limit: 10 },
         (response) => {
           setUsers(response?.data || []);
-          setFilteredUsers(response?.data || []); // Initialize filteredUsers
+          setFilteredUsers(response?.data || []);
           setLoading(false);
         },
         (err) => {
@@ -48,13 +47,24 @@ export default function AdminUser() {
 
   // Handle search query update
   const handleSearch = () => {
-    setFilteredUsers(
-      users.filter((user) =>
-        `${user.first_name} ${user.last_name}`
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase())
-      )
-    );
+    if (!searchQuery.trim()) {
+      setFilteredUsers(users); // Reset to full data when search query is empty
+    } else {
+      setFilteredUsers(
+        users.filter((user) =>
+          `${user.first_name} ${user.last_name}`
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+        )
+      );
+    }
+  };
+
+  // Trigger search on Enter key press
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
   const openEditModal = (user) => {
@@ -77,13 +87,13 @@ export default function AdminUser() {
   return (
     <>
       {/* Edit Modal */}
-      {showEditModal ? (
-        <EditUserModal user={selectedUser} onClose={setShowEditModal} />
-      ) : null}
+      {showEditModal && (
+        <EditUserModal user={selectedUser} onClose={() => setShowEditModal(false)} />
+      )}
 
       {/* Delete Modal */}
       {showDeleteModal && (
-        <DeleteUserModal user={selectedUser} onClose={setShowDeleteModal} />
+        <DeleteUserModal user={selectedUser} onClose={() => setShowDeleteModal(false)} />
       )}
 
       <div className="flex flex-col px-3 h-full space-y-4">
@@ -111,6 +121,7 @@ export default function AdminUser() {
                 placeholder="Search by User Name..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
                 className="w-full px-6 py-2 pl-10 border border-gray-300 rounded-full"
               />
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
@@ -142,7 +153,9 @@ export default function AdminUser() {
                 <th className="p-4 font-semibold max-lg:hidden">Email Address</th>
                 <th className="p-4 font-semibold">Role</th>
                 <th className="p-4 font-semibold text-center">Status</th>
-                <th className="p-4 font-semibold text-center hidden lg:visible">Date Joined</th>
+                <th className="p-4 font-semibold text-center hidden lg:visible">
+                  Date Joined
+                </th>
                 <th className="p-4 font-semibold text-center">Action</th>
               </tr>
             </thead>
@@ -155,7 +168,9 @@ export default function AdminUser() {
                   <td className="p-4 text-[#5F6D7E] text-sm font-medium">
                     <div className="max-lg:flex max-lg:flex-col">
                       {user.first_name} {user.last_name}
-                      <span className=" text-[#5F6D7E] text-sm font-medium md:hidden">{user.email}</span>
+                      <span className=" text-[#5F6D7E] text-sm font-medium md:hidden">
+                        {user.email}
+                      </span>
                     </div>
                   </td>
                   <td className="p-4 text-[#5F6D7E] text-sm font-medium max-lg:hidden">
@@ -166,20 +181,23 @@ export default function AdminUser() {
                   </td>
                   <td className="p-4 text-center">
                     <div className="max-lg:flex max-lg:flex-col">
-                    <span
-                      className={`inline-block px-3 py-1 rounded-full text-sm font-normal font-Manrope ${
-                        user.id_status === "verified"
-                          ? "bg-green-100 text-green-600"
-                          : "bg-red-100 text-[#ED1450]"
-                      }`}
-                    >
-                      {user.id_status}
-                    </span>
-                    <span className="text-[#5F6D7E] text-sm font-medium lg:hidden"> {new Date(user.created_at).toLocaleDateString("en-US", {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                    })} </span>
+                      <span
+                        className={`inline-block px-3 py-1 rounded-full text-sm font-normal font-Manrope ${
+                          user.id_status === "verified"
+                            ? "bg-green-100 text-green-600"
+                            : "bg-red-100 text-[#ED1450]"
+                        }`}
+                      >
+                        {user.id_status}
+                      </span>
+                      <span className="text-[#5F6D7E] text-sm font-medium lg:hidden">
+                        {" "}
+                        {new Date(user.created_at).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                        })}{" "}
+                      </span>
                     </div>
                   </td>
                   <td className="p-4 text-[#5F6D7E] text-sm font-medium hidden lg:visible">
@@ -203,9 +221,6 @@ export default function AdminUser() {
                         priority
                       />
                     </button>
-                    {/* <Link href={{pathname: '/admin/admin-user/user-profile',
-                       query:{ userId: user.id }
-                    }}> */}
                     <button
                       onClick={() => showUserInfo(user.id)}
                       className="text-gray-500 hover:text-gray-800"
@@ -218,7 +233,6 @@ export default function AdminUser() {
                         priority
                       />
                     </button>
-                    {/* </Link> */}
                     <button
                       onClick={() => openDeleteModal(user)}
                       className="text-gray-500 hover:text-gray-800"

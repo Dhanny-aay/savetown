@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import search from "./assets/search.svg";
-import Table from "./../components/table";
 import { fetchTransactions } from "../adminControllers/transactionControl";
 
 export default function AdminTransactions() {
@@ -19,7 +18,7 @@ export default function AdminTransactions() {
       { page: 1, limit: 10 },
       (response) => {
         setTransactions(response?.data);
-        setFilteredUsers(response?.data)
+        setFilteredUsers(response?.data);
         setLoading(false);
       },
       (err) => {
@@ -32,13 +31,25 @@ export default function AdminTransactions() {
     showTransactions();
   }, []);
 
-  // Handle search query update
-  const handleSearch = () => {
-    setFilteredUsers(
-      transactions.filter((transaction) =>
-        `${transaction.description}`.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    );
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredUsers(transactions); // Reset data when search is cleared
+    } else {
+      setFilteredUsers(
+        transactions.filter(
+          (transaction) =>
+            `${transaction.user.first_name} ${transaction.user.last_name}`
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase()) ||
+            `${transaction.status}`.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
+    }
+  }, [searchQuery, transactions]); 
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+    }
   };
 
   return (
@@ -49,7 +60,7 @@ export default function AdminTransactions() {
           {/* Back Button */}
           <button
             onClick={() => router.back()}
-            className="text-[#ED1450] hover:underline text-base font-normal hidden md:block"
+            className="text-[#ED1450] hover:underline text-base font-normal"
           >
             &lt; Back
           </button>
@@ -63,12 +74,13 @@ export default function AdminTransactions() {
       <div className="mb-4">
         <div className="flex items-center space-x-4">
           {/* Search Bar */}
-          <div className="relative w-full font-Manrope ">
+          <div className="relative w-full font-Manrope">
             <input
               type="text"
-              placeholder="Search transactions..."
+              placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
               className="w-full px-6 py-2 text-sm md:text-base pl-10 border border-gray-300 rounded-full"
             />
             {/* Search Icon */}
@@ -83,8 +95,10 @@ export default function AdminTransactions() {
             </span>
           </div>
           {/* Search Button */}
-          <button  onClick={handleSearch}
-           className="px-6 text-sm md:text-base py-2 bg-[#ED1450] text-white rounded-full font-Manrope">
+          <button
+            onClick={() => {} /* Optional: Keep for UI consistency */}
+            className="px-6 text-sm md:text-base py-2 bg-[#ED1450] text-white rounded-full font-Manrope"
+          >
             Search
           </button>
         </div>
@@ -97,7 +111,7 @@ export default function AdminTransactions() {
       </div>
 
       {/* Table Section with Fixed Height */}
-      <div className="overflow-auto w-full md:h-[100%] ">
+      <div className="overflow-auto w-full md:h-[100%]">
         {loading ? (
           <div>Loading transactions...</div>
         ) : (
@@ -128,10 +142,7 @@ export default function AdminTransactions() {
 
                   <td className="max-sm:p-2 max-sm:text-xs p-4 text-[#5F6D7E] text-sm font-medium max-lg:text-left">
                     <div className="max-lg:flex max-lg:flex-col">
-                      {tx.description}
-                      {/* <span className="lg:hidden max-sm:text-xs max-lg:text-[#5F6D7E] max-lg:font-medium">
-                        Savetown Wallet
-                      </span> */}
+                      {tx.user.first_name} {tx.user.last_name}
                     </div>
                   </td>
 
@@ -167,7 +178,6 @@ export default function AdminTransactions() {
           </table>
         )}
       </div>
-      {/* <Table /> */}
     </div>
   );
 }

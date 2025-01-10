@@ -3,40 +3,62 @@ import FileUploader from "@/app/utils/fileUploader";
 import edit from "../assets/edit.svg";
 import Image from "next/image";
 import { useEffect, useState } from 'react';
-import { fetchBlog } from "../../adminControllers/blogController";
+import { fetchBlog, updateBlog } from "../../adminControllers/blogController";
 
 export default function AdminWhySavetown(first) {
   const [why, setWhy] = useState({
     id: "",
-    heading: "",
-    subheading: "",
+    title: "",
+    excerpt: "",
     type: "",
   });
-    const [editHeadline, setEditHeadline] = useState(null);
+    const [editWhy, setEditWhy] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [loading, setLoading] = useState(false)
 
   const handleEditSlide = (headline) => {
-    setEditHeadline(headline);
+    setEditWhy(headline);
     setShowEditModal(true);
   };
 
-  const handleSaveSlide = () => {
-    if (editHeadline.id) {
-      // Update existing headline
-      const updatedWhy = why.map((headline) =>
-        headline.id === editHeadline.id ? editHeadline : headline
-      );
-      setWhy(updatedWhy);
-    } else {
-      // Add new headline
-      setWhy([
-        ...why,
-        { ...editHeadline, id: Date.now() }, // Assign a unique ID
-      ]);
-    }
+  const handleSaveSlide = async() => {
+    const updatedHeadlines = {
+      ...editWhy,
+    };
+    let id = updatedHeadlines.id;
+    // console.log(updatedHeadlines);
+    await updateBlog(
+      `${id}`,
+      {
+        title: `${updatedHeadlines.title}`,
+        type: "Slider",
+        link: "http://langosh.com/",
+        category: `${updatedHeadlines.category}`,
+        location: "pariatur",
+        content: "autem",
+        date: "2025-01-08T14:57:42",
+        time: "accusamus",
+        author: "debitis",
+        excerpt: `${updatedHeadlines.excerpt}`,
+        description: "Nisi vero dolorem ut.",
+      },
+      (response) => {
+        console.log(response);
+      },
+      (err) => {
+        console.error("unable to edit headline", err);
+      }
+    );
     setShowEditModal(false);
   };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditWhy({
+      ...editWhy, 
+      [name]:value
+    })
+  }
 
     const loadwhy = async () => {
       setLoading(true);
@@ -59,6 +81,7 @@ export default function AdminWhySavetown(first) {
     useEffect(() => {
       loadwhy();
     }, []);
+
     return (
       <>
         {loading ? (
@@ -73,7 +96,7 @@ export default function AdminWhySavetown(first) {
         <thead className="bg-white text-[13px]">
           <tr>
             <th className="p-4 text-gray-500">S/N</th>
-            <th className="p-4 w-[400px]">Heading</th>
+            <th className="p-4 ">Heading</th>
             <th className="p-4">Subheading</th>
             <th className="p-4">Action</th>
           </tr>
@@ -82,7 +105,7 @@ export default function AdminWhySavetown(first) {
           {why&& why.map&& why.map((row, index) => (
             <tr key={row.id} className="border-t text-sm">
               <td className="p-4 text-gray-500">{index + 1}</td>
-              <td className="p-4 w-[400px] text-gray-500">{row.title}</td>
+              <td className="p-4  text-gray-500">{row.title}</td>
               <td className="p-4">{row.excerpt}</td>
               <td className="p-4 flex items-center justify-center gap-2">
                 <button  onClick={() => handleEditSlide(row)}
@@ -113,7 +136,7 @@ export default function AdminWhySavetown(first) {
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-xl font-bold font-Manrope">
-              {editHeadline.id ? "Edit Headline" : "Add New Slide"}
+            Edit Why Savetown Section
             </h2>
             <div>
               <label className="block text-sm font-semibold mb-1">
@@ -121,12 +144,11 @@ export default function AdminWhySavetown(first) {
               </label>
               <input
                 type="text"
+                name="title"
                 placeholder="Enter Heading"
-                value={editHeadline.heading || ""}
-                onChange={(e) =>
-                  setEditHeadline({ ...editHeadline, heading: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-[32px]"
+                value={editWhy.title || ""}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border text-sm border-gray-300 rounded-[30px]"
               />
             </div>
             <div>
@@ -134,41 +156,35 @@ export default function AdminWhySavetown(first) {
                 Sub Heading
               </label>
               <textarea
-                placeholder="Enter sub heading"
-                value={editHeadline.subheading || ""}
-                onChange={(e) =>
-                  setEditHeadline({
-                    ...editHeadline,
-                    subheading: e.target.value,
-                  })
+                placeholder="Enter Text"
+                name="excerpt"
+                value={editWhy.excerpt || ""}
+                onChange={handleChange
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-[32px] h-32 resize-none"
+                className="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm h-32 resize-none"
               />
             </div>
             <div>
-              {/* <label className="block text-sm font-semibold mb-1">
-                Slide Image
-              </label> */}
               <FileUploader
-                label="Upload Slide Image"
+                label="Slide Image"
                 accept="image/*"
                 maxSize={5000000}
                 isImage={true}
                 onFileSelect={(file) =>
-                  setEditHeadline({ ...editHeadline, image: file })
+                  setEditWhy({ ...editWhy, image: file })
                 }
               />
             </div>
             <div className="flex justify-between items-center w-full space-x-2">
               <button
                 onClick={() => setShowEditModal(false)}
-                className="px-3 py-[18px] w-1/2 border bg-white border-gray-300 rounded-[32px]"
+                className="px-3 py-[11px] w-1/2 border bg-white border-gray-300 text-sm rounded-[32px]"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveSlide}
-                className="px-3 py-[18px] w-1/2 bg-[#ED1450] text-white rounded-[32px]"
+                className="px-3 py-[11px] w-1/2 bg-[#ED1450] text-white text-sm rounded-[32px]"
               >
                 Save
               </button>

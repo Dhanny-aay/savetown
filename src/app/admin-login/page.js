@@ -7,12 +7,14 @@ import eye from "./assets/eye.svg";
 import { useRouter } from "next/navigation";
 import { handleAdminLogin } from "./../admin/adminControllers/authController";
 import { saveToken } from "../utils/authAdminUtils";
+import load from './assets/load.gif'
 
 export default function AdminLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false)
 
   const router = useRouter(); // Router hook for redirection
 
@@ -24,27 +26,42 @@ export default function AdminLogin() {
     email,
     password
   };
+
+  const validateFields = () => {
+    const newErrors = {};
+    if (!email) newErrors.email = "Email is required";
+    if (!password) newErrors.password = "Password is required";
+
+    // console.log(newErrors.email)
+    // setErrorMessage(newErrors.email);
+    return Object.keys(newErrors).length === 0; // If no errors, validation passed
+  };
+
   
   
   // Handle form submission
   const handleSubmit = (e) => {
-    e.preventDefault();
-
-    handleAdminLogin(
-      userData,
-      (response) => {
-        // On successful login, redirect to the dashboard
-        if(response.access_token){
-          saveToken(response.token)
+    // if (validateFields()){
+      e.preventDefault();
+      setLoading(true)
+      handleAdminLogin(
+        userData,
+        (response) => {
+          // On successful login, redirect to the dashboard
+          if(response.access_token){
+            saveToken(response.token)
+          }
+          if (response.data.name === 'Admin') {
+            setLoading(false)
+            router.push("/admin"); 
+          }
+        },
+        (error) => {
+          setLoading(false)
+          setErrorMessage("Invalid email or password.");
         }
-        if (response.data.name === 'Admin') {
-          router.push("/admin"); 
-        }
-      },
-      (error) => {
-        setErrorMessage("Invalid email or password.");
-      }
-    );
+      );
+    // }
 
   };
 
@@ -64,7 +81,7 @@ export default function AdminLogin() {
           </Link>
         </div>
         <h1 className="text-2xl font-normal text-[#101828] text-center md:text-3xl">
-          Log in to the Admin Portal
+          Log In To The Admin Portal
         </h1>
         <p className="text-base font-normal font-Manrope text-[#475467] text-center mt-1">
           Welcome back! Please enter your details.
@@ -72,6 +89,11 @@ export default function AdminLogin() {
 
         {/* Login form */}
         <form className="mt-6" onSubmit={handleSubmit}>
+
+          {/* Error Message */}
+          {errorMessage && (
+          <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
+        )}
           {/* Email Input */}
           <h5 className="mb-4">
             <label
@@ -136,37 +158,30 @@ export default function AdminLogin() {
             </div>
           </h5>
 
-          {/* Error Message */}
-          {errorMessage && (
-            <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
-          )}
-
+        
           {/* Remember me and Forgot Password */}
           <div className="flex items-center justify-between">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="h-4 w-4 text-[#ED1450] focus:ring-[#ED1450] border-gray-300 rounded"
-              />
-              <span className="ml-2 text-sm text-[#475467] md:text-sm">
-                Remember for 30 days
-              </span>
-            </label>
             <Link
-              href="#"
-              className="text-sm text-[#ED1450] font-bold font-Manrope hover:underline"
-            >
-              Forgot Password?
-            </Link>
+                  href="/forgot-password"
+                  className=" text-body14Bold text-[#ED1450] font-Manrope "
+                >
+                  Forgot Password?
+                </Link>
           </div>
 
           {/* Submit Button */}
           <div className="mt-6">
             <button
               type="submit"
+              disabled={loading}
               className="w-full px-4 py-3 bg-[#ED1450] text-white font-bold text-xl font-Manrope rounded-full"
             >
-              Continue
+               {loading ? (
+                  <img src={load.src} className=" w-5" alt="" />
+                ) : (
+                  "Log In"
+                )}
+              
             </button>
           </div>
         </form>
