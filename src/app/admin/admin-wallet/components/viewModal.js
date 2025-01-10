@@ -1,33 +1,9 @@
-import Image from "next/image";
-// import id from "../assets/id.svg";
 import { useEffect, useState } from "react";
-import { fetchWalletDetails } from "../../adminControllers/walletController";
 
-export default function ViewModal({ onClose, user }) {
+export default function ViewEntry({ onClose, user }) {
   const [selectedUser, setSelectedUser] = useState({
     ...user
   });
-  const id = user.id;
-  console.log(id)
-
-  // const fetchData = async () => {
-  //   await fetchWalletDetails(
-  //     `${id}`,
-  //     (response) => {
-  //       console.log(response?.data.id);
-  //       setSelectedUser(response);
-  //     },
-  //     (err) => {
-  //       console.error("Error fetching user info:", err);
-  //     }
-  //   );
-  // };
-
-  // useEffect(() => {
-  //   if (user) {
-  //     fetchData();
-  //   }
-  // }, [user]);
 
   return (
     <>
@@ -37,11 +13,12 @@ export default function ViewModal({ onClose, user }) {
       >
         <div
           className="bg-white rounded-2xl p-6 w-[400px] h-[500px] md:w-[500px] space-y-5 font-Manrope overflow-auto"
-          onClick={(e) => e.stopPropagation()}>
+          onClick={(e) => e.stopPropagation()}
+        >
           {/* Modal Header */}
           <div className="mb-4 flex justify-between items-center">
             <h2 className="text-[20px] font-bold font-Manrope">
-              Wallet Information
+              Duration Information
             </h2>
             <button
               onClick={() => onClose(false)}
@@ -51,102 +28,116 @@ export default function ViewModal({ onClose, user }) {
             </button>
           </div>
 
+          {/* Duration */}
           <div>
             <label className="block text-sm font-semibold mb-1">
-              Available Balance
+              Duration
             </label>
             <input
               type="text"
-              // placeholder="Enter reason for rejection"
-              value={selectedUser.available_balance}
+              value={selectedUser.value}
               disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md  text-sm"
+              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
             />
           </div>
 
+          {/* Minimum House Price */}
           <div>
             <label className="block text-sm font-semibold mb-1">
-              Locked Balance
-            </label>
-            <input
-            type="text"
-              // placeholder="Enter reason for rejection"
-              value={selectedUser.locked_balance}
-              disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md  text-sm"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold mb-1">
-              Rolling Reserve Balance
+              Minimum House Price
             </label>
             <input
               type="text"
-              // placeholder="Enter reason for rejection"
-              value={selectedUser.rolling_reserve_balance}
+              value={selectedUser.min_house_price}
               disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md  text-sm"
+              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
             />
           </div>
 
+          {/* Maximum House Price */}
           <div>
             <label className="block text-sm font-semibold mb-1">
-              Wallet Number
+              Maximum House Price
             </label>
             <input
               type="text"
-              // placeholder="Enter reason for rejection"
-              value={selectedUser.wallet_number}
+              value={selectedUser.max_house_price}
               disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md  text-sm"
+              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold mb-1">Currency</label>
-            <input
-              type="text"
-              // placeholder="Enter reason for rejection"
-              value={selectedUser.currency}
-              disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md  text-sm"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold mb-1">Status</label>
-            <input
-              type="text"
-              // placeholder="Enter reason for rejection"
-              value={selectedUser.status}
-              disabled
-              className="w-full capitalize cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md  text-sm"
-            />
-          </div>
+          {/* Minimum Saving Period */}
           <div>
             <label className="block text-sm font-semibold mb-1">
-              Created At
+              Minimum Saving Period
             </label>
             <input
               type="text"
-              // placeholder="Enter reason for rejection"
+              value={selectedUser.min_saving_period}
+              disabled
+              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
+            />
+          </div>
+
+          {/* Maximum Saving Period */}
+          <div>
+            <label className="block text-sm font-semibold mb-1">
+              Maximum Saving Period
+            </label>
+            <input
+              type="text"
+              value={selectedUser.max_saving_period}
+              disabled
+              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
+            />
+          </div>
+
+          {/* Minimum Monthly Commitment */}
+          <div>
+            <label className="block text-sm font-semibold mb-1">
+              Minimum Monthly Commitment
+            </label>
+            <input
+              type="text"
+              value={selectedUser.min_monthly_commitment}
+              disabled
+              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
+            />
+          </div>
+
+          {/* Maximum Monthly Commitment */}
+          <div>
+            <label className="block text-sm font-semibold mb-1">
+              Maximum Monthly Commitment
+            </label>
+            <input
+              type="text"
+              value={selectedUser.max_monthly_commitment}
+              disabled
+              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
+            />
+          </div>
+
+          {/* Created At */}
+          <div>
+            <label className="block text-sm font-semibold mb-1">Created At</label>
+            <input
+              type="text"
               value={selectedUser.created_at}
               disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md  text-sm"
+              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
             />
           </div>
 
+          {/* Updated At */}
           <div>
-            <label className="block text-sm font-semibold mb-1">
-              Updated At
-            </label>
+            <label className="block text-sm font-semibold mb-1">Updated At</label>
             <input
               type="text"
-              // placeholder="Enter reason for rejection"
               value={selectedUser.updated_at}
               disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md  text-sm"
+              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
             />
           </div>
         </div>

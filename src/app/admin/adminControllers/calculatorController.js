@@ -22,10 +22,36 @@ export const houseDisplay = async (onSuccess, onError) => {
   }
 };
 
-export const createHouse = async (data, onSuccess, onError) => {
+export const createHouseType = async (data, onSuccess, onError) => {
   try {
     const response = await api("POST", "/house-settings", data);
     return(response);
+  } catch (error) {
+    if (onError) {
+      onError(error);
+    }
+  }
+};
+
+export const deleteHouseType = async (id,  onSuccess, onError) => {
+  try {
+    const response = await api("DELETE", `/house-settings/${id}`);
+    if (onSuccess) {
+      onSuccess(response);
+    }
+  } catch (error) {
+    if (onError) {
+      onError(error);
+    }
+  }
+};
+
+export const editHouseType = async (id, data, onSuccess, onError) => {
+  try {
+    const response = await api("PUT", `/house-settings/${id}`, data);
+    if (onSuccess) {
+      onSuccess(response);
+    }
   } catch (error) {
     if (onError) {
       onError(error);

@@ -7,11 +7,18 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import CreateRolesModal from "./components/createRolesModal";
+import EditRoles from "./components/editRoles";
+import DeleteRoles from "./components/deleteRoles";
+
 
 export default function AdminRoles() {
   const [roleList, setRolesList] = useState({ id: "", name: "", profiles: "" });
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [selection, setSelection] = useState('')
 
   const displayRoles = async () => {
     setLoading(true);
@@ -23,22 +30,54 @@ export default function AdminRoles() {
 
   useEffect(() => {
     displayRoles();
-  }, []);
+  }, [refresh]);
 
   const router = useRouter();
 
+  const handleEdit = (role) => {
+    setSelection(role);
+    setShowEditModal(true);
+  };
+
+  const handleDelete = (role) => {
+    setSelection(role);
+    setShowDeleteModal(true);
+  };
 
   return (
     <>
-      { loading ? (
+      {showModal && (
+            <CreateRolesModal
+              onClose={setShowModal}
+              onRolesChange={() => setRefresh(!refresh)}
+            />
+          )}
+          {showEditModal && (
+            <EditRoles
+              onClose={setShowEditModal}
+              user={selection}
+              onRolesChange={() => setRefresh(!refresh)}
+            />
+          )}
+          {showDeleteModal && (
+            <DeleteRoles
+              onClose={setShowDeleteModal}
+              user={selection}
+              onRolesChange={() => setRefresh(!refresh)}
+            />
+          )}
+      {loading ? (
         <div> Loading roles</div>
-      ) :  (
+      ) : (
         <div className="flex flex-col px-3 h-full space-y-4">
           {/* Header with Back Button */}
           <div className="flex justify-between items-center mb-4 font-Manrope">
             <div className="flex items-center space-x-2">
               {/* Back Button */}
-              <button onClick={()=>router.back()} className="text-[#ED1450] hover:underline text-base font-normal">
+              <button
+                onClick={() => router.back()}
+                className="text-[#ED1450] hover:underline text-base font-normal"
+              >
                 &lt; Back
               </button>
               <h3 className="text-xl md:text-2xl font-bold text-black">
@@ -60,28 +99,37 @@ export default function AdminRoles() {
           <table className="w-full mt-4 bg-white rounded shadow font-Manrope">
             <thead>
               <tr className="text-left bg-gray-50">
-                <th className="p-4 max-sm:p-2 font-semibold">S/N</th>
-                <th className="p-4 max-sm:p-2 font-semibold">Names</th>
-                <th className="p-4 max-sm:p-2 font-semibold">Number of Profiles</th>
-                <th className="p-4 max-sm:p-2 font-semibold">Action</th>
+                <th className="p-4 font-semibold">S/N</th>
+                <th className="p-4 font-semibold">Names</th>
+                <th className="p-4 font-semibold">Permission</th>
+                <th className="p-4 font-semibold">Action</th>
               </tr>
             </thead>
             <tbody>
               {!roleList || roleList.length === 0 ? (
-        <div className="text-center text-[#5F6D7E]">
-          No roles available to display.
-        </div>
-      ) : null }
+                <div className="text-center text-[#5F6D7E]">
+                  No roles available to display.
+                </div>
+              ) : null}
               {roleList &&
                 roleList.map &&
                 roleList.map((role) => (
                   <tr key={role.id} className="border-t text-sm">
-                    <td className="p-4 max-sm:p-2 font-semibold text-[#5F6D7E]">{role.id}</td>
-                    <td className="p-4 max-sm:p-2 font-semibold">{role.name}</td>
-                    <td className="p-4 max-sm:p-2 font-semibold text-[#5F6D7E]">{role.profiles}</td>
-                    <td className="p-4 max-sm:p-2 font-semibold flex items-center gap-2">
+                    <td className="p-4 font-semibold text-[#5F6D7E]">
+                      {role.id}
+                    </td>
+                    <td className="p-4 font-semibold">{role.name}</td>
+                    <td className="p-4 font-semibold text-[#5F6D7E]">
+                      {role.permissions
+                        .map((permission) => permission.name)
+                        .join(", ")}
+                    </td>
+                    <td className="p-4 font-semibold flex items-center gap-2">
                       {/* Edit Button */}
-                      <button className="text-[#5F6D7E] hover:text-gray-800">
+                      <button
+                        onClick={() => handleEdit(role)}
+                        className="text-[#5F6D7E] hover:text-gray-800"
+                      >
                         <Image
                           src={edit.src}
                           alt="Edit Icon"
@@ -91,7 +139,10 @@ export default function AdminRoles() {
                         />
                       </button>
                       {/* Delete Button */}
-                      <button className="text-[#5F6D7E] hover:text-gray-800">
+                      <button
+                        onClick={() => handleDelete(role)}
+                        className="text-[#5F6D7E] hover:text-gray-800"
+                      >
                         <Image
                           src={trash.src}
                           alt="Delete Icon"
@@ -106,7 +157,7 @@ export default function AdminRoles() {
             </tbody>
           </table>
 
-           {showModal && ( <CreateRolesModal onClose={setShowModal}/> )}
+        
         </div>
       )}
     </>
