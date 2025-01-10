@@ -6,8 +6,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
-import { handleSendResetPasswordOTP } from "../userControllers/authController";
+// import { handleSendResetPasswordOTP } from "../userControllers/authController";
 import load from "./assets/load.gif";
+import { handleSendResetPasswordOTP } from "../authController";
 
 export default function Page() {
   const [email, setEmail] = useState("");
