@@ -19,3 +19,25 @@ export const createRoles = async (roleData, onSuccess, onError) => {
     }
   }
 };
+
+export const editRoles = async (id, roleData, onSuccess, onError) => {
+  try {
+    const response = await api("PUT", `/admin-roles/${id}`, roleData);
+    onSuccess(response);
+  } catch (error) {
+    if (onError) {
+      onError(error);
+    }
+  }
+};
+
+export const deleteRoles = async (id, onSuccess, onError) => {
+  try {
+    const response = await api("DELETE", `/admin-roles/${id}`);
+    onSuccess(response);
+  } catch (error) {
+    if (onError) {
+      onError(error);
+    }
+  }
+};

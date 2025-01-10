@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import User from "./components/user";
-import Settings from "./components/settings/settings";
+import User from "./user";
+import Settings from "./settings/settings";
 
 export default function AdminCalculator() {
   const calculator = [

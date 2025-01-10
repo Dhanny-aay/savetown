@@ -193,7 +193,7 @@ const UserProfile = () => {
               No transactions available at this time.
             </p> */}
             <div>
-              <UserTransactions />
+              <UserTransactions user = {userInfo} />
             </div>
           </div>
         )}

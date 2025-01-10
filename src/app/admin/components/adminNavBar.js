@@ -10,7 +10,7 @@ export default function AdminNavBar() {
   const getPageTitle = () => {
     switch (pathname) {
       case "/admin":
-        return "Home";
+        return "Welcome Back, Admin!";
       case "/admin/admin-user":
         return "User";
       case "/admin/admin-user/user-profile":
@@ -44,7 +44,7 @@ export default function AdminNavBar() {
       case "/admin/admin-signout":
         return "Sign Out";
       default:
-        return "Welcome Back, Admin!";
+        return null;
     }
   };
 

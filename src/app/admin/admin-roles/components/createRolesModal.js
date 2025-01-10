@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { createRoles } from "../../adminControllers/rolesController";
 import { permissionsDisplay } from "../../adminControllers/permissionController";
 
-export default function CreateRolesModal({ onClose }) {
+export default function CreateRolesModal({ onClose, onRolesChange }) {
   const [createRole, setCreateRole] = useState({
     name: "",
     permissions: [],
@@ -21,62 +21,43 @@ export default function CreateRolesModal({ onClose }) {
 
   const handleAddRoles = async () => {
     const newRole = {
-      ...createRole,
+      name: createRole.name,
+      permissions: createRole.permissions,
     };
-    console.log(newRole.permissions);
-
+    // console.log("Sending role data:", newRole);
     await createRoles(
-      {
-        name: `iyoxxrq`,
-        permissions: [`${createRole.permissions}`],
+      {name: newRole.name,
+        permissions: newRole.permissions
       },
       (response) => {
-        console.log("Role created successfully", response);
+        console.log("Role created successfully");
       },
       (err) => {
         console.error("Error creating role", err);
       }
     );
+onRolesChange();
     onClose(false);
   };
 
-  const handleCheckboxChange = (permission) => {
+  const handleCheckboxChange = (permissionId) => {
     setCreateRole((prevState) => ({
       ...prevState,
-      permissions: prevState.permissions.includes(permission)
-        ? prevState.permissions.filter((perm) => perm !== permission)
-        : [...prevState.permissions, permission],
+      permissions: prevState.permissions.includes(permissionId)
+        ? prevState.permissions.filter((id) => id !== permissionId)
+        : [...prevState.permissions, permissionId],
     }));
   };
 
-  // const handleDropdownChange = (e) => {
-  //   const selected = e.target.value;
-
-  //   // Add the new permission to the list if it's not already there
-  //   if (!permissions.includes(selected)) {
-  //     setPermissions((prevPermissions) => [...prevPermissions, selected]);
-  //   }
-
-  //   // Add the selected permission to the createRole permissions array
-  //   if (!createRole.permissions.includes(selected)) {
-  //     setCreateRole((prevState) => ({
-  //       ...prevState,
-  //       permissions: [...prevState.permissions, selected],
-  //       // permissions: prevState.permissions
-  //       // ? `${prevState.permissions}, ${selected}`
-  //       // : selected,
-  //     }));
-  //   }
-
-  //   // Reset the dropdown selection
-  //   setSelectedPermission("");
-  // };
-
   const displayPermissions = async () => {
     setLoading(true);
-    const response = await permissionsDisplay({});
-    const permissionNames = response?.data?.map((perm) => perm.name);
-    setPermissions(permissionNames || []);
+    try {
+      const response = await permissionsDisplay({});
+      const permissionData = response?.data || [];
+      setPermissions(permissionData);
+    } catch (error) {
+      console.error("Error fetching permissions:", error);
+    }
     setLoading(false);
   };
 
@@ -108,54 +89,30 @@ export default function CreateRolesModal({ onClose }) {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold mb-1">
-            Permissions
-          </label>
+          <label className="block text-sm font-semibold mb-1">Permissions</label>
           {loading ? (
-            <div>loading permissions..</div>
+            <div>Loading permissions...</div>
           ) : (
             <ul className="space-y-3 mb-6 w-full">
-              {permissions &&
-                permissions.map &&
-                permissions.map((permission, index) => (
-                  <li key={index} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id={permission}
-                      checked={createRole.permissions.includes(permission)}
-                      onChange={() => handleCheckboxChange(permission)}
-                      className="w-4 h-4 text-[#ED1450] accent-[#ED1450] cursor-pointer"
-                    />
-                    <label
-                      htmlFor={permission}
-                      className="ml-3 text-[14px] font-normal text-[#272D37] cursor-pointer"
-                    >
-                      {permission}
-                    </label>
-                  </li>
-                ))}
+              {permissions.map((permission) => (
+                <li key={permission.id} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id={`permission-${permission.id}`}
+                    checked={createRole.permissions.includes(permission.id)}
+                    onChange={() => handleCheckboxChange(permission.id)}
+                    className="w-4 h-4 text-[#ED1450] accent-[#ED1450] cursor-pointer"
+                  />
+                  <label
+                    htmlFor={`permission-${permission.id}`}
+                    className="ml-3 text-[14px] font-normal text-[#272D37] cursor-pointer"
+                  >
+                    {permission.name}
+                  </label>
+                </li>
+              ))}
             </ul>
           )}
-
-          {/* <label className="block text-sm font-semibold mb-1">
-            Add New Permissions
-          </label>
-          <select
-            id="permissions"
-            value={selectedPermission}
-            onChange={handleDropdownChange}
-            className="bg-white border border-gray-300 rounded-[32px] text-sm focus:ring-[#ED1450] focus:border-[#ED1450] block w-full p-2.5"
-          >
-            <option value="" disabled>
-              Choose Permission
-            </option>
-            {permissions.map((permission, index) => (
-              <option key={index} value={permission}>
-                {permission}
-              </option>
-            ))}
-            <option value="Custom Permission">Custom Permission</option>
-          </select> */}
         </div>
 
         <div className="flex justify-between items-center w-full space-x-2">
