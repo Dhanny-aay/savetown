@@ -50,8 +50,8 @@ export default function AdminLogin() {
           // On successful login, redirect to the dashboard
           if(response.access_token){
             saveToken(response.token)
-          }
-          if (response.data.name === 'Admin') {
+          // }
+          // if (response.data.name === 'Admin') {
             setLoading(false)
             router.push("/admin"); 
           }

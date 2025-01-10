@@ -20,8 +20,8 @@ const DeletePermissionsModal = ({onClose,setUser,onPermissionChange }) => {
 
   return (
     <>
-      <div className="fixed inset-0 z-[999] bg-black bg-opacity-50 flex justify-center items-center">
-        <div className="bg-white rounded-2xl p-6 w-[600px] space-y-5 font-Manrope ">
+      <div onClick={() => onClose(false)} className="fixed inset-0 z-[999] bg-black bg-opacity-50 flex justify-center items-center">
+        <div  onClick={(e) => e.stopPropagation()} className="bg-white rounded-2xl p-6 w-[600px] space-y-5 font-Manrope ">
           <h2 className="text-lg font-bold font-Manrope text-center">
             Delete Section{" "}
           </h2>
