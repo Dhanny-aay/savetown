@@ -7,8 +7,9 @@ import Image from "next/image";
 import edit from "./assets/edit.svg";
 import trash from "./assets/trash.svg";
 import CreatePermissionsModal from "./components/createPermission";
-import DeletePermissionsModal from "../admin-push/components/deletePermission";
+// import DeletePermissionsModal from "../admin-push/components/deletePermission";
 import EditPermissionsModal from "./components/editPermissions";
+import DeletePermissionsModal from "./components/deletePermissions";
 
 export default function AdminPermissions() {
   const [loading, setLoading] = useState(false);

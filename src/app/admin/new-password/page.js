@@ -2,11 +2,15 @@
 import bgImg from "./assets/bgimage.svg";
 import ArrowRight from "./assets/ArrowRight.svg";
 import Link from "next/link";
-import PasswordCreate from "../utils/passwordCreate";
+// import PasswordCreate from "../utils/passwordCreate";
 import { useState } from "react";
+import PasswordCreate from "@/app/utils/passwordCreate";
 
 export default function Page() {
-  const savedEmail = typeof window !== "undefined" ? localStorage.getItem("savetown_reset_email") : null;
+  const savedEmail =
+    typeof window !== "undefined"
+      ? localStorage.getItem("savetown_reset_email")
+      : null;
   const [password, setPassword] = useState("");
 
   const handlePasswordValid = (password) => {
