@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { showUsersTransactions } from "../../adminControllers/usersController";
 
 export default function UserTransactions({user}) {
-    const userid = user.id
-    const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(false)
+  const userid = user.id
 
       const fetchTransaction = async () => {
+        setLoading(true);
         await showUsersTransactions(
           `${userid}`,
           (response) => {
             setTransactions(response.data);
+            setLoading(false);
           },
           (err) => {
             console.error("Error fetching user info:", err);
@@ -26,7 +29,8 @@ export default function UserTransactions({user}) {
       }
       
     return (
-        <div className="overflow-auto w-full md:h-[100%] "> {/* Adjust the height to fit the screen */}
+        <div className="overflow-auto w-full md:h-[100%] ">
+          {loading ? (<div>loading transactions..</div>) : ( 
         <table className="w-full mt-4 bg-white rounded shadow font-Manrope">
           <thead>
             <tr className="text-left bg-gray-50">
@@ -88,7 +92,7 @@ export default function UserTransactions({user}) {
             ))}
           </tbody>
         </table>
-
+)}
           {/* Pagination */}
   <Pagination/>
       </div>

@@ -6,7 +6,7 @@ const DeletePermissionsModal = ({onClose,setUser,onPermissionChange }) => {
   const confirmDeleteSlide = async() => {
     console.log(setUser)
     await deletePermissions(
-      {setUser},
+      `${setUser}`,
       (response)=>{
         console.log(response)
       },

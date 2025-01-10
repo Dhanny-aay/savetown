@@ -1,54 +1,17 @@
-"use client";
-import { useState, useEffect } from "react";
-import { createRoles } from "../../adminControllers/rolesController";
+import React, { useState, useEffect } from "react";
 import { permissionsDisplay } from "../../adminControllers/permissionController";
+import { editRoles } from "../../adminControllers/rolesController";
 
-export default function CreateRolesModal({ onClose, onRolesChange }) {
-  const [createRole, setCreateRole] = useState({
-    name: "",
-    permissions: [],
+const EditRoles = ({ onClose, user, onRolesChange }) => {
+  const [editRole, setEditRole] = useState({
+    id: user.id, // Include the role's ID
+    name: user.name || "",
+    permissions: user.permissions.map((perm) => perm.id) || [],
   });
   const [permissions, setPermissions] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCreateRole((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleAddRoles = async () => {
-    const newRole = {
-      name: createRole.name,
-      permissions: createRole.permissions,
-    };
-    // console.log("Sending role data:", newRole);
-    await createRoles(
-      {name: newRole.name,
-        permissions: newRole.permissions
-      },
-      (response) => {
-        console.log("Role created successfully");
-      },
-      (err) => {
-        console.error("Error creating role", err);
-      }
-    );
-onRolesChange();
-    onClose(false);
-  };
-
-  const handleCheckboxChange = (permissionId) => {
-    setCreateRole((prevState) => ({
-      ...prevState,
-      permissions: prevState.permissions.includes(permissionId)
-        ? prevState.permissions.filter((id) => id !== permissionId)
-        : [...prevState.permissions, permissionId],
-    }));
-  };
-
+  // Fetch permissions from API
   const displayPermissions = async () => {
     setLoading(true);
     try {
@@ -65,6 +28,60 @@ onRolesChange();
     displayPermissions();
   }, []);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditRole((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleCheckboxChange = (permissionId) => {
+    setEditRole((prevState) => ({
+      ...prevState,
+      permissions: prevState.permissions.includes(permissionId)
+        ? prevState.permissions.filter((id) => id !== permissionId)
+        : [...prevState.permissions, permissionId],
+    }));
+  };
+
+  const handleAddRoles = async () => {
+    console.log("Edited Role Data:", editRole.permissions);
+    await editRoles(
+      `${editRole.id}`,
+      {
+        name: `${editRole.name}`, 
+        permissions: editRole.permissions, 
+      },
+      (response) => {
+        console.log("Response:", response);
+      },
+      (err) => {
+        console.error("Unable to edit roles", err);
+      }
+    );
+    onRolesChange();
+    onClose(false);
+  };
+  
+
+  // Save on Enter key press
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter") {
+        handleAddRoles();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [editRole]);
+
+  const unselectedPermissions = permissions.filter(
+    (perm) => !editRole.permissions.includes(perm.id)
+  );
+
   return (
     <div
       className="fixed inset-0 z-[999] bg-black bg-opacity-50 flex justify-center items-center"
@@ -74,20 +91,22 @@ onRolesChange();
         className="bg-white rounded-2xl p-6 w-[600px] space-y-5 font-Manrope"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-lg font-bold font-Manrope">Add New Roles</h2>
+        <h2 className="text-lg font-bold font-Manrope">Edit Roles</h2>
 
+        {/* Role Name */}
         <div>
-          <label className="block text-sm font-semibold mb-1">Name</label>
+          <label className="block text-sm font-semibold mb-1">Role Name</label>
           <input
             type="text"
             name="name"
             placeholder="Enter Role Name"
-            value={createRole.name}
+            value={editRole.name}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-[32px]"
           />
         </div>
 
+        {/* Selected Permissions */}
         <div>
           <label className="block text-sm font-semibold mb-1">Permissions</label>
           {loading ? (
@@ -99,7 +118,7 @@ onRolesChange();
                   <input
                     type="checkbox"
                     id={`permission-${permission.id}`}
-                    checked={createRole.permissions.includes(permission.id)}
+                    checked={editRole.permissions.includes(permission.id)}
                     onChange={() => handleCheckboxChange(permission.id)}
                     className="w-4 h-4 text-[#ED1450] accent-[#ED1450] cursor-pointer"
                   />
@@ -115,6 +134,7 @@ onRolesChange();
           )}
         </div>
 
+        {/* Save and Cancel Buttons */}
         <div className="flex justify-between items-center w-full space-x-2">
           <button
             onClick={() => onClose(false)}
@@ -132,4 +152,6 @@ onRolesChange();
       </div>
     </div>
   );
-}
+};
+
+export default EditRoles;

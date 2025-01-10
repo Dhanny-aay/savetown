@@ -76,12 +76,12 @@ export default function AdminPermissions() {
           </div>
 
           {/* Table */}
-          <table className="w-full mt-4 bg-white rounded shadow font-Manrope">
+          <table className="w-full mt-4 bg-white rounded font-Manrope">
             <thead>
               <tr className="text-left bg-gray-50">
-                <th className="p-4 max-sm:p-2 font-semibold">S/N</th>
-                <th className="p-4 max-sm:p-2 font-semibold">Names</th>
-                <th className="p-4 max-sm:p-2 font-semibold">Action</th>
+                <th className="p-4 font-semibold">S/N</th>
+                <th className="p-4 font-semibold">Names</th>
+                <th className="p-4 font-semibold">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -94,13 +94,13 @@ export default function AdminPermissions() {
                 permissionList.map &&
                 permissionList.map((permission) => (
                   <tr key={permission.id} className="border-t text-sm">
-                    <td className="p-4 max-sm:p-2 font-semibold text-[#5F6D7E]">
+                    <td className="p-4 font-semibold text-[#5F6D7E]">
                       {permission.id}
                     </td>
-                    <td className="p-4 max-sm:p-2 font-semibold">
+                    <td className="p-4  font-semibold">
                       {permission.name}
                     </td>
-                    <td className="p-4 max-sm:p-2 font-semibold flex items-center gap-2">
+                    <td className="p-4 font-semibold flex items-center gap-2">
                       {/* Edit Button */}
                       <button
                         onClick={() => openEditModal(permission)}
