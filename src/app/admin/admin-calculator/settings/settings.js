@@ -4,15 +4,15 @@ import HouseType from "./houseType";
 import HouseLocation from "./houseLocation";
 import Duration from "./duration";
 
-export default function Settings(first) {
+export default function Settings() {
   const contentNav = [
-    { name: "Pricing", id: "pricing" },
+    // { name: "Pricing", id: "pricing" },
     { name: "House Type", id: "house-type" },
     { name: "Duration", id: "duration" },
     { name: "House Location", id: "house-location" },
   ];
 
-  const [secondActiveTab, setSecondActiveTab] = useState("Pricing");
+  const [secondActiveTab, setSecondActiveTab] = useState("House Type");
 
   return (
     <div>
@@ -42,9 +42,11 @@ export default function Settings(first) {
 
       {/* Dynamic Table Section */}
       <div className="w-full">
-          {secondActiveTab === "Pricing" ? (
-            <Pricing />
-          ) : secondActiveTab === "House Type" ? (
+          {
+          // secondActiveTab === "Pricing" ? (
+          //   <Pricing />
+          // ) :
+           secondActiveTab === "House Type" ? (
             <HouseType/>
           ) : secondActiveTab === "House Location" ? (
             <HouseLocation />

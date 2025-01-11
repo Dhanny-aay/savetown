@@ -29,12 +29,11 @@ export default function OurStats() {
         link: "http://langosh.com/",
         category: `${updatedStats.category}`,
         location: "pariatur",
-        content: "autem",
         date: "2025-01-08T14:57:42",
         time: "accusamus",
         author: "debitis",
-        excerpt: `${updatedStats.excerpt}`,
-        description: "Nisi vero dolorem ut.",
+        excerpt: "itaque",
+        description: `${updatedStats.description}`,
       },
       (response) => {
         console.log(response);
@@ -44,6 +43,7 @@ export default function OurStats() {
       }
     );
     setShowEditModal(false);
+    loadstats()
   };
 
   const loadstats = async () => {
@@ -138,6 +138,9 @@ export default function OurStats() {
                 placeholder="Enter Heading"
                 value={editStats?.title || ""}
                 onChange={handleEditChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveEdit();
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-[30px]  text-sm text-[#919BA7] "
               />
             </div>
@@ -146,10 +149,14 @@ export default function OurStats() {
                 Sub Heading
               </label>
               <textarea
-                name="excerpt"
+              type="text"
+                name="description"
                 placeholder="Enter Text"
-                value={editStats?.excerpt || ""}
+                value={editStats?.description || ""}
                 onChange={handleEditChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveEdit();
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl text-[#919BA7] text-sm h-32 resize-none"
               />
             </div>
@@ -159,7 +166,7 @@ export default function OurStats() {
                 type="text"
                 placeholder="Enter type"
                 value={editStats?.type || ""}
-                onChange={handleEditChange}
+                readOnly
                 className="w-full px-3 py-2 text-[#919BA7] border text-sm border-gray-300 rounded-[30px]"
               />
             </div>

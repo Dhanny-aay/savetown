@@ -35,7 +35,6 @@ export default function WhatSetUsApart() {
         link: "http://langosh.com/",
         category: `${updatedapart.category}`,
         location: "pariatur",
-        content: "autem",
         date: "2025-01-08T14:57:42",
         time: "accusamus",
         author: "debitis",
@@ -50,6 +49,7 @@ export default function WhatSetUsApart() {
       }
     );
     setShowEditModal(false);
+    loadapart();
   };
 
   const loadapart = async () => {
@@ -145,6 +145,9 @@ export default function WhatSetUsApart() {
                 placeholder="Enter Heading"
                 value={editApart?.title || ""}
                 onChange={handleEditChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveEdit();
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-[30px]  text-sm text-[#919BA7] "
               />
             </div>
@@ -157,20 +160,45 @@ export default function WhatSetUsApart() {
                 placeholder="Enter Text"
                 value={editApart?.excerpt || ""}
                 onChange={handleEditChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveEdit();
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl text-[#919BA7] text-sm h-32 resize-none"
               />
             </div>
             <div>
-                  <FileUploader
-                    label="Slide Image"
-                    accept="image/*"
-                    maxSize={5000000}
-                    isImage={true}
-                    onFileSelect={(file) =>
-                      setEditApart({ ...editApart, image: file })
-                    }
-                  />
-                </div>
+        {editApart.image ? (
+          <div className="relative">
+            {/* Display Image */}
+            <img
+              src={editApart.image}
+              alt="Uploaded image"
+              width={300}
+              height={200}
+              className="rounded-lg"
+            />
+            {/* Cancel Button */}
+            <button
+              onClick={() => setEditApart({ ...editApart, image: null })}
+              className="absolute top-1 left-[80%] bg-black text-white rounded-full w-6 h-6 flex justify-center items-center text-xs"
+            >
+              X
+            </button>
+          </div>
+        ) : (
+          // File Uploader
+          <FileUploader
+            label="Slide Image"
+            accept="image/*"
+            maxSize={5000000}
+            isImage={true}
+            onFileSelect={(file) =>
+              setEditApart({ ...editApart, image: URL.createObjectURL(file) })
+            }
+          />
+        )}
+      </div>
+
             <div className="flex justify-between items-center w-full space-x-2">
               <button
                 onClick={() => setShowEditModal(false)}

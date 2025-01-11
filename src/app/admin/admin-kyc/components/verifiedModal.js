@@ -63,7 +63,7 @@ export default function VerifiedModal({ onClose, user }) {
             Uploaded Images - Front and Back
           </label>
           <div className="flex flex-col md:flex-row justify-center gap-3 items-center px-3">
-           <img src={selectedUser.id_front} alt="id picture"  width={300}
+           <img src={selectedUser.id_front} alt="id picture" width={300}
               height={100}/>
             {/* <Image
               // src={selectedUser.id_front}
@@ -73,7 +73,9 @@ export default function VerifiedModal({ onClose, user }) {
               height={100}
               priority
             /> */}
-            <Image
+            <img src={selectedUser.id_back} alt="id picture" width={300}
+              height={100}/>
+            {/* <Image
               src={id.src}
               // src={selectedUser.id_back}
               alt="id picture"
@@ -81,7 +83,7 @@ export default function VerifiedModal({ onClose, user }) {
               height={100}
               priority
               placeholder='empty'
-            />
+            /> */}
           </div>
         </div>
       </div>

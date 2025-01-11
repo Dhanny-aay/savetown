@@ -47,8 +47,8 @@ export default function Headline() {
         console.error("unable to edit headline", err);
       }
     );
-    // setHeadlines(updatedHeadlines);
     setShowEditModal(false);
+    loadHeadlines()
   };
 
   const loadHeadlines = async () => {
@@ -56,7 +56,6 @@ export default function Headline() {
     await fetchBlog(
       { page: 1, type: "PageTitle", category: "CEOMessage", page: "Home" },
       (response) => {
-        // console.log(response);
         setHeadlines(response?.data || []);
         setEditHeadline(response?.data || []);
         setLoading(false);
@@ -146,6 +145,9 @@ export default function Headline() {
                 placeholder="Enter Heading"
                 value={editHeadline?.title || ""}
                 onChange={handleEditChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveEdit();
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-[30px]  text-sm text-[#919BA7] "
               />
             </div>
@@ -158,6 +160,9 @@ export default function Headline() {
                 placeholder="Enter sub heading"
                 value={editHeadline?.excerpt || ""}
                 onChange={handleEditChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveEdit();
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl text-[#919BA7] text-sm h-32 resize-none"
               />
             </div>
@@ -168,6 +173,9 @@ export default function Headline() {
                 placeholder="Enter type"
                 value={editHeadline?.type || ""}
                 onChange={handleEditChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveEdit();
+                }}
                 className="w-full px-3 py-2 text-[#919BA7] border text-sm border-gray-300 rounded-[30px]"
               />
             </div>

@@ -35,7 +35,6 @@ export default function AdminWhySavetown(first) {
         link: "http://langosh.com/",
         category: `${updatedHeadlines.category}`,
         location: "pariatur",
-        content: "autem",
         date: "2025-01-08T14:57:42",
         time: "accusamus",
         author: "debitis",
@@ -50,6 +49,7 @@ export default function AdminWhySavetown(first) {
       }
     );
     setShowEditModal(false);
+    loadwhy();
   };
 
   const handleChange = (e) => {
@@ -148,6 +148,9 @@ export default function AdminWhySavetown(first) {
                 placeholder="Enter Heading"
                 value={editWhy.title || ""}
                 onChange={handleChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveSlide();
+                }}
                 className="w-full px-3 py-2 border text-sm border-gray-300 rounded-[30px]"
               />
             </div>
@@ -161,20 +164,46 @@ export default function AdminWhySavetown(first) {
                 value={editWhy.excerpt || ""}
                 onChange={handleChange
                 }
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveSlide();
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm h-32 resize-none"
               />
             </div>
             <div>
-              <FileUploader
-                label="Slide Image"
-                accept="image/*"
-                maxSize={5000000}
-                isImage={true}
-                onFileSelect={(file) =>
-                  setEditWhy({ ...editWhy, image: file })
-                }
-              />
-            </div>
+  {editWhy.image ? (
+    <div className="relative">
+      {/* Display Image */}
+      <img
+        src={editWhy.image}
+        alt="Uploaded Feature"
+        width={300}
+        height={200}
+        className="rounded-lg"
+      />
+      {/* Cancel Button */}
+      <button
+        onClick={() =>
+          setEditWhy({ ...editWhy, image: null })
+        }
+        className="absolute top-1 left-[80%] bg-black text-white rounded-full w-6 h-6 flex justify-center items-center text-xs"
+      >
+        X
+      </button>
+    </div>
+  ) : (
+    // File Uploader
+    <FileUploader
+      label="Slide Image"
+      accept="image/*"
+      maxSize={5000000}
+      isImage={true}
+      onFileSelect={(file) =>
+        setEditWhy({ ...editWhy, image: URL.createObjectURL(file) })
+      }
+    />
+  )}
+</div>
             <div className="flex justify-between items-center w-full space-x-2">
               <button
                 onClick={() => setShowEditModal(false)}

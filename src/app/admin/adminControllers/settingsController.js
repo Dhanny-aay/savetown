@@ -21,3 +21,14 @@ export const showSettings = async (onSuccess, onError) => {
       }
     }
   };
+
+  export const changePassword = async ( settingsData, onSuccess, onError) => {
+    try {
+      const response = await api("POST", '/auth/change-password', settingsData);
+      onSuccess(response);
+    } catch (error) {
+      if (onError) {
+        onError(error);
+      }
+    }
+  };

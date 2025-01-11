@@ -7,14 +7,14 @@ import {
 
 export default function InterestRate() {
   const [isEditing, setIsEditing] = useState(false);
-  const [data, setData] = useState({ id: 1, interestRate: "N/A" }); // Default value
+  const [data, setData] = useState({ id: 0, interestRate: "N/A" }); // Default value
   const [tempRate, setTempRate] = useState(data); // Temporary value for editing
 
   const handleSave = async () => {
     setData(tempRate);
     setIsEditing(false);
     console.log("Saved Interest Rate:", tempRate);
-    let id = 1;
+    let id = 0;
     await editInterest(
       `${id}`,
       { tempRate },
@@ -87,25 +87,34 @@ export default function InterestRate() {
       </div>
 
       {/* Interest Rate Input */}
-      <form className="space-y-4">
-        <div className="flex flex-col w-full">
-          <label
-            htmlFor="interest-rate"
-            className="text-sm font-medium text-gray-700 mb-1"
-          >
-            Interest Rate
-          </label>
-          <input
-            id="interest-rate"
-            type="text"
-            placeholder=""
-            className="w-full border rounded-[32px] px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#ED1450]"
-            value={isEditing ? tempRate.interestRate : data.interestRate}
-            onChange={(e) => setTempRate(e.target.value)}
-            readOnly={!isEditing}
-          />
-        </div>
-      </form>
+      <form
+  className="space-y-4"
+  onSubmit={(e) => {
+    e.preventDefault(); // Prevent the form from reloading the page
+    if (isEditing) {
+      handleSave(); // Call the save function if editing
+    }
+  }}
+>
+  <div className="flex flex-col w-full">
+    <label
+      htmlFor="interest-rate"
+      className="text-sm font-medium text-gray-700 mb-1"
+    >
+      Interest Rate
+    </label>
+    <input
+  id="interest-rate"
+  type="text"
+  placeholder=""
+  className="w-full border rounded-[32px] px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#ED1450]"
+  value={isEditing ? tempRate.interestRate || "" : data.interestRate || ""}
+  onChange={(e) => setTempRate({ ...tempRate, interestRate: e.target.value })}
+  readOnly={!isEditing}
+/>
+  </div>
+</form>
+
     </div>
   );
 }

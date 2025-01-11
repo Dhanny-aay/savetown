@@ -94,7 +94,7 @@ export default function Partners() {
           title: `${newSlide.title}`,
           excerpt: `${newSlide.excerpt}`,
           type: "Slider",
-          link: "http://www.vandervort.info/quos-dolor-id-numquam-vel-commodi",
+          link: `${newSlide.image}`,
           location: "qui",
           date: "2025-01-08T14:57:42",
           time: "sunt",
@@ -125,8 +125,8 @@ export default function Partners() {
     await fetchBlog(
       {
         page: 1,
-        type: "Team",
-        page: "About Us",
+        type: "Partners",
+        page: "landing",
       },
       (response) => {
         // console.log(response);
@@ -166,13 +166,13 @@ export default function Partners() {
             </div>
           </div>
 
-          <table className="w-full text-left border rounded-lg font-Manrope shadow">
+          <table className="w-full text-left border rounded-lg font-Manrope ">
             <thead className="bg-white text-[13px]">
               <tr>
                 <th className="p-4 text-gray-500">S/N</th>
                 <th className="p-4">Heading</th>
-                <th className="p-4">Subheading</th>
-                <th className="p-4">Action</th>
+                {/* <th className="p-4">Subheading</th> */}
+                <th className="p-4 text-center">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -182,7 +182,7 @@ export default function Partners() {
                   <tr key={row.id} className="border-t text-sm">
                     <td className="p-4 text-gray-500">{index + 1}</td>
                     <td className="p-4  text-gray-500">{row.title}</td>
-                    <td className="p-4">{row.excerpt}</td>
+                    {/* <td className="p-4">{row.excerpt}</td> */}
                     <td className="p-4 flex items-center justify-center gap-2">
                       <button
                         onClick={() => handleEditSlide(row)}
@@ -224,7 +224,7 @@ export default function Partners() {
                 onClick={(e) => e.stopPropagation()}
               >
                 <h2 className="text-xl font-bold font-Manrope">
-                  {editPartners.id ? "Edit Headline" : "Add New Team"}
+                  {editPartners.id ? "Edit Partner" : "Add New Partner"}
                 </h2>
                 <div>
                   <label className="block text-sm font-semibold mb-1">
@@ -236,10 +236,13 @@ export default function Partners() {
                     placeholder="Enter Full Name"
                     value={editPartners.title || ""}
                     onChange={handleNewChange}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSaveSlide();
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 text-sm rounded-[30px]"
                   />
                 </div>
-                <div>
+                {/* <div>
                   <label className="block text-sm font-semibold mb-1">
                     Sub Heading
                   </label>
@@ -248,19 +251,48 @@ export default function Partners() {
                     placeholder="Enter sub heading"
                     value={editPartners.excerpt || ""}
                     onChange={handleNewChange}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSaveSlide();
+                    }}
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-xl h-32 resize-none"
                   />
-                </div>
+                </div> */}
                 <div>
-                  <FileUploader
-                    label="Slide Image"
-                    accept="image/*"
-                    maxSize={5000000}
-                    isImage={true}
-                    onFileSelect={(file) =>
-                      setEditPartners({ ...editPartners, image: file })
-                    }
-                  />
+                  {editPartners.image ? (
+                    <div className="relative">
+                      {/* Display Image */}
+                      <img
+                        src={editPartners.image}
+                        alt="Uploaded Feature"
+                        width={300}
+                        height={200}
+                        className="rounded-lg"
+                      />
+                      {/* Cancel Button */}
+                      <button
+                        onClick={() =>
+                          setEditPartners({ ...editPartners, image: null })
+                        }
+                        className="absolute top-1 left-[80%] bg-black text-white rounded-full w-6 h-6 flex justify-center items-center text-xs"
+                      >
+                        X
+                      </button>
+                    </div>
+                  ) : (
+                    // File Uploader
+                    <FileUploader
+                      label="Slide Image"
+                      accept="image/*"
+                      maxSize={5000000}
+                      isImage={true}
+                      onFileSelect={(file) =>
+                        setEditPartners({
+                          ...editPartners,
+                          image: URL.createObjectURL(file),
+                        })
+                      }
+                    />
+                  )}
                 </div>
                 <div className="flex justify-between items-center w-full space-x-2">
                   <button
@@ -283,13 +315,24 @@ export default function Partners() {
           {showDeletePopup && (
             <div className="fixed inset-0 z-[999] bg-black bg-opacity-50 flex justify-center items-center">
               <div className="bg-white rounded-2xl p-6 w-[600px] space-y-5 font-Manrope ">
-                <h2 className="text-lg font-bold font-Manrope text-center">
-                  Delete Section{" "}
-                </h2>
-                <p className="text-center">
-                  {" "}
-                  Are you sure you want to delete this section?
-                </p>
+               <Image
+                                              src={alert.src}
+                                              alt="view icon"
+                                              width={98}
+                                              height={98}
+                                              priority
+                                            />
+                        <h2 className="text-lg font-bold font-Manrope text-center">
+                          Delete Section{" "}
+                        </h2>
+                        <p className="text-center">
+                          {" "}
+                          Are you sure you want to delete this section?
+                        </p>
+                        <p className="text-center">
+                          {" "}
+                          Are you sure you want to proceed? This action is irreversible and will permanently remove the section.
+                        </p>
                 <div className="flex justify-between items-center gap-4 ">
                   <button
                     onClick={() => setShowDeletePopup(false)}
