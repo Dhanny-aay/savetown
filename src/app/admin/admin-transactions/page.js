@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import search from "./assets/search.svg";
 import { fetchTransactions } from "../adminControllers/transactionControl";
+import Pagination from "../components/pagination";
 
 export default function AdminTransactions() {
   const router = useRouter();
@@ -64,7 +65,7 @@ export default function AdminTransactions() {
           >
             &lt; Back
           </button>
-          <h3 className="text-base md:text-2xl font-bold text-black">
+          <h3 className="text-base md:text-2xl font-bold text-[#595A5C]">
             Transactions
           </h3>
         </div>
@@ -177,6 +178,7 @@ export default function AdminTransactions() {
             </tbody>
           </table>
         )}
+        <Pagination data={filteredUsers} isLoading ={loading}/>
       </div>
     </div>
   );

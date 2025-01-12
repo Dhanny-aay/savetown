@@ -1,5 +1,5 @@
 import Image from "next/image";
-import id from '../assets/id.svg'
+import cancel from '../assets/cancel.svg'
 import { useState } from "react";
 
 export default function UnverifiedModal({ onClose, user }) {
@@ -13,7 +13,7 @@ export default function UnverifiedModal({ onClose, user }) {
       onClick={() => onClose(false)}
     >
       <div
-        className="bg-white rounded-2xl p-6 w-[400px] h-[500px] md:w-[650px] space-y-5 font-Manrope overflow-auto"
+        className="bg-white rounded-2xl p-6 w-[400px] max-md:h-[500px] md:w-[500px] space-y-5 font-Manrope overflow-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-bold font-Manrope">'{setSelectedUser.name}'</h2>
@@ -39,29 +39,11 @@ export default function UnverifiedModal({ onClose, user }) {
             className="w-full px-3 py-2 border border-gray-300 rounded-[32px]"
           />
         </div>
-        <div>
-          <label className="block text-sm font-semibold mb-1">
-          Uploaded Images - Front
-          </label>
-            <Image
-              src={id.src}
-              alt="id picture"
-              width={300}
-              height={282}
-              priority
-            />
-        </div>
-        <div>
-          <label className="block text-sm font-semibold mb-1">
-          Facial Integration - Selfie
-          </label>
-            <Image
-              src={id.src}
-              alt="id picture"
-              width={300}
-              height={282}
-              priority
-            />
+        <div className="flex flex-col md:flex-row justify-center gap-3 items-center px-3">
+           <img src={selectedUser.id_front} alt="id picture" width={300}
+              height={100}/>
+            <img src={selectedUser.id_back} alt="id picture" width={300}
+              height={100}/>
         </div>
         <div className="flex justify-between items-center w-full space-x-2">
           <button

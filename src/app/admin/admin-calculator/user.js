@@ -3,6 +3,7 @@ import search from "./assets/search.svg";
 import Image from "next/image";
 import CalculatorModal from "./components/calculatorModal";
 import { calculatorDisplay } from "../adminControllers/calculatorController";
+import Pagination from './../components/pagination';
 
 export default function User() {
   const [calcData, setCalcData] = useState([]);
@@ -10,6 +11,13 @@ export default function User() {
   const [showCModal, setShowCModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
+  const [loading, setLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
+  const lastIndex = currentPage * recordsPerPage;
+  const startIndex = lastIndex - recordsPerPage;
+  const records = filteredData.slice(startIndex, lastIndex);
+  const totalPages = Math.ceil(filteredData.length / recordsPerPage);
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -44,15 +52,26 @@ export default function User() {
   };
 
   const fetchData = async () => {
+    setLoading(true)
     const response = await calculatorDisplay({});
     const calcUser = response.data;
     setCalcData(calcUser);
-    setFilteredData(calcUser); // Initialize filtered data
+    setFilteredData(calcUser); 
+    setLoading(false)
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[50vh]">
+        {/* Spinner for the loading state */}
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -132,6 +151,12 @@ export default function User() {
             ))}
         </tbody>
       </table>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
 
       {showCModal ? (
         <CalculatorModal onClose={setShowCModal} user={selectedUser} />

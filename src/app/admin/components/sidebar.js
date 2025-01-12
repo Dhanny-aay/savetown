@@ -218,6 +218,7 @@ export default function Sidebar() {
               className={`flex flex-col items-center flex-1 ${
                 currentPath === item.page ? "text-[#ED1450]" : "text-gray-500"
               }`}
+              // onClick={()=>isMoreOpen(false)}
             >
               <Image
                 src={currentPath === item.page ? item.activImg : item.icon}
@@ -250,11 +251,11 @@ export default function Sidebar() {
       {/* Popup for hidden items */}
       {isMoreOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 md:hidden font-Manrope"
+          className="fixed inset-0 z-50 flex items-center justify-end bg-opacity-50 md:hidden font-Manrope"
           onClick={() => setIsMoreOpen(false)} // Close popup when clicking anywhere
         >
           <div
-            className="bg-white rounded-lg overflow-auto max-w-xs p-3 space-y-4 shadow-lg h-[247px] w-[240px] bottom-[-14%] right-[-14%]  relative"
+            className="bg-white relative rounded-lg overflow-auto max-w-xs p-3 space-y-4 shadow-lg h-[247px] w-[240px] bottom-[-21%]"
             onClick={(e) => e.stopPropagation()} // Prevent click events inside the popup from closing it
           >
             <button

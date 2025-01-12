@@ -9,6 +9,7 @@ import { fetchUsers } from "../adminControllers/usersController";
 import EditUserModal from "./components/editUserModal";
 import DeleteUserModal from "./components/deleteUserModal";
 import { useRouter } from "next/navigation";
+import Pagination from "../components/pagination";
 
 export default function AdminUser() {
   const [users, setUsers] = useState([]);
@@ -19,6 +20,12 @@ export default function AdminUser() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+const recordsPerPage = 10;
+const lastIndex = currentPage * recordsPerPage;
+const startIndex = lastIndex - recordsPerPage;
+const records = filteredUsers.slice(startIndex, lastIndex);
+const totalPages = Math.ceil(filteredUsers.length / recordsPerPage);
 
   const router = useRouter();
 
@@ -81,9 +88,15 @@ export default function AdminUser() {
     router.push(`/admin/admin-user/user-profile?userid=${userId}`);
   };
 
-  if (loading) return <div>Loading users...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
-
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[50vh]">
+        {/* Spinner for the loading state */}
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
   return (
     <>
       {/* Edit Modal */}
@@ -160,7 +173,7 @@ export default function AdminUser() {
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.map((user, index) => (
+              {records.map((user, index) => (
                 <tr key={user.id} className="border-t">
                   <td className="p-4 text-[#5F6D7E] text-sm font-medium">
                     {index + 1}
@@ -250,6 +263,12 @@ export default function AdminUser() {
               ))}
             </tbody>
           </table>
+
+          <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
         </div>
       </div>
     </>

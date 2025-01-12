@@ -2,6 +2,7 @@ import Image from "next/image";
 import id from "../assets/id.svg";
 import { useEffect, useState } from "react";
 import { showUsers } from "../../adminControllers/usersController";
+import cancel from '../assets/cancel.svg'
 
 export default function PendingModal({ onClose, user }) {
   const [selectedUser, setSelectedUser] = useState("");
@@ -82,7 +83,7 @@ export default function PendingModal({ onClose, user }) {
           onClick={() => onClose(false)}
         >
           <div
-            className="bg-white rounded-2xl p-6 w-[400px] h-[500px] md:w-[650px] space-y-5 font-Manrope overflow-auto"
+            className="bg-white rounded-2xl p-6 w-[400px] max-md:h-[500px] md:w-[500px] space-y-5 font-Manrope overflow-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
@@ -94,7 +95,8 @@ export default function PendingModal({ onClose, user }) {
                 onClick={() => onClose(false)}
                 className="text-gray-400 hover:text-gray-600"
               >
-                &times;
+                 <img src={cancel.src} alt="id picture" width={12}
+              height={12}/>
               </button>
             </div>
 
