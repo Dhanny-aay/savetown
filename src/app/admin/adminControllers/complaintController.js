@@ -13,7 +13,7 @@ export const complaintsDisplay = async (onSuccess, onError) => {
 
 export const replyComplaint = async (msgId, reply, onSuccess, onError) => {
     try {
-      const response = await api("PUT", `/admin-permissions/${msgId}`, reply);
+      const response = await api("PUT", `/support-message/${msgId}`, reply);
       onSuccess(response);
     } catch (error) {
       if (onError) {

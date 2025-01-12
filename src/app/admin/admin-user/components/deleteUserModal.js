@@ -1,4 +1,6 @@
+import Image from 'next/image'
 import React, { useState } from 'react'
+import alert from '../assets/alert.svg'
 
 const DeleteUserModal = ({user, onClose}) => {
   
@@ -21,10 +23,24 @@ const DeleteUserModal = ({user, onClose}) => {
       className="bg-white rounded-2xl p-6 w-[500px] space-y-5 font-Manrope"
       onClick={(e) => e.stopPropagation()}
     >
-      <h2 className="text-lg font-bold text-[#5F6D7E] text-center font-Manrope">Delete User</h2>
-      <p className="text-center text-[#5F6D7E] font-Manrope">
-        Are you sure you want to delete this user?
-      </p>
+    <Image
+                                   src={alert.src}
+                                   alt="view icon"
+                                   width={98}
+                                   height={98}
+                                   priority
+                                 />
+             <h2 className="text-lg font-bold font-Manrope text-center">
+               Delete Section{" "}
+             </h2>
+             <p className="text-center">
+               {" "}
+               Are you sure you want to delete this section?
+             </p>
+             <p className="text-center">
+               {" "}
+               Are you sure you want to proceed? This action is irreversible and will permanently remove the section.
+             </p>
       <div className="flex justify-center gap-4">
         <button
           onClick={() => onClose(false)}

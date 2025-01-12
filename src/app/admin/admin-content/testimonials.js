@@ -6,7 +6,7 @@ import trash from "./assets/trash.svg";
 import search from "./assets/search.svg";
 import FileUploader from "@/app/utils/fileUploader";
 import { createBlog, deleteBlog, fetchBlog, updateBlog } from "../adminControllers/blogController";
-
+import alert from './assets/alert.svg'
 
 export default function Testimonials() {
   const [testimonials, setTestimonials] = useState({
@@ -44,6 +44,7 @@ export default function Testimonials() {
     )
     setShowDeletePopup(false);
     setDeleteId(null);
+    loadtestimonials()
   };
 
   const handleAddNewTestimonial = () => {
@@ -62,15 +63,14 @@ export default function Testimonials() {
         {
           title: `${updatedTestimonials.title}`,
           type: "Reason",
-          link: "http://langosh.com/",
-          category: "cumque",
+          link: `${updatedTestimonials.image}`,
+          category: `${updatedTestimonials.category}`,
           location: "pariatur",
-          content: "autem",
           date: "2025-01-08T14:57:42",
           time: "accusamus",
           author: "debitis",
-          excerpt: `${updatedTestimonials.excerpt}`,
-          description: "Nisi vero dolorem ut.",
+          excerpt: "itaque",
+          description: `${updatedTestimonials.description}`,
         },
         (response) => {
           console.log(response);
@@ -88,9 +88,9 @@ export default function Testimonials() {
       await createBlog(
         {
           title: `${newSlide.title}`,
-          excerpt: `${newSlide.excerpt}`,
+          excerpt: "autem",
           type: "Slider",
-          link: "http://www.vandervort.info/quos-dolor-id-numquam-vel-commodi",
+          link: `${newSlide.image}`,
           location: "qui",
           date: "2025-01-08T14:57:42",
           time: "sunt",
@@ -98,7 +98,7 @@ export default function Testimonials() {
             "http://www.tillman.com/sint-debitis-laudantium-tempora-ullam-nisi-beatae-vel-doloremque.html",
           status: "a",
           author: "vel",
-          description: "Inventore enim eum maxime cum quia et.",
+          description: `${newSlide.description}`,
         },
         (response) => {
           console.log(response);
@@ -109,6 +109,7 @@ export default function Testimonials() {
       );
     }
     setShowEditModal(false);
+    loadtestimonials();
   };
 
   const handleNewChange = (e) => {
@@ -121,8 +122,8 @@ export default function Testimonials() {
     await fetchBlog(
       {
         page: 1,
-        type: "Team",
-        page: "About Us",
+        type: "Testimonials",
+        page: "landing",
       },
       (response) => {
         // console.log(response);
@@ -139,6 +140,13 @@ export default function Testimonials() {
   useEffect(() => {
     loadtestimonials();
   }, []);
+
+  const handleEnter = (e)=>{
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault(); 
+        handleSaveTestimony(); 
+      }
+  }
 
   return (
     <>
@@ -179,17 +187,17 @@ export default function Testimonials() {
                 onClick={handleAddNewTestimonial}
                 className="px-6 py-2 bg-[#ED1450] text-sm text-white rounded-full font-Manrope"
               >
-                + Add new testimonials
+                + Add new testimonial
               </button>
             </div>
           </div>
 
-          <table className="w-full text-left border rounded-lg font-Manrope shadow">
+          <table className="w-full text-left border rounded-lg font-Manrope">
             <thead className="bg-white text-[13px]">
               <tr>
                 <th className="p-4 text-gray-500">S/N</th>
                 <th className="p-4">Heading</th>
-                <th className="p-4">Subheading</th>
+                <th className="p-4">Testimony</th>
                 <th className="p-4">Action</th>
               </tr>
             </thead>
@@ -200,7 +208,7 @@ export default function Testimonials() {
                   <tr key={row.id} className="border-t text-sm">
                     <td className="p-4 text-gray-500">{index + 1}</td>
                     <td className="p-4  text-gray-500">{row.title}</td>
-                    <td className="p-4">{row.excerpt}</td>
+                    <td className="p-4">{row.description}</td>
                     <td className="p-4 flex items-center justify-center gap-2">
                       <button
                         onClick={() => handleEditTestimony(row)}
@@ -238,11 +246,11 @@ export default function Testimonials() {
               onClick={() => setShowEditModal(false)}
             >
               <div
-                className="bg-white rounded-2xl p-6 w-[600px] space-y-5 font-Manrope"
+                className="bg-white rounded-2xl p-6 w-[400px] h-[500px] md:mx-5 overflow-auto space-y-5 font-Manrope"
                 onClick={(e) => e.stopPropagation()}
               >
                 <h2 className="text-xl font-bold font-Manrope">
-                  {editTestimonials.id ? "Edit Headline" : "Add New Team"}
+                  {editTestimonials.id ? "Edit Testimonial" : "Add New Testimonial"}
                 </h2>
                 <div>
                   <label className="block text-sm font-semibold mb-1">
@@ -254,29 +262,57 @@ export default function Testimonials() {
                     placeholder="Enter Name"
                     value={editTestimonials.title || ""}
                     onChange={handleNewChange}
+                    onKeyDown={handleEnter}
                     className="w-full px-3 py-2 border border-gray-300 text-sm rounded-[30px]"
                   />
                 </div>
                 <div>
-                  <FileUploader
-                    label="Slide Image"
-                    accept="image/*"
-                    maxSize={5000000}
-                    isImage={true}
-                    onFileSelect={(file) =>
-                      setEditTestimonials({ ...editTestimonials, image: file })
-                    }
-                  />
+                  {editTestimonials.image ? (
+                    <div className="relative">
+                      {/* Display Image */}
+                      <img
+                        src={editTestimonials.image}
+                        alt="Uploaded Feature"
+                        width={300}
+                        height={200}
+                        className="rounded-lg"
+                      />
+                      {/* Cancel Button */}
+                      <button
+                        onClick={() =>
+                          setEditTestimonials({ ...editTestimonials, image: null })
+                        }
+                        className="absolute top-1 left-[80%] bg-black text-white rounded-full w-6 h-6 flex justify-center items-center text-xs"
+                      >
+                        X
+                      </button>
+                    </div>
+                  ) : (
+                    // File Uploader
+                    <FileUploader
+                      label="Slide Image"
+                      accept="image/*"
+                      maxSize={5000000}
+                      isImage={true}
+                      onFileSelect={(file) =>
+                        setEditTestimonials({
+                          ...editTestimonials,
+                          image: URL.createObjectURL(file),
+                        })
+                      }
+                    />
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-semibold mb-1">
-                    Sub Heading
+                    Location
                   </label>
                   <textarea
-                    name="excerpt"
+                    name="description"
                     placeholder="Enter testimony"
-                    value={editTestimonials.excerpt || ""}
+                    value={editTestimonials.description || ""}
                     onChange={handleNewChange}
+                    onKeyDown={handleEnter}
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-xl h-32 resize-none"
                   />
                 </div>
@@ -301,13 +337,24 @@ export default function Testimonials() {
           {showDeletePopup && (
             <div className="fixed inset-0 z-[999] bg-black bg-opacity-50 flex justify-center items-center">
               <div className="bg-white rounded-2xl p-6 w-[600px] space-y-5 font-Manrope ">
-                <h2 className="text-lg font-bold font-Manrope text-center">
-                  Delete Section{" "}
-                </h2>
-                <p className="text-center">
-                  {" "}
-                  Are you sure you want to delete this section?
-                </p>
+               <Image
+                                              src={alert.src}
+                                              alt="view icon"
+                                              width={98}
+                                              height={98}
+                                              priority
+                                            />
+                        <h2 className="text-lg font-bold font-Manrope text-center">
+                          Delete Section{" "}
+                        </h2>
+                        <p className="text-center">
+                          {" "}
+                          Are you sure you want to delete this section?
+                        </p>
+                        <p className="text-center">
+                          {" "}
+                          Are you sure you want to proceed? This action is irreversible and will permanently remove the section.
+                        </p>
                 <div className="flex justify-between items-center gap-4 ">
                   <button
                     onClick={() => setShowDeletePopup(false)}

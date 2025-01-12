@@ -1,5 +1,6 @@
 import React from "react";
 import { deleteHouseType } from "@/app/admin/adminControllers/calculatorController";
+import Image from "next/image";
 
 const DeleteTypeModal = ({onClose,row,onTypeChange, }) => {
 
@@ -26,13 +27,24 @@ const DeleteTypeModal = ({onClose,row,onTypeChange, }) => {
     <>
       <div onClick={() => onClose(false)} className="fixed inset-0 z-[999] bg-black bg-opacity-50 flex justify-center items-center">
         <div  onClick={(e) => e.stopPropagation()} className="bg-white rounded-2xl p-6 w-[400px] space-y-5 font-Manrope ">
-          <h2 className="text-lg font-bold font-Manrope text-center">
-            Delete Section{" "}
-          </h2>
-          <p className="text-center">
-            {" "}
-            Are you sure you want to delete this section?
-          </p>
+          <Image
+                                         src={alert.src}
+                                         alt="view icon"
+                                         width={98}
+                                         height={98}
+                                         priority
+                                       />
+                   <h2 className="text-lg font-bold font-Manrope text-center">
+                     Delete Section{" "}
+                   </h2>
+                   <p className="text-center">
+                     {" "}
+                     Are you sure you want to delete this section?
+                   </p>
+                   <p className="text-center">
+                     {" "}
+                     Are you sure you want to proceed? This action is irreversible and will permanently remove the section.
+                   </p>
           <div className="flex justify-between items-center gap-4 ">
             <button
               onClick={handleCancel}

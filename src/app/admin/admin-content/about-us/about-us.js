@@ -21,7 +21,7 @@ export default function AboutUs(first) {
         {contentNav.map((item) => (
           <button
             key={item.id}
-            className={`pb-2 text-lg font-semibold ${
+            className={`pb-2 text-sm font-semibold ${
               secondActiveTab === item.name
                 ? "border-b-4 border-[#ED1450] text-[#ED1450]"
                 : "text-gray-500"
@@ -35,7 +35,7 @@ export default function AboutUs(first) {
 
       {/* Dynamic Second Header */}
       <div className="py-4">
-        <h3 className="text-xl md:text-xl font-bold text-black">
+        <h3 className="text-lg md:text-xl font-bold text-black">
           {secondActiveTab}
         </h3>
       </div>

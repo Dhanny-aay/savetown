@@ -116,21 +116,26 @@ export default function PendingModal({ onClose, user }) {
                 Uploaded Images - Front and Back
               </label>
               <div className="flex flex-col md:flex-row justify-center gap-3 items-center px-3">
-                <Image
-                  // src={selectedUser.id_back}
-                  src={id.src}
+              <img src={selectedUser.id_front} alt="id picture"  width={300}
+              height={100}/>
+                {/* <Image
+                  src={selectedUser.id_back}
+                  // src={id.src}
                   alt="id picture"
                   width={300}
                   height={100}
                   priority
-                />
-                <Image
-                  src={id.src}
+                /> */}
+                <img src={selectedUser.id_back} alt="id picture"  width={300}
+              height={100}/>
+                {/* <Image
+                  src={selectedUser.id_front}
+                  // src={id.src}
                   alt="id picture"
                   width={300}
                   height={100}
                   priority
-                />
+                /> */}
               </div>
             </div>
             {/* <div>

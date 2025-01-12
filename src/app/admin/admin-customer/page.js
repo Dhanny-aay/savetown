@@ -3,42 +3,11 @@ import { useEffect, useState } from "react";
 import send from "./assets/send.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { complaintsDisplay } from "../adminControllers/complaintController";
+import { complaintsDisplay, replyComplaint } from "../adminControllers/complaintController";
 
 export default function CustomerComplaint() {
   const [messages, setMessages] = useState([]);
-  const [recentMessages, setRecentMessages] = useState([
-    // {
-    //   id: 1,
-    //   email: "Veekdesign@gmail.com",
-    //   message: "I want to withdraw",
-    //   time: "May 12, 2024 | 12:00 PM",
-    // },
-    // {
-    //   id: 2,
-    //   email: "Veekdesign@gmail.com",
-    //   message: "I want to withdraw",
-    //   time: "May 12, 2024 | 12:00 PM",
-    // },
-    // {
-    //   id: 3,
-    //   email: "Veekdesign@gmail.com",
-    //   message: "I want to withdraw",
-    //   time: "May 12, 2024 | 12:00 PM",
-    // },
-    // {
-    //   id: 4,
-    //   email: "Veekdesign@gmail.com",
-    //   message: "I want to withdraw",
-    //   time: "May 12, 2024 | 12:00 PM",
-    // },
-    // {
-    //   id: 5,
-    //   email: "Veekdesign@gmail.com",
-    //   message: "I want to withdraw",
-    //   time: "May 12, 2024 | 12:00 PM",
-    // },
-  ]);
+  const [recentMessages, setRecentMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [selectedChat, setSelectedChat] = useState(null);
   const [loading, setLoading] = useState(false); // Loading state
@@ -46,8 +15,8 @@ export default function CustomerComplaint() {
   const fetchMessages = async () => {
     setLoading(true);
     const response = await complaintsDisplay({});
-    setRecentMessages(response?.data)
-    setLoading(false)
+    setRecentMessages(response?.data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -65,26 +34,43 @@ export default function CustomerComplaint() {
       };
 
       setMessages((prevMessages) => [...prevMessages, newMessageData]);
-      setNewMessage(""); // Clear input field after sending
+      setNewMessage("");
+       reply(newMessageData)
     }
   };
 
+  const reply = async(newMsg) =>{
+    console.log(newMsg)
+ await replyComplaint(
+  `${newMsg.id}`,
+  {body: newMsg.text},
+  (response)=>{
+    console.log(response)
+  },
+  (err)=>{
+    console.error('unable to send reply', err)
+  }
+
+ )
+  }
+
   const handleSelectChat = (chatId) => {
-    // Find the messages for the selected chat
-    const selectedChatMessages = recentMessages.filter(
-      (chat) => chat.id === chatId
-    );
-    setMessages([
-      {
-        id: 1,
-        user: selectedChatMessages[0].email,
-        time: selectedChatMessages[0].time,
-        text: selectedChatMessages[0].message,
-        isUser: false,
-      },
-    ]);
-    setSelectedChat(chatId); // Set the currently selected chat
+    const selectedChat = recentMessages.find((chat) => chat.id === chatId);
+  
+    if (selectedChat) {
+      const chatMessages = selectedChat.messages.map((msg) => ({
+        id: msg.id,
+        user: selectedChat.email, 
+        time: new Date(msg.created_at).toLocaleTimeString(), 
+        text: msg.body, 
+        isUser: false, 
+      }));
+  
+      setMessages(chatMessages);
+      setSelectedChat(chatId); 
+    }
   };
+  
 
   const router = useRouter();
 
@@ -111,75 +97,101 @@ export default function CustomerComplaint() {
         <div className="flex flex-col lg:flex-row h-full border font-Manrope">
           {/* Recent Messages Section */}
           <div className="lg:w-1/3 w-full bg-white border-x overflow-y-auto">
-            <h2 className="text-[22px] font-semibold mb-4 font-Manrope border-b p-4 ">
+            <h2 className="text-lg font-semibold mb-4 font-Manrope border-b p-4 ">
               Recent
             </h2>
             {!recentMessages || recentMessages.length === 0 ? (
-                <div className="text-center text-[#5F6D7E]">
-                  No messages available to display.
-                </div>
-              ) : null}
-            {recentMessages.map((item) => (
-              <div
-                key={item.id}
-                onClick={() => handleSelectChat(item.id)}
-                className="p-4 mb-4 bg-white border-b cursor-pointer"
-              >
-                <div className="flex items-center">
-                  <div>
-                    <p className="font-semibold">{item.email}</p>
-                    <p className="text-gray-500">{item.message}</p>
-                    <p className="text-xs text-gray-400">{item.time}</p>
-                  </div>
-                </div>
+              <div className="text-center text-[#5F6D7E]">
+                No messages available to display.
               </div>
-            ))}
+            ) : null}
+          {recentMessages.map((item) => (
+  <div
+    key={item.id}
+    onClick={() => handleSelectChat(item.id)}
+    className="p-4 mb-4 bg-white border-b cursor-pointer"
+  >
+    <div className="flex items-center">
+      <div>
+        <p className="font-semibold text-base">{item.email}</p>
+        <p className="text-gray-500 text-sm">
+          {item.messages.length > 0
+            ? item.messages[item.messages.length - 1].body
+            : "No messages yet."}
+        </p>
+        <p className="text-xs text-gray-400">
+          {item.messages.length > 0
+            ? new Date(
+                item.messages[item.messages.length - 1].created_at
+              ).toLocaleTimeString()
+            : ""}
+        </p>
+      </div>
+    </div>
+  </div>
+))}
+
           </div>
 
           {/* Messaging Section */}
           <div className="flex flex-col flex-1 bg-white text-white border-l border-b">
             {/* Header */}
-            <div className="p-4 flex justify-between items-center bg-white font-Manrope">
-              <h2 className="text-[20px] font-semibold font-Manrope">
+            <div className="p-4 flex justify-between items-center bg-white text-sm font-Manrope">
+              <h2 className="text-base font-semibold font-Manrope">
                 {selectedChat
                   ? recentMessages.find((chat) => chat.id === selectedChat)
                       .email
                   : "Select a chat"}
               </h2>
-              <span className="text-base">
-                {new Date().toLocaleTimeString()}
-              </span>
+              <span className="text-xs">{new Date().toLocaleTimeString()}</span>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-4 border-t">
+            
+            <div className="flex-1 p-4 overflow-y-auto space-y-4 border-t ">
               {messages.map((msg) => (
+                <div key={msg.id} className="chat-box p-2 w-full">
+                {/* Header */}
                 <div
-                  key={msg.id}
                   className={`flex ${
-                    msg.isUser ? "justify-end" : "justify-start"
+                    !msg.isUser ? '' : "justify-end"
                   }`}
                 >
-                  <div
-                    className={`p-3 rounded-lg flex items-center ${
-                      msg.isUser
-                        ? "bg-[#ED1450] text-white"
-                        : "bg-[#F2F4F7] text-white"
-                    }`}
-                  >
-                    {!msg.isUser && (
-                      <img
-                        src="https://www.w3schools.com/w3images/avatar2.png" // Sender's profile picture
-                        alt="Profile"
-                        className="w-8 h-8 rounded-full mr-3"
-                      />
-                    )}
-                    <div>
-                      <p className="text-sm text-black">{msg.text}</p>
-                      <p className="text-xs mt-1 text-gray-400">{msg.time}</p>
+                  {!msg.isUser && (
+                    <img
+                      src="https://via.placeholder.com/40" // Replace with user image URL if available
+                      alt="User avatar"
+                      className="w-10 h-10 rounded-full"
+                    />
+                  )}
+                  <div>
+                    <div className="flex items-center gap-5 justify-between mb-1">
+                      <div className="flex justify-between items-center">
+                        <h4 className="font-bold text-xs text-gray-800">
+                          {msg.isUser ? 'You': msg.user}
+                        </h4>
+                        <span className="text-xs text-gray-500">
+                        {msg.time}
+                        </span>
+                      </div>
+                    </div>
+                    {/* Message Body */}
+                    <div
+                      className={`message-body rounded-tl-none rounded-tr-md rounded-br-md rounded-bl-md p-2 shadow-sm ${
+                        msg.isUser
+                          ? "bg-[#ED1450] "
+                          : "bg-[#F2F4F7]"
+                      }`}
+                    >
+                      <p className={`font-light text-sm ${
+                        msg.isUser
+                          ? " text-white"
+                          : " text-black"
+                      }`}>{msg.text}</p>
                     </div>
                   </div>
                 </div>
+              </div>
               ))}
             </div>
 

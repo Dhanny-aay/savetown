@@ -133,7 +133,7 @@ export default function Careers(first) {
         </table>
   )}
         {/* Pagination Section */}
-        <div className="flex justify-between items-center mt-4">
+        {/* <div className="flex justify-between items-center mt-4">
           <button className="px-4 py-2 text-gray-600 rounded font-Manrope hover:underline">
             &larr; Prev
           </button>
@@ -155,7 +155,7 @@ export default function Careers(first) {
           <button className="px-4 py-2 text-gray-600 rounded font-Manrope hover:underline">
             Next &rarr;
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

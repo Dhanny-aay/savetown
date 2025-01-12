@@ -11,6 +11,7 @@ import {
   createBlog,
   deleteBlog
 } from "../../adminControllers/blogController";
+import alert from '../assets/alert.svg'
 
 export default function OurTeam() {
   const [teams, setTeams] = useState({
@@ -36,8 +37,6 @@ export default function OurTeam() {
   };
 
   const confirmDeleteTeam = async() => {
-    // const filteredteams = teams.filter((headline) => headline.id !== deleteId);
-    // setTeams(filteredteams);
     await deleteBlog(
       `${deleteId}`,
       (response)=>{
@@ -69,9 +68,8 @@ export default function OurTeam() {
           title: `${updatedteams.title}`,
           type: "Reason",
           link: "http://langosh.com/",
-          category: "cumque",
+          category: `${updatedteams.category}`,
           location: "pariatur",
-          content: "autem",
           date: "2025-01-08T14:57:42",
           time: "accusamus",
           author: "debitis",
@@ -119,6 +117,7 @@ export default function OurTeam() {
       );
     }
     setShowEditModal(false);
+    loadteams()
   };
 
   const handleNewChange = (e) => {
@@ -199,7 +198,7 @@ export default function OurTeam() {
               <tr>
                 <th className="p-4 text-gray-500">S/N</th>
                 <th className="p-4">Heading</th>
-                <th className="p-4">Subheading</th>
+                <th className="p-4">Position</th>
                 <th className="p-4">Action</th>
               </tr>
             </thead>
@@ -261,35 +260,62 @@ export default function OurTeam() {
                   <input
                     type="text"
                     name="title"
-                    placeholder="Enter Heading"
+                    placeholder="Enter Name"
                     value={editTeams.title || ""}
                     onChange={handleNewChange}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSaveTeam();
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 text-sm rounded-[30px]"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold mb-1">
-                    Sub Heading
+                    Position
                   </label>
                   <textarea
                     name="excerpt"
                     placeholder="Enter Text"
                     value={editTeams.excerpt || ""}
                     onChange={handleNewChange}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSaveTeam();
+                    }}
                     className="w-full px-3 py-2 text-sm border border-gray-300 rounded-xl h-32 resize-none"
                   />
                 </div>
                 <div>
-                  <FileUploader
-                    label="Slide Image"
-                    accept="image/*"
-                    maxSize={5000000}
-                    isImage={true}
-                    onFileSelect={(file) =>
-                      setEditTeams({ ...editTeams, image: file })
-                    }
-                  />
-                </div>
+        {editTeams.image ? (
+          <div className="relative">
+            {/* Display Image */}
+            <img
+              src={editTeams.image}
+              alt="Uploaded image"
+              width={300}
+              height={200}
+              className="rounded-lg"
+            />
+            {/* Cancel Button */}
+            <button
+              onClick={() => setEditTeams({ ...editTeams, image: null })}
+              className="absolute top-1 left-[80%] bg-black text-white rounded-full w-6 h-6 flex justify-center items-center text-xs"
+            >
+              X
+            </button>
+          </div>
+        ) : (
+          // File Uploader
+          <FileUploader
+            label="Slide Image"
+            accept="image/*"
+            maxSize={5000000}
+            isImage={true}
+            onFileSelect={(file) =>
+              setEditTeams({ ...editTeams, image: URL.createObjectURL(file) })
+            }
+          />
+        )}
+      </div>
                 <div className="flex justify-between items-center w-full space-x-2">
                   <button
                     onClick={() => setShowEditModal(false)}
@@ -311,13 +337,24 @@ export default function OurTeam() {
           {showDeletePopup && (
             <div className="fixed inset-0 z-[999] bg-black bg-opacity-50 flex justify-center items-center">
               <div className="bg-white rounded-2xl p-6 w-[600px] space-y-5 font-Manrope ">
-                <h2 className="text-lg font-bold font-Manrope text-center">
-                  Delete Section{" "}
-                </h2>
-                <p className="text-center">
-                  {" "}
-                  Are you sure you want to delete this section?
-                </p>
+                 <Image
+                                                src={alert.src}
+                                                alt="view icon"
+                                                width={98}
+                                                height={98}
+                                                priority
+                                              />
+                          <h2 className="text-lg font-bold font-Manrope text-center">
+                            Delete Section{" "}
+                          </h2>
+                          <p className="text-center">
+                            {" "}
+                            Are you sure you want to delete this section?
+                          </p>
+                          <p className="text-center">
+                            {" "}
+                            Are you sure you want to proceed? This action is irreversible and will permanently remove the section.
+                          </p>
                 <div className="flex justify-between items-center gap-4 ">
                   <button
                     onClick={() => setShowDeletePopup(false)}

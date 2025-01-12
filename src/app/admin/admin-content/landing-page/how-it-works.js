@@ -49,6 +49,7 @@ export default function HowItWorks(first) {
       }
     );
     setShowEditModal(false);
+    loadworks()
   };
 
   const handleChange = (e) => {
@@ -145,6 +146,9 @@ export default function HowItWorks(first) {
                 placeholder="Enter Heading"
                 value={editWorks.title || ""}
                 onChange={handleChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveWorks();
+                }}
                 className="w-full px-3 py-2 border text-sm border-gray-300 rounded-[30px]"
               />
             </div>
@@ -158,6 +162,9 @@ export default function HowItWorks(first) {
                 value={editWorks.excerpt || ""}
                 onChange={handleChange
                 }
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveSlide();
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl text-sm h-32 resize-none"
               />
             </div>

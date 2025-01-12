@@ -34,7 +34,6 @@ export default function Headline() {
         link: "http://langosh.com/",
         category: `${updatedHeadlines.category}`,
         location: "pariatur",
-        content: "autem",
         date: "2025-01-08T14:57:42",
         time: "accusamus",
         author: "debitis",
@@ -49,6 +48,7 @@ export default function Headline() {
       }
     );
     setShowEditModal(false);
+    loadHeadlines()
   };
 
   const loadHeadlines = async () => {
@@ -146,6 +146,9 @@ export default function Headline() {
                 placeholder="Enter Heading"
                 value={editHeadline?.title || ""}
                 onChange={handleEditChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveEdit();
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-[30px]  text-sm text-[#919BA7] "
               />
             </div>
@@ -158,6 +161,9 @@ export default function Headline() {
                 placeholder="Enter Text"
                 value={editHeadline?.excerpt || ""}
                 onChange={handleEditChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveEdit();
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-xl text-[#919BA7] text-sm h-32 resize-none"
               />
             </div>
@@ -167,7 +173,7 @@ export default function Headline() {
                 type="text"
                 placeholder="Enter type"
                 value={editHeadline?.type || ""}
-                onChange={handleEditChange}
+                readOnly
                 className="w-full px-3 py-2 text-[#919BA7] border text-sm border-gray-300 rounded-[30px]"
               />
             </div>
