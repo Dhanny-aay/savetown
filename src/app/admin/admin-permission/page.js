@@ -10,15 +10,22 @@ import CreatePermissionsModal from "./components/createPermission";
 // import DeletePermissionsModal from "../admin-push/components/deletePermission";
 import EditPermissionsModal from "./components/editPermissions";
 import DeletePermissionsModal from "./components/deletePermissions";
+import Pagination from "../components/pagination";
 
 export default function AdminPermissions() {
   const [loading, setLoading] = useState(false);
-  const [permissionList, setPermissionList] = useState(null);
+  const [permissionList, setPermissionList] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
+  const lastIndex = currentPage * recordsPerPage;
+  const startIndex = lastIndex - recordsPerPage;
+  const records = permissionList.slice(startIndex, lastIndex);
+  const totalPages = Math.ceil(permissionList.length / recordsPerPage);
 
   const displayPermissions = async () => {
     setLoading(true);
@@ -46,12 +53,15 @@ export default function AdminPermissions() {
   return (
     <>
       {loading ? (
-        <div> Loading permissions....</div>
+         <div className="flex items-center justify-center h-[50vh]">
+         {/* Spinner for the loading state */}
+         <div className="w-8 h-8 border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div>
+       </div>
       ) : (
-        <div className="flex flex-col px-3 h-full space-y-4">
+        <div className="flex flex-col h-full px-3 space-y-4">
           {/* Header with Back Button */}
 
-          <div className="flex justify-between items-center mb-4 font-Manrope">
+          <div className="flex items-center justify-between mb-4 font-Manrope">
             <div className="flex items-center space-x-2">
               {/* Back Button */}
               <button
@@ -60,13 +70,13 @@ export default function AdminPermissions() {
               >
                 &lt; Back
               </button>
-              <h3 className="text-xl md:text-2xl font-bold text-black">
+              <h3 className="text-xl font-bold text-black md:text-2xl">
                 Permissions
               </h3>
             </div>
           </div>
 
-          <div className="w-full flex justify-end">
+          <div className="flex justify-end w-full">
             <button
               onClick={() => setShowModal(true)}
               className="px-6 py-2 bg-[#ED1450] text-white text-sm md:text-base rounded-full font-Manrope"
@@ -90,17 +100,17 @@ export default function AdminPermissions() {
                   No permissions available to display.
                 </div>
               ) : null}
-              {permissionList &&
-                permissionList.map &&
-                permissionList.map((permission) => (
-                  <tr key={permission.id} className="border-t text-sm">
+              {records &&
+                records.map &&
+                records.map((permission, index) => (
+                  <tr key={index} className="text-sm border-t">
                     <td className="p-4 font-semibold text-[#5F6D7E]">
-                      {permission.id}
+                      {index + 1}
                     </td>
-                    <td className="p-4  font-semibold">
+                    <td className="p-4 font-semibold">
                       {permission.name}
                     </td>
-                    <td className="p-4 font-semibold flex items-center gap-2">
+                    <td className="flex items-center gap-2 p-4 font-semibold">
                       {/* Edit Button */}
                       <button
                         onClick={() => openEditModal(permission)}
@@ -132,6 +142,12 @@ export default function AdminPermissions() {
                 ))}
             </tbody>
           </table>
+
+          <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
 
           {showModal && (
             <CreatePermissionsModal

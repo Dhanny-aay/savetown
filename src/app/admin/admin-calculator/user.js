@@ -121,9 +121,9 @@ export default function User() {
           </tr>
         </thead>
         <tbody>
-          {filteredData &&
-            filteredData.map &&
-            filteredData.map((user, index) => (
+          {records &&
+            records.map &&
+            records.map((user, index) => (
               <tr key={user.id} className="border-t">
                 <td className="p-4 text-[#5F6D7E] text-xs md:text-sm font-Manrope font-medium">
                   {index + 1}

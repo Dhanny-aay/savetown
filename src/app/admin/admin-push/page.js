@@ -5,17 +5,18 @@ import Sent from "./components/sent";
 import { useRouter } from "next/navigation";
 
 export default function PushNotifications(second) {
+
   const notification = [
     { name: "Pending Notification", id: "pending" },
     // { name: "Sent Notification", id: "sent" },
   ];
-const router = useRouter();
   const [activeTab, setActiveTab] = useState("Pending Notification");
+const router = useRouter();
 
   return (
-    <div className="flex flex-col px-3 h-full space-y-4">
+    <div className="flex flex-col h-full px-3 space-y-4">
       {/* Header with Back Button */}
-      <div className="flex justify-between items-center mb-4 font-Manrope">
+      <div className="flex items-center justify-between mb-4 font-Manrope">
         <div className="flex items-center space-x-2">
           {/* Back Button */}
           <button
@@ -24,7 +25,7 @@ const router = useRouter();
           >
             &lt; Back
           </button>
-          <h3 className="text-xl md:text-2xl font-bold text-black">
+          <h3 className="text-xl font-bold text-black md:text-2xl">
             Notification
           </h3>
         </div>

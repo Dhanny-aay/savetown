@@ -6,15 +6,22 @@ import { houseDisplay } from "@/app/admin/adminControllers/calculatorController"
 import CreateEntry from "../components/createEntry";
 import EditEntry from "../components/editEntry";
 import ViewEntry from "../components/viewEntry";
+import Pagination from "../../components/pagination";
 
 export default function Duration() {
-  const [duration, setDuration] = useState({});
+  const [duration, setDuration] = useState([{}]);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [selection, setSelection] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
+  const lastIndex = currentPage * recordsPerPage;
+  const startIndex = lastIndex - recordsPerPage;
+  const records = duration.slice(startIndex, lastIndex);
+  const totalPages = Math.ceil(duration.length / recordsPerPage);
 
   const fetchData = async () => {
     setLoading(true);
@@ -72,8 +79,8 @@ export default function Duration() {
         />
       ) : null}
       <div className="mb-4">
-        <div className="flex justify-between items-center">
-          <div className="w-full flex justify-end">
+        <div className="flex items-center justify-between">
+          <div className="flex justify-end w-full">
             {/* Add new slide Button */}
             <button
               onClick={() => setShowModal(true)}
@@ -94,33 +101,33 @@ export default function Duration() {
               <th className="p-4 text-gray-500">S/N</th>
               <th className="p-4 w-[200px]">Title</th>
               <th className="p-4">Minimum Value</th>
-              <th className="p-4 hidden lg:block">Maximun Value</th>
+              <th className="hidden p-4 lg:block">Maximun Value</th>
               <th className="p-4">Created On</th>
               <th className="p-4">Action</th>
             </tr>
           </thead>
           <tbody>
-            {duration &&
-              duration.map &&
-              duration.map((value, index) => (
-                <tr key={value.id} className="border-t text-sm">
+            {records &&
+              records.map &&
+              records.map((value, index) => (
+                <tr key={index} className="text-sm border-t">
                   <td className="p-4 text-gray-500">{index + 1}</td>
                   <td className="p-4 w-[200px] text-gray-500">{value.value}</td>
                   <td className="p-4">
                     <div className="flex flex-col justify-center">
                       <span className="lg:hidden">Min: </span>{" "}
                       {value.min_saving_period}
-                      <span className="lg:hidden font-black text-semibold">
+                      <span className="font-black lg:hidden text-semibold">
                         {" "}
                         Max:{value.max_saving_period}{" "}
                       </span>
                     </div>
                   </td>
-                  <td className="p-4 hidden lg:block">
+                  <td className="hidden p-4 lg:block">
                     {value.max_saving_period}
                   </td>
                   <td className="p-4">{formatDateTime(value.created_at)}</td>
-                  <td className="p-4 flex items-center justify-center gap-2">
+                  <td className="flex items-center justify-center gap-2 p-4">
                     <button
                       onClick={() => {
                         handleEdit(value);
@@ -155,6 +162,12 @@ export default function Duration() {
           </tbody>
         </table>
       )}
+
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
     </div>
   );
 }

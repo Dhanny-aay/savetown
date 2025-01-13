@@ -5,6 +5,7 @@ const EditNotificationModal = ({ onClose, notifInfo }) => {
   const [editNotification, setEditNotification] = useState({
     ...notifInfo
   });
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,10 +25,11 @@ const EditNotificationModal = ({ onClose, notifInfo }) => {
   };
 
   const handleSaveNotification = async () => {
+    setLoading(true)
     const newNotif = {
       ...editNotification,
     };
-    console.log(newNotif);
+    // console.log(newNotif);
     let id = newNotif.id;
     await editNotifications(
       `${id}`,
@@ -39,7 +41,8 @@ const EditNotificationModal = ({ onClose, notifInfo }) => {
         ],
       },
       (response) => {
-        console.log("I am successful", response);
+        setLoading(false)
+        // console.log("I am successful", response);
       },
       (err) => {
         console.error("Unable to create notification", err);
@@ -69,7 +72,7 @@ const EditNotificationModal = ({ onClose, notifInfo }) => {
 
         {/* Title Input */}
         <div>
-          <label className="block text-sm font-semibold mb-1">Title</label>
+          <label className="block mb-1 text-sm font-semibold">Title</label>
           <input
             type="text"
             name="title"
@@ -83,20 +86,20 @@ const EditNotificationModal = ({ onClose, notifInfo }) => {
 
         {/* Body Input */}
         <div>
-          <label className="block text-sm font-semibold mb-1">Body</label>
+          <label className="block mb-1 text-sm font-semibold">Body</label>
           <textarea
             placeholder="Enter Body"
             name="body"
             value={editNotification.body}
             onChange={handleChange}
             onKeyPress={handleKeyPress} // Trigger save on Enter
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg h-32 resize-none"
+            className="w-full h-32 px-3 py-2 border border-gray-300 rounded-lg resize-none"
           />
         </div>
 
         {/* Date Input */}
         <div>
-          <label className="block text-sm font-semibold mb-1">Date</label>
+          <label className="block mb-1 text-sm font-semibold">Date</label>
           <input
             type="date"
             name="scheduled_date"
@@ -108,7 +111,7 @@ const EditNotificationModal = ({ onClose, notifInfo }) => {
         </div>
 
         {/* Buttons */}
-        <div className="flex justify-between items-center w-full space-x-2">
+        <div className="flex items-center justify-between w-full space-x-2">
           <button
             onClick={() => onClose(false)}
             className="px-3 py-2 w-1/2 border bg-white border-gray-300 rounded-[32px]"
@@ -119,7 +122,11 @@ const EditNotificationModal = ({ onClose, notifInfo }) => {
             onClick={handleSaveNotification}
             className="px-3 py-2 w-1/2 bg-[#ED1450] text-white rounded-[32px]"
           >
-            Save
+            {loading ? (
+      <div className="flex items-center justify-center">
+        {/* Spinner for the loading state */}
+        <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+      </div>) : 'Save'}             
           </button>
         </div>
       </div>

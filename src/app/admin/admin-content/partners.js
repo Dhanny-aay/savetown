@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import edit from "./assets/edit.svg";
 import trash from "./assets/trash.svg";
-import search from "./assets/search.svg";
+import alert from "./assets/alert.svg";
 import FileUploader from "@/app/utils/fileUploader";
 import { createBlog, deleteBlog, fetchBlog, updateBlog } from "../adminControllers/blogController";
 
@@ -50,13 +50,14 @@ export default function Partners() {
     setShowEditModal(true);
   };
 
-  const handleSaveTeam = async () => {
+  const handleSavePartner = async () => {
     if (editPartners.id) {
       const updatedpartners = partners.map((headline) =>
         headline.id === editPartners.id ? editPartners : headline
       );
       // setPartners(updatedpartners);
-      console.log("edit", updatedpartners);
+      // console.log("edit", updatedpartners);
+      // setLoading(true)
       await updateBlog(
         `${editPartners.id}`,
         {
@@ -73,7 +74,8 @@ export default function Partners() {
           description: "Nisi vero dolorem ut.",
         },
         (response) => {
-          console.log(response);
+          // console.log(response);
+          setLoading(false);
         },
         (err) => {
           console.error("unable to edit slider", err);
@@ -84,7 +86,8 @@ export default function Partners() {
         id: Date.now(),
         ...editPartners,
       };
-      console.log(newSlide);
+      
+      // console.log(newSlide);
       // setPartners([
       //   ...partners,
       //   { ...editPartners, id: Date.now() },
@@ -105,7 +108,8 @@ export default function Partners() {
           description: "Inventore enim eum maxime cum quia et.",
         },
         (response) => {
-          console.log(response);
+          // console.log(response);
+          setLoading(false);
         },
         (err) => {
           console.err("unable to create partners", err);
@@ -179,11 +183,11 @@ export default function Partners() {
               {partners &&
                 partners.map &&
                 partners.map((row, index) => (
-                  <tr key={row.id} className="border-t text-sm">
+                  <tr key={row.id} className="text-sm border-t">
                     <td className="p-4 text-gray-500">{index + 1}</td>
-                    <td className="p-4  text-gray-500">{row.title}</td>
+                    <td className="p-4 text-gray-500">{row.title}</td>
                     {/* <td className="p-4">{row.excerpt}</td> */}
-                    <td className="p-4 flex items-center justify-center gap-2">
+                    <td className="flex items-center justify-center gap-2 p-4">
                       <button
                         onClick={() => handleEditSlide(row)}
                         className="text-gray-500 hover:text-gray-800"
@@ -227,7 +231,7 @@ export default function Partners() {
                   {editPartners.id ? "Edit Partner" : "Add New Partner"}
                 </h2>
                 <div>
-                  <label className="block text-sm font-semibold mb-1">
+                  <label className="block mb-1 text-sm font-semibold">
                     Heading
                   </label>
                   <input
@@ -237,13 +241,13 @@ export default function Partners() {
                     value={editPartners.title || ""}
                     onChange={handleNewChange}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") handleSaveSlide();
+                      if (e.key === "Enter") handleSavePartner();
                     }}
                     className="w-full px-3 py-2 border border-gray-300 text-sm rounded-[30px]"
                   />
                 </div>
                 {/* <div>
-                  <label className="block text-sm font-semibold mb-1">
+                  <label className="block mb-1 text-sm font-semibold">
                     Sub Heading
                   </label>
                   <textarea
@@ -254,7 +258,7 @@ export default function Partners() {
                     onKeyDown={(e) => {
                       if (e.key === "Enter") handleSaveSlide();
                     }}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-xl h-32 resize-none"
+                    className="w-full h-32 px-3 py-2 text-sm border border-gray-300 resize-none rounded-xl"
                   />
                 </div> */}
                 <div>
@@ -294,7 +298,7 @@ export default function Partners() {
                     />
                   )}
                 </div>
-                <div className="flex justify-between items-center w-full space-x-2">
+                <div className="flex items-center justify-between w-full space-x-2">
                   <button
                     onClick={() => setShowEditModal(false)}
                     className="px-3 py-[11px] text-sm w-1/2 border bg-white border-gray-300 rounded-[30px]"
@@ -302,10 +306,14 @@ export default function Partners() {
                     Cancel
                   </button>
                   <button
-                    onClick={handleSaveTeam}
+                    onClick={handleSavePartner}
                     className="px-3 py-[11px] text-sm w-1/2 bg-[#ED1450] text-white rounded-[32px]"
                   >
-                    Save
+                    {loading ? (
+      <div className="flex items-center justify-center">
+        {/* Spinner for the loading state */}
+        <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+      </div>) : 'Save'}
                   </button>
                 </div>
               </div>
@@ -314,26 +322,24 @@ export default function Partners() {
 
           {showDeletePopup && (
             <div className="fixed inset-0 z-[999] bg-black bg-opacity-50 flex justify-center items-center">
-              <div className="bg-white rounded-2xl p-6 w-[600px] space-y-5 font-Manrope ">
+              <div className="bg-white rounded-2xl p-6 w-[600px] space-y-5 font-Manrope flex flex-col items-center ">
                <Image
                                               src={alert.src}
                                               alt="view icon"
                                               width={98}
                                               height={98}
                                               priority
+                                              clasName='text-center'
                                             />
-                        <h2 className="text-lg font-bold font-Manrope text-center">
+                        <h2 className="text-lg font-bold text-center font-Manrope">
                           Delete Section{" "}
                         </h2>
-                        <p className="text-center">
-                          {" "}
-                          Are you sure you want to delete this section?
-                        </p>
+
                         <p className="text-center">
                           {" "}
                           Are you sure you want to proceed? This action is irreversible and will permanently remove the section.
                         </p>
-                <div className="flex justify-between items-center gap-4 ">
+                <div className="flex items-center justify-between w-full gap-4 ">
                   <button
                     onClick={() => setShowDeletePopup(false)}
                     className="px-3 py-[13px] w-1/2 border bg-white border-gray-300 rounded-[32px]"
@@ -344,7 +350,11 @@ export default function Partners() {
                     onClick={()=>confirmDeleteTeam(partners.id)}
                     className="px-3 py-[13px] w-1/2 bg-[#ED1450] text-white rounded-[32px]"
                   >
-                    Yes, delete
+                      {loading ? (
+      <div className="flex items-center justify-center">
+        {/* Spinner for the loading state */}
+        <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+      </div>) : 'Yes, delete'}
                   </button>
                 </div>
               </div>

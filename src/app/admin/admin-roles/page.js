@@ -67,11 +67,14 @@ export default function AdminRoles() {
             />
           )}
       {loading ? (
-        <div> Loading roles</div>
+        <div className="flex items-center justify-center h-[50vh]">
+        {/* Spinner for the loading state */}
+        <div className="w-8 h-8 border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div>
+      </div>
       ) : (
-        <div className="flex flex-col px-3 h-full space-y-4">
+        <div className="flex flex-col h-full px-3 space-y-4">
           {/* Header with Back Button */}
-          <div className="flex justify-between items-center mb-4 font-Manrope">
+          <div className="flex items-center justify-between mb-4 font-Manrope">
             <div className="flex items-center space-x-2">
               {/* Back Button */}
               <button
@@ -80,13 +83,13 @@ export default function AdminRoles() {
               >
                 &lt; Back
               </button>
-              <h3 className="text-xl md:text-2xl font-bold text-black">
+              <h3 className="text-xl font-bold text-black md:text-2xl">
                 Roles
               </h3>
             </div>
           </div>
 
-          <div className="w-full flex justify-end">
+          <div className="flex justify-end w-full">
             <button
               onClick={() => setShowModal(true)}
               className="px-6 py-2 bg-[#ED1450] text-white text-sm md:text-base rounded-full font-Manrope"
@@ -114,7 +117,7 @@ export default function AdminRoles() {
               {roleList &&
                 roleList.map &&
                 roleList.map((role) => (
-                  <tr key={role.id} className="border-t text-sm">
+                  <tr key={role.id} className="text-sm border-t">
                     <td className="p-4 font-semibold text-[#5F6D7E]">
                       {role.id}
                     </td>
@@ -124,7 +127,7 @@ export default function AdminRoles() {
                         .map((permission) => permission.name)
                         .join(", ")}
                     </td>
-                    <td className="p-4 font-semibold flex items-center gap-2">
+                    <td className="flex items-center gap-2 p-4 font-semibold">
                       {/* Edit Button */}
                       <button
                         onClick={() => handleEdit(role)}

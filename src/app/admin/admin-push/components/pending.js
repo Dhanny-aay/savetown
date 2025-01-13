@@ -7,14 +7,15 @@ import CreateNotificationModal from "./createNotificationModal";
 import { pushNotificationsDisplay } from "./../../adminControllers/pushController";
 import EditNotificationModal from "./editNotificationModal";
 import DeleteNotificationsModal from "./deleteNotifications";
+import Pagination from "../../components/pagination";
 
 export default function Pending() {
-  const [notificationList, setNotificationList] = useState({
+  const [notificationList, setNotificationList] = useState([{
     id: null,
     title: "",
     body: "",
     scheduled_date: "",
-  });
+  }]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -22,6 +23,12 @@ export default function Pending() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [refresh,setRefresh] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
+  const lastIndex = currentPage * recordsPerPage;
+  const startIndex = lastIndex - recordsPerPage;
+  const records = notificationList.slice(startIndex, lastIndex);
+  const totalPages = Math.ceil(notificationList.length / recordsPerPage);
 
   const fetchNotifications = async () => {
     setLoading(true);
@@ -66,7 +73,14 @@ export default function Pending() {
     setSelectedUser(notif);
   }
   
-  if (loading) return <div>Loading notifications...</div>; 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[50vh]">
+        {/* Spinner for the loading state */}
+        <div className="w-8 h-8 border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div>
+      </div>
+    );
+  } 
 
   return (
     <div>
@@ -97,29 +111,29 @@ export default function Pending() {
           <tr>
             <th className="p-4 text-gray-500">S/N</th>
             <th className="p-4">Title</th>
-            <th className="p-4 hidden md:block">Body</th>
+            <th className="hidden p-4 md:block">Body</th>
             <th className="p-4">Date</th>
             <th className="p-4">Action</th>
           </tr>
         </thead>
         <tbody>
           {notificationList.length > 0 ? (
-            notificationList.map((notifs, index) => (
-              <tr key={notifs.id || index} className="border-t text-sm">
+            records.map((notifs, index) => (
+              <tr key={notifs.id || index} className="text-sm border-t">
                 <td className="p-4 text-gray-500">{index + 1}</td>
                 <td className="p-4">
                   <div className="flex flex-col justify-center">
                   {notifs.title}
-                  <span className="md:hidden text-gray-500">
+                  <span className="text-gray-500 md:hidden">
                   {notifs.body}
                   </span>
                   </div>
                   </td>
-                <td className="p-4 text-gray-500 hidden md:block">
+                <td className="hidden p-4 text-gray-500 md:block">
                   {notifs.body}
                   </td>
                 <td className="p-4 text-gray-500">{formatDateTime(notifs.scheduled_date)}</td>
-                <td className="p-4 flex items-center justify-center gap-2">
+                <td className="flex items-center justify-center gap-2 p-4">
                   <button onClick={() => openEditModal(notifs)}
                    className="text-gray-500 hover:text-gray-800">
                     <Image
@@ -152,6 +166,12 @@ export default function Pending() {
           )}
         </tbody>
       </table>
+        {/* ============pagination=============== */}
+  <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
     </div>
   );
 }

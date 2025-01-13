@@ -4,6 +4,7 @@ import Image from "next/image";
 import edit from "./assets/edit.svg";
 import trash from "./assets/trash.svg";
 import search from "./assets/search.svg";
+import alert from "./assets/alert.svg";
 import FileUploader from "@/app/utils/fileUploader";
 import { createBlog, deleteBlog, fetchBlog, updateBlog } from "../adminControllers/blogController";
 
@@ -32,11 +33,12 @@ export default function Faq() {
   };
 
   const confirmDeleteFaq = async() => {
-
+setLoading(true)
     await deleteBlog(
       `${deleteId}`,
       (response)=>{
-        console.log(response)
+        setLoading(false)
+        // console.log(response)
       },
       (err)=>{
         console.error('unable to delete permission', err)
@@ -53,17 +55,12 @@ export default function Faq() {
   };
 
   const handleSaveFaq = async () => {
-
-    // page: 1, 
-    // type: "PageTitle", 
-    // category: "LatestBlogs", 
-    // page: "Home" 
-
     if (editFaqs.id) {
       const updatedfaqs = faqs.map((headline) =>
         headline.id === editFaqs.id ? editFaqs : headline
       );
-      console.log("edit", updatedfaqs);
+      // console.log("edit", updatedfaqs);
+      // setLoading(true)
       await updateBlog(
         `${editFaqs.id}`,
         {
@@ -79,7 +76,8 @@ export default function Faq() {
           description:"Impedit minus aliquid aperiam ut alias.",
         },
         (response) => {
-          console.log(response);
+          setLoading(false)
+          // console.log(response);
         },
         (err) => {
           console.error("unable to edit slider", err);
@@ -90,7 +88,8 @@ export default function Faq() {
         id: Date.now(),
         ...editFaqs,
       };
-      console.log(newSlide);
+      // console.log(newSlide);
+      // setLoading(true)
       await createBlog(
         {
           title: `${newSlide.title}`,
@@ -107,15 +106,16 @@ export default function Faq() {
           description:"Quas est quia ea dolorem in ut molestiae.",
         },
         (response) => {
-          console.log(response);
+          setLoading(false)
+          // console.log(response);
         },
         (err) => {
           console.err("unable to create faqs", err);
         }
       );
     }
-    setShowEditModal(false);
     loadfaqs();
+    setShowEditModal(false);
   };
 
   const handleNewChange = (e) => {
@@ -154,6 +154,12 @@ export default function Faq() {
       }
   }
 
+  // const isDisabled = !(
+  //   faqs.title &&
+  //   faqs.body &&
+  //   faqs.scheduled_date
+  // );
+
   return (
     <>
       {loading ? (
@@ -165,16 +171,16 @@ export default function Faq() {
       ) : (
         <div>
           <div className="mb-4">
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               {/* Search bar */}
-              <div className="flex items-center space-x-4 w-1/2">
+              <div className="flex items-center w-1/2 space-x-4">
                 <div className="relative w-full font-Manrope">
                   <input
                     type="text"
                     placeholder="Search Faq..."
                     className="w-full px-6 py-2 pl-10 border border-gray-300 rounded-full"
                   />
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                  <span className="absolute text-gray-500 transform -translate-y-1/2 left-3 top-1/2">
                     <Image
                       src={search.src}
                       alt="search icon"
@@ -211,11 +217,11 @@ export default function Faq() {
               {faqs &&
                 faqs.map &&
                 faqs.map((row, index) => (
-                  <tr key={row.id} className="border-t text-sm">
+                  <tr key={row.id} className="text-sm border-t">
                     <td className="p-4 text-gray-500">{index + 1}</td>
-                    <td className="p-4  text-gray-500">{row.title}</td>
+                    <td className="p-4 text-gray-500">{row.title}</td>
                     <td className="p-4">{row.excerpt}</td>
-                    <td className="p-4 flex items-center justify-center gap-2">
+                    <td className="flex items-center justify-center gap-2 p-4">
                       <button
                         onClick={() => handleEditFaq(row)}
                         className="text-gray-500 hover:text-gray-800"
@@ -259,7 +265,7 @@ export default function Faq() {
                   {editFaqs.id ? "Edit Faq" : "Add New Faq"}
                 </h2>
                 <div>
-                  <label className="block text-sm font-semibold mb-1">
+                  <label className="block mb-1 text-sm font-semibold">
                     Faq
                   </label>
                   <input
@@ -273,7 +279,7 @@ export default function Faq() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-1">
+                  <label className="block mb-1 text-sm font-semibold">
                     Description
                   </label>
                   <textarea
@@ -282,10 +288,10 @@ export default function Faq() {
                     value={editFaqs.excerpt || ""}
                     onChange={handleNewChange}
                     onKeyDown={handleEnter}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-xl h-32 resize-none"
+                    className="w-full h-32 px-3 py-2 text-sm border border-gray-300 resize-none rounded-xl"
                   />
                 </div>
-                <div className="flex justify-between items-center w-full space-x-2">
+                <div className="flex items-center justify-between w-full space-x-2">
                   <button
                     onClick={() => setShowEditModal(false)}
                     className="px-3 py-[11px] text-sm w-1/2 border bg-white border-gray-300 rounded-[30px]"
@@ -294,9 +300,13 @@ export default function Faq() {
                   </button>
                   <button
                     onClick={handleSaveFaq}
-                    className="px-3 py-[11px] text-sm w-1/2 bg-[#ED1450] text-white rounded-[32px]"
+                    className='px-3 py-2 w-1/2 rounded-[32px] text-white bg-[#ED1450]'
                   >
-                    Save
+                      {loading ? (
+      <div className="flex items-center justify-center">
+        {/* Spinner for the loading state */}
+        <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+      </div>) : 'Save'}
                   </button>
                 </div>
               </div>
@@ -305,26 +315,24 @@ export default function Faq() {
 
           {showDeletePopup && (
             <div  onClick={()=>setShowDeletePopup(false)} className=" fixed inset-0 z-[999] bg-black bg-opacity-50 flex justify-center items-center">
-              <div  onClick={(e) => e.stopPropagation()} className="bg-white rounded-2xl p-6 w-[600px] space-y-5 font-Manrope ">
+              <div  onClick={(e) => e.stopPropagation()} className="bg-white rounded-2xl p-6 w-[600px] space-y-5 font-Manrope flex flex-col items-center">
                <Image
                                               src={alert.src}
                                               alt="view icon"
                                               width={98}
                                               height={98}
                                               priority
+                                              className="text-center"
                                             />
-                        <h2 className="text-lg font-bold font-Manrope text-center">
+                        <h2 className="text-lg font-bold text-center font-Manrope">
                           Delete Section{" "}
                         </h2>
-                        <p className="text-center">
-                          {" "}
-                          Are you sure you want to delete this section?
-                        </p>
-                        <p className="text-center">
+
+                       <p className="text-center">
                           {" "}
                           Are you sure you want to proceed? This action is irreversible and will permanently remove the section.
                         </p>
-                <div className="flex justify-between items-center gap-4 ">
+                <div className="flex items-center justify-between w-full gap-4">
                   <button
                     onClick={() => setShowDeletePopup(false)}
                     className="px-3 py-[13px] w-1/2 border bg-white border-gray-300 rounded-[32px]"
@@ -335,7 +343,11 @@ export default function Faq() {
                     onClick={()=>confirmDeleteFaq(faqs.id)}
                     className="px-3 py-[13px] w-1/2 bg-[#ED1450] text-white rounded-[32px]"
                   >
-                    Yes, delete
+                    {loading ? (
+      <div className="flex items-center justify-center">
+        {/* Spinner for the loading state */}
+        <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+      </div>) : 'Yes, delete'}
                   </button>
                 </div>
               </div>

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export default function ViewEntry({ onClose, user }) {
+export default function ViewModal({ onClose, user }) {
   const [selectedUser, setSelectedUser] = useState({
-    ...user
+    ...user,
   });
 
   return (
@@ -16,9 +16,9 @@ export default function ViewEntry({ onClose, user }) {
           onClick={(e) => e.stopPropagation()}
         >
           {/* Modal Header */}
-          <div className="mb-4 flex justify-between items-center">
+          <div className="flex items-center justify-between mb-4">
             <h2 className="text-[20px] font-bold font-Manrope">
-              Duration Information
+              Wallet Information
             </h2>
             <button
               onClick={() => onClose(false)}
@@ -28,116 +28,107 @@ export default function ViewEntry({ onClose, user }) {
             </button>
           </div>
 
-          {/* Duration */}
-          <div>
-            <label className="block text-sm font-semibold mb-1">
-              Duration
+              {/* Available Balance */}
+              <div>
+            <label className="block mb-1 text-sm font-semibold">
+              Available Balance
             </label>
             <input
               type="text"
-              value={selectedUser.value}
+              value={selectedUser.available_balance || ""}
               disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md cursor-not-allowed"
+            />
+          </div>
+      
+          {/* Locked Balance */}
+          <div>
+            <label className="block mb-1 text-sm font-semibold">
+              Locked Balance
+            </label>
+            <input
+              type="text"
+              value={selectedUser.locked_balance || ""}
+              disabled
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md cursor-not-allowed"
             />
           </div>
 
-          {/* Minimum House Price */}
+          {/* Rolling Reserve Balance */}
           <div>
-            <label className="block text-sm font-semibold mb-1">
-              Minimum House Price
+            <label className="block mb-1 text-sm font-semibold">
+              Rolling Reserve Balance
             </label>
             <input
               type="text"
-              value={selectedUser.min_house_price}
+              value={selectedUser.rolling_reserve_balance || ""}
               disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md cursor-not-allowed"
+            />
+          </div>
+          
+             {/* Wallet Number */}
+             <div>
+            <label className="block mb-1 text-sm font-semibold">
+              Wallet Number
+            </label>
+            <input
+              type="text"
+              value={selectedUser.wallet_number || ""}
+              disabled
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md cursor-not-allowed"
             />
           </div>
 
-          {/* Maximum House Price */}
+          {/* Currency */}
           <div>
-            <label className="block text-sm font-semibold mb-1">
-              Maximum House Price
+            <label className="block mb-1 text-sm font-semibold">
+              Currency
             </label>
             <input
               type="text"
-              value={selectedUser.max_house_price}
+              value={selectedUser.currency || ""}
               disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md cursor-not-allowed"
             />
           </div>
 
-          {/* Minimum Saving Period */}
+          {/* Status */}
           <div>
-            <label className="block text-sm font-semibold mb-1">
-              Minimum Saving Period
+            <label className="block mb-1 text-sm font-semibold">
+              Status
             </label>
             <input
               type="text"
-              value={selectedUser.min_saving_period}
+              value={selectedUser.status || ""}
               disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
-            />
-          </div>
-
-          {/* Maximum Saving Period */}
-          <div>
-            <label className="block text-sm font-semibold mb-1">
-              Maximum Saving Period
-            </label>
-            <input
-              type="text"
-              value={selectedUser.max_saving_period}
-              disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
-            />
-          </div>
-
-          {/* Minimum Monthly Commitment */}
-          <div>
-            <label className="block text-sm font-semibold mb-1">
-              Minimum Monthly Commitment
-            </label>
-            <input
-              type="text"
-              value={selectedUser.min_monthly_commitment}
-              disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
-            />
-          </div>
-
-          {/* Maximum Monthly Commitment */}
-          <div>
-            <label className="block text-sm font-semibold mb-1">
-              Maximum Monthly Commitment
-            </label>
-            <input
-              type="text"
-              value={selectedUser.max_monthly_commitment}
-              disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md cursor-not-allowed"
             />
           </div>
 
           {/* Created At */}
           <div>
-            <label className="block text-sm font-semibold mb-1">Created At</label>
+            <label className="block mb-1 text-sm font-semibold">
+              Created At
+            </label>
             <input
               type="text"
-              value={selectedUser.created_at}
+              value={selectedUser.created_at || ""}
               disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md cursor-not-allowed"
             />
           </div>
 
           {/* Updated At */}
           <div>
-            <label className="block text-sm font-semibold mb-1">Updated At</label>
+            <label className="block mb-1 text-sm font-semibold">
+              Updated At
+            </label>
             <input
               type="text"
-              value={selectedUser.updated_at}
+              value={selectedUser.updated_at || ""}
               disabled
-              className="w-full cursor-not-allowed px-3 py-2 border border-gray-300 rounded-md text-sm"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md cursor-not-allowed"
             />
           </div>
         </div>

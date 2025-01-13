@@ -25,12 +25,14 @@ export default function CreateRolesModal({ onClose, onRolesChange }) {
       permissions: createRole.permissions,
     };
     // console.log("Sending role data:", newRole);
+    setLoading(true)
     await createRoles(
       {name: newRole.name,
         permissions: newRole.permissions
       },
       (response) => {
         console.log("Role created successfully");
+        setLoading(false)
       },
       (err) => {
         console.error("Error creating role", err);
@@ -77,7 +79,7 @@ onRolesChange();
         <h2 className="text-lg font-bold font-Manrope">Add New Roles</h2>
 
         <div>
-          <label className="block text-sm font-semibold mb-1">Name</label>
+          <label className="block mb-1 text-sm font-semibold">Name</label>
           <input
             type="text"
             name="name"
@@ -89,11 +91,11 @@ onRolesChange();
         </div>
 
         <div>
-          <label className="block text-sm font-semibold mb-1">Permissions</label>
+          <label className="block mb-1 text-sm font-semibold">Permissions</label>
           {loading ? (
             <div>Loading permissions...</div>
           ) : (
-            <ul className="space-y-3 mb-6 w-full">
+            <ul className="w-full mb-6 space-y-3">
               {permissions.map((permission) => (
                 <li key={permission.id} className="flex items-center">
                   <input
@@ -115,7 +117,7 @@ onRolesChange();
           )}
         </div>
 
-        <div className="flex justify-between items-center w-full space-x-2">
+        <div className="flex items-center justify-between w-full space-x-2">
           <button
             onClick={() => onClose(false)}
             className="px-3 py-[13px] w-1/2 border text-sm bg-white border-gray-300 rounded-[32px]"
@@ -126,7 +128,11 @@ onRolesChange();
             onClick={handleAddRoles}
             className="px-3 py-[13px] w-1/2 text-sm bg-[#ED1450] text-white rounded-[32px]"
           >
-            Save
+           {loading ? (
+      <div className="flex items-center justify-center">
+        {/* Spinner for the loading state */}
+        <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+      </div>) : 'Save'}
           </button>
         </div>
       </div>
