@@ -8,6 +8,8 @@ import {
   handleVerifyDepo,
 } from "@/app/userControllers/transactionController";
 import { useUserContext } from "../UserContext";
+import PaymentSuccessModal from "./paymentSuccessModal";
+import FailureModal from "./paymentFailedModal";
 
 export default function WalletDepositDrawer({ onClose, isVisible }) {
   const [amount, setAmount] = useState(null);
@@ -23,6 +25,15 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
   const [isCopied, setIsCopied] = useState(false);
   const [selectedID, setSelectedID] = useState("");
   const { triggerFetchDashboard } = useUserContext();
+  const [isSuccessModalVisible, setSuccessModalVisible] = useState(false);
+  const [isFailedModalVisible, setFailedModalVisible] = useState(false);
+
+  // success modal
+  const showSuccessModal = () => setSuccessModalVisible(true);
+  const closeSuccessModal = () => setSuccessModalVisible(false);
+  // failed modal
+  const showFailedModal = () => setFailedModalVisible(true);
+  const closeFailedModal = () => setFailedModalVisible(false);
 
   const resetState = () => {
     setAmount(null);
@@ -32,7 +43,7 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
     setErrors({});
     setConversion(null);
     setDetails([]);
-    setSavingDetails([]);
+    // setSavingDetails([]);
     setInitiateSuccess(false);
     setIsCopied(false);
     setSelectedID("");
@@ -137,10 +148,12 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
         setSavingDetails(data.data);
         triggerFetchDashboard();
         onClose();
-        resetState(); // Reset all state values
+        resetState();
+        showSuccessModal(); // Reset all state values
       }
     } catch (error) {
-      console.log("Error fetching personal saving details:", error);
+      console.log("Error verifying personal saving details:", error);
+      showFailedModal();
     } finally {
       setLoadingPaid(false);
     }
@@ -161,154 +174,167 @@ export default function WalletDepositDrawer({ onClose, isVisible }) {
   };
 
   return (
-    <div
-      className={`fixed top-0 right-0 z-[999] h-screen overflow-y-auto transition-transform transform ${
-        isVisible ? "translate-x-0" : "translate-x-full"
-      } w-full bg-[#D5D7DA4D]`}
-      onClick={onClose}
-    >
+    <>
       <div
-        className="bg-white w-full md:w-[70%] lg:w-[600px] h-full py-8 px-4 md:px-6 plansbg border overflow-auto border-[#D5D7DA] relative ml-auto"
-        onClick={(e) => e.stopPropagation()}
+        className={`fixed top-0 right-0 z-[999] h-screen overflow-y-auto transition-transform transform ${
+          isVisible ? "translate-x-0" : "translate-x-full"
+        } w-full bg-[#D5D7DA4D]`}
+        onClick={onClose}
       >
-        <img
-          src={ArrowRightBlk.src}
-          className="cursor-pointer"
-          alt=""
-          onClick={onClose}
-        />
+        <div
+          className="bg-white w-full md:w-[70%] lg:w-[600px] h-full py-8 px-4 md:px-6 plansbg border overflow-auto border-[#D5D7DA] relative ml-auto"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <img
+            src={ArrowRightBlk.src}
+            className="cursor-pointer"
+            alt=""
+            onClick={onClose}
+          />
 
-        {initiateSuccess ? (
-          // Transfer Payment Section
-          <div className="w-full mt-9">
-            <h3 className="text-h55 md:text-h5 font-Manrope font-bold text-[#595A5C] mt-9">
-              Transfer Payment
-            </h3>
-            <div className="mt-9">
-              <div>
-                <p className="text-[#878787] font-Manrope text-body14Regular">
-                  Amount
-                </p>
-                <span className="font-Manrope text-h55 md:text-h5 font-semibold block text-black mt-4">
-                  ₦ {details?.amount?.toLocaleString() || "0"}
-                </span>
-              </div>
-              <div className="mt-6">
-                <p className="text-[#878787] font-Manrope text-body14Regular">
-                  Bank
-                </p>
-                <span className="font-Manrope text-h55 md:text-h5 font-semibold block text-black mt-4">
-                  {details?.virtual_account_bank}
-                </span>
-              </div>
-              <div className="mt-6">
-                <p className="text-[#878787] font-Manrope text-body14Regular">
-                  Account Name
-                </p>
-                <span className="font-Manrope text-h55 md:text-h5 font-semibold block text-black mt-4">
-                  {details?.virtual_account_name}
-                </span>
-              </div>
-              <div className="mt-6">
-                <p className="text-[#878787] font-Manrope text-body14Regular">
-                  Account Number
-                </p>
-                <span className="font-Manrope text-h55 md:text-h5 font-semibold text-black mt-4 flex items-center space-x-2">
-                  <p> {details?.virtual_account_number}</p>
-                  <span
-                    className="block text-[#878787] font-Manrope text-body12Regular cursor-pointer"
-                    onClick={handleCopy}
-                  >
-                    {isCopied ? (
-                      <p className="">Copied</p>
-                    ) : (
-                      <img src={copy.src} className="w-4" alt="Copy" />
-                    )}
+          {initiateSuccess ? (
+            // Transfer Payment Section
+            <div className="w-full mt-9">
+              <h3 className="text-h55 md:text-h5 font-Manrope font-bold text-[#595A5C] mt-9">
+                Transfer Payment
+              </h3>
+              <div className="mt-9">
+                <div>
+                  <p className="text-[#878787] font-Manrope text-body14Regular">
+                    Amount
+                  </p>
+                  <span className="font-Manrope text-h55 md:text-h5 font-semibold block text-black mt-4">
+                    ₦ {details?.amount?.toLocaleString() || "0"}
                   </span>
-                </span>
+                </div>
+                <div className="mt-6">
+                  <p className="text-[#878787] font-Manrope text-body14Regular">
+                    Bank
+                  </p>
+                  <span className="font-Manrope text-h55 md:text-h5 font-semibold block text-black mt-4">
+                    {details?.virtual_account_bank}
+                  </span>
+                </div>
+                <div className="mt-6">
+                  <p className="text-[#878787] font-Manrope text-body14Regular">
+                    Account Name
+                  </p>
+                  <span className="font-Manrope text-h55 md:text-h5 font-semibold block text-black mt-4">
+                    {details?.virtual_account_name}
+                  </span>
+                </div>
+                <div className="mt-6">
+                  <p className="text-[#878787] font-Manrope text-body14Regular">
+                    Account Number
+                  </p>
+                  <span className="font-Manrope text-h55 md:text-h5 font-semibold text-black mt-4 flex items-center space-x-2">
+                    <p> {details?.virtual_account_number}</p>
+                    <span
+                      className="block text-[#878787] font-Manrope text-body12Regular cursor-pointer"
+                      onClick={handleCopy}
+                    >
+                      {isCopied ? (
+                        <p className="">Copied</p>
+                      ) : (
+                        <img src={copy.src} className="w-4" alt="Copy" />
+                      )}
+                    </span>
+                  </span>
+                </div>
+
+                <div className=" w-full grid grid-cols-2 gap-4">
+                  <button
+                    onClick={handleBack}
+                    className="border border-[#878787] py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-[#878787] text-xs 2xl:text-lg flex items-center justify-center"
+                  >
+                    Back
+                  </button>
+                  <button
+                    onClick={handleVerifyPay}
+                    disabled={loadingPaid}
+                    className="bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center justify-center"
+                  >
+                    {loadingPaid ? (
+                      <img src={load.src} className="w-5" alt="" />
+                    ) : (
+                      "I have paid"
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            // Deposit Funds Section
+            <div>
+              <h3 className="text-h55 md:text-h5 font-Manrope font-bold text-[#595A5C] mt-9">
+                Deposit Funds
+              </h3>
+              <label className="mt-9">
+                How much will you like to deposit(₦)?
+              </label>
+              <div className="mt-2 flex flex-col items-start">
+                <input
+                  placeholder="₦0.00"
+                  value={formatWithCommas(amount)}
+                  type="text"
+                  onChange={handleAmountChange}
+                  onKeyUp={debouncedHandleSend} // Use the debounced version
+                  className={`w-full border rounded-[32px] mt-1 text-body14Regular ${
+                    errors.amount ? "border-[#DC3545]" : "border-[#D5D7DA]"
+                  } font-Manrope px-6 py-3`}
+                />
+                {errors.amount && (
+                  <span className="text-[#DC3545] text-xs text-left font-Manrope mt-2">
+                    {errors.amount}
+                  </span>
+                )}
               </div>
 
-              <div className=" w-full grid grid-cols-2 gap-4">
+              {conversion && (
+                <>
+                  <p className="text-[#8133F1] mt-3 text-body12Regular font-Manrope">
+                    You will be depositing a total of (₦
+                    {formatWithCommas(conversion?.sourceAmount)} = $
+                    {conversion?.amountToReceive})
+                  </p>
+                  <p className="text-[#8133F1] mt-1 text-body12Regular font-Manrope">
+                    At the rate of (₦1.00 = ${conversion?.rate})
+                  </p>
+                </>
+              )}
+
+              {conversion && (
                 <button
-                  onClick={handleBack}
-                  className="border border-[#878787] py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-[#878787] text-xs 2xl:text-lg flex items-center justify-center"
+                  onClick={handleInitiate}
+                  disabled={loadingExchange || !conversion || loadingInitiate} // Disable if loading or no conversion
+                  className={`bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center justify-center ${
+                    loadingExchange || !conversion || loadingInitiate
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
                 >
-                  Back
-                </button>
-                <button
-                  onClick={handleVerifyPay}
-                  disabled={loadingPaid}
-                  className="bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center justify-center"
-                >
-                  {loadingPaid ? (
+                  {loadingInitiate ? (
                     <img src={load.src} className="w-5" alt="" />
                   ) : (
-                    "I have paid"
+                    "Continue"
                   )}
                 </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          // Deposit Funds Section
-          <div>
-            <h3 className="text-h55 md:text-h5 font-Manrope font-bold text-[#595A5C] mt-9">
-              Deposit Funds
-            </h3>
-            <label className="mt-9">
-              How much will you like to deposit(₦)?
-            </label>
-            <div className="mt-2 flex flex-col items-start">
-              <input
-                placeholder="₦0.00"
-                value={formatWithCommas(amount)}
-                type="text"
-                onChange={handleAmountChange}
-                onKeyUp={debouncedHandleSend} // Use the debounced version
-                className={`w-full border rounded-[32px] mt-1 text-body14Regular ${
-                  errors.amount ? "border-[#DC3545]" : "border-[#D5D7DA]"
-                } font-Manrope px-6 py-3`}
-              />
-              {errors.amount && (
-                <span className="text-[#DC3545] text-xs text-left font-Manrope mt-2">
-                  {errors.amount}
-                </span>
               )}
             </div>
-
-            {conversion && (
-              <>
-                <p className="text-[#8133F1] mt-3 text-body12Regular font-Manrope">
-                  You will be depositing a total of (₦
-                  {formatWithCommas(conversion?.sourceAmount)} = $
-                  {conversion?.amountToReceive})
-                </p>
-                <p className="text-[#8133F1] mt-1 text-body12Regular font-Manrope">
-                  At the rate of (₦1.00 = ${conversion?.rate})
-                </p>
-              </>
-            )}
-
-            {conversion && (
-              <button
-                onClick={handleInitiate}
-                disabled={loadingExchange || !conversion || loadingInitiate} // Disable if loading or no conversion
-                className={`bg-btnPrimary py-3 w-full rounded-[50px] mt-5 font-semibold font-Manrope text-white text-xs 2xl:text-lg flex items-center justify-center ${
-                  loadingExchange || !conversion || loadingInitiate
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-              >
-                {loadingInitiate ? (
-                  <img src={load.src} className="w-5" alt="" />
-                ) : (
-                  "Continue"
-                )}
-              </button>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+
+      <PaymentSuccessModal
+        isVisible={isSuccessModalVisible}
+        onClose={closeSuccessModal}
+        savingdetails={savingdetails}
+        setSavingDetails={setSavingDetails}
+      />
+      <FailureModal
+        isVisible={isFailedModalVisible}
+        onClose={closeFailedModal}
+      />
+    </>
   );
 }

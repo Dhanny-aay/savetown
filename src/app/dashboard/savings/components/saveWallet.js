@@ -28,6 +28,23 @@ export default function SaveWallet() {
   const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
+
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
   const fetchTransactions = async () => {
     const params = {
       category: "personal_savings",
@@ -112,6 +129,12 @@ export default function SaveWallet() {
     setFilteredTransactions(filtered);
   };
 
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentTransactions = filteredTransactions.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
   return (
     <>
       <h2 className=" text-h5 font-bold text-[#262626] font-Manrope">
@@ -140,6 +163,12 @@ export default function SaveWallet() {
                   }`
                 : "****"}
             </h2>
+            {/* <div className=" text-white font-Manrope">
+              <span className=" text-body14Bold text-white">$ 10.67 at 8%</span>{" "}
+              <span className=" text-white text-body14Medium">
+                Interest accured in 12 days
+              </span>
+            </div> */}
           </div>
           {/* <button
             onClick={showLearnModal}
@@ -231,7 +260,7 @@ export default function SaveWallet() {
           </div>
           {/* Table Section with Fixed Height */}
           <div className="overflow-auto mt-6 max-h-[100%] h-screen md:h-[55vh] border border-[#c2c4c686] rounded-[8px]">
-            {filteredTransactions.length > 0 ? (
+            {currentTransactions.length > 0 ? (
               <table className="w-full bg-white shadow font-Manrope relative">
                 <thead className="sticky top-0 left-0 bg-white">
                   <tr className="text-left">
@@ -252,7 +281,7 @@ export default function SaveWallet() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredTransactions
+                  {currentTransactions
                     .slice()
                     .sort(
                       (a, b) => new Date(b.created_at) - new Date(a.created_at)
@@ -287,6 +316,33 @@ export default function SaveWallet() {
                 No transactions within this period.
               </div>
             )}
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="flex justify-between items-center mt-4">
+            <button
+              onClick={handlePrevious}
+              disabled={currentPage === 1}
+              className={`py-2 px-4 rounded-md border text-xs font-Manrope ${
+                currentPage === 1 ? "border-[#c2c4c686] opacity-50" : ""
+              }`}
+            >
+              Previous
+            </button>
+            <span className="text-sm text-[#5F6D7E]">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={handleNext}
+              disabled={currentPage === totalPages}
+              className={`py-2 px-4 rounded-md border text-xs font-Manrope ${
+                currentPage === totalPages
+                  ? "border-[#c2c4c686] opacity-50"
+                  : ""
+              }`}
+            >
+              Next
+            </button>
           </div>
         </>
       )}

@@ -27,6 +27,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 import DepositModal from "./component/depositModal";
 import WalletDepositDrawer from "./component/walletDepositDrawer";
 import GroupDepositDrawer from "./component/groupDepositDrawer";
+import PaymentSuccessModal from "./component/paymentSuccessModal";
+import FailureModal from "./component/paymentFailedModal";
 
 export default function Page() {
   const {
@@ -427,6 +429,7 @@ export default function Page() {
         onClose={closeGroupDepositDrawer}
         selectedID={selectedID}
       />
+      {/* <FailureModal /> */}
     </>
   );
 }

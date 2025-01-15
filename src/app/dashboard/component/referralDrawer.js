@@ -37,7 +37,7 @@ export default function ReferralDrawer({ isVisible, onClose }) {
               <Skeleton width={24} height={24} containerClassName=" mt-2" />
             ) : (
               <span className=" mt-2 text-[#595A5C] text-body14Regular">
-                {`$${userStats?.referral_balance ?? 0}.00`}
+                {`$${userStats?.referral_balance ?? 0}.00`} interest earned
               </span>
             )}
           </div>

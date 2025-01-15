@@ -17,12 +17,16 @@ import GroupDrawer from "./groupDrawer";
 import { useUserContext } from "../UserContext";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import VerifyDrawer from "./verifyDrawer";
+import { useSnackbar } from "notistack";
 
 export default function SavingPlanTab({ isDashboard }) {
   const [isLearnVisible, setLearnVisible] = useState(false);
   const [isGroupDrawerVisible, setGroupDrawerVisible] = useState(false);
   const { userStats, loading, isVisible, toggleVisibility, userProfile } =
     useUserContext();
+  const [isVerifyDrawerVisible, setVerifyDrawerVisible] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   // learn modal
   const showLearnModal = () => setLearnVisible(true);
@@ -32,9 +36,24 @@ export default function SavingPlanTab({ isDashboard }) {
   const showGroupDrawer = () => setGroupDrawerVisible(true);
   const closeGroupDrawer = () => setGroupDrawerVisible(false);
 
+  // verification drawer
+  const showVerifyDrawer = () => setVerifyDrawerVisible(true);
+  const closeVerifyDrawer = () => setVerifyDrawerVisible(false);
+
   const formatWithCommas = (value) => {
     if (value === 0 || value == null) return "0.00"; // Handle 0, null, and undefined
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const handleClick = () => {
+    if (userProfile?.id_status === "pending") {
+      enqueueSnackbar("You need to be verified to create a group", {
+        variant: "warning",
+      });
+      showVerifyDrawer();
+    } else {
+      showGroupDrawer();
+    }
   };
 
   return (
@@ -133,7 +152,7 @@ export default function SavingPlanTab({ isDashboard }) {
           {!userProfile.group_savings?.length > 0 && (
             <div className=" absolute bottom-6 right-6 flex items-center space-x-2">
               <button
-                onClick={showGroupDrawer}
+                onClick={handleClick}
                 className="text-[#6B4300] text-body14Bold font-Manrope"
               >
                 Create Group
@@ -259,7 +278,7 @@ export default function SavingPlanTab({ isDashboard }) {
               {!userProfile.group_savings?.length > 0 && (
                 <div className=" absolute bottom-6 right-6 flex items-center space-x-2">
                   <button
-                    onClick={showGroupDrawer}
+                    onClick={handleClick}
                     className="text-[#6B4300] text-body12SemiBold md:text-body14Bold font-Manrope"
                   >
                     Create Group
@@ -280,6 +299,12 @@ export default function SavingPlanTab({ isDashboard }) {
       <GroupDrawer
         isVisible={isGroupDrawerVisible}
         onClose={closeGroupDrawer}
+      />
+
+      {/* verify  */}
+      <VerifyDrawer
+        isVisible={isVerifyDrawerVisible}
+        onClose={closeVerifyDrawer}
       />
     </>
   );

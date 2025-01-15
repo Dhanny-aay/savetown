@@ -7,6 +7,7 @@ import { useSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
 import { handleLoginUser } from "../userControllers/authController";
 import load from "./assets/load.gif";
+import eye from "./assets/eye.svg";
 
 export default function Page() {
   const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ export default function Page() {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const validateFields = () => {
     const newErrors = {};
@@ -52,6 +54,9 @@ export default function Page() {
       const userData = { email, password };
       handleLoginUser(userData, onSuccess, onError);
     }
+  };
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -97,17 +102,43 @@ export default function Page() {
                 )}
               </div>
               <div className=" flex flex-col w-full mt-3">
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className={` mt-2 bg-white rounded-[32px] border ${
-                    errors.password ? "border-[#DC3545]" : "border-[#D5D7DA]"
-                  } w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]`}
-                  placeholder="Enter passsword"
-                />
+                <label htmlFor="password" className=" relative">
+                  Password
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className={` mt-2 bg-white rounded-[32px] border ${
+                      errors.password ? "border-[#DC3545]" : "border-[#D5D7DA]"
+                    } w-full py-3 px-6 font-medium font-Manrope text-xs 2xl:text-lg placeholder:text-[#000000B2]`}
+                    placeholder="Enter passsword"
+                  />
+                  <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="absolute top-5 inset-y-0 flex items-center justify-center text-gray-500 right-4 hover:text-gray-700 focus:outline-none"
+                  >
+                    {showPassword ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M10 3a7 7 0 015.83 10.9l1.48 1.48a1 1 0 01-1.42 1.42l-1.48-1.48A7 7 0 113 10a7 7 0 017-7zm0 2a5 5 0 00-4.58 7.18l1.5-1.5A3 3 0 0110 7a3 3 0 013 3c0 .39-.09.76-.24 1.1l1.5 1.5A5 5 0 0010 5zm0 2a1 1 0 100 2 1 1 0 000-2z" />
+                      </svg>
+                    ) : (
+                      <img
+                        src={eye.src}
+                        alt="Show password"
+                        width={16}
+                        height={15}
+                        priority
+                      />
+                    )}
+                  </button>
+                </label>
                 {errors.password && (
                   <span className="text-[#DC3545] text-xs font-Manrope mt-2">
                     {errors.password}

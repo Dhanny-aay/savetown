@@ -27,6 +27,7 @@ import VerifyDrawer from "../../component/verifyDrawer";
 import { handleGetTransactionsWithParam } from "@/app/userControllers/transactionController";
 import SkeletonTable from "@/app/utils/loadingTable";
 import TableFilter from "./dateFilter";
+import { useSnackbar } from "notistack";
 
 export default function GroupSaving() {
   const [isGroupDrawerVisible, setGroupDrawerVisible] = useState(false);
@@ -47,6 +48,24 @@ export default function GroupSaving() {
   const [loadingTransactions, setLoadingTransactions] = useState(true);
   const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
+
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
   const fetchTransactions = async () => {
     const params = {
@@ -174,6 +193,24 @@ export default function GroupSaving() {
   const handleFilterChange = (filtered) => {
     setFilteredTransactions(filtered);
   };
+
+  const handleClick = () => {
+    if (userProfile?.id_status === "pending") {
+      enqueueSnackbar("You need to be verified to create a group", {
+        variant: "warning",
+      });
+      showVerifyDrawer();
+    } else {
+      showGroupDrawer();
+    }
+  };
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentTransactions = filteredTransactions.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
   return (
     <>
       <h2 className=" text-h55 md:text-h5 font-bold text-[#262626] font-Manrope">
@@ -203,6 +240,12 @@ export default function GroupSaving() {
                   }`
                 : "****"}
             </h2>
+            {/* <div className=" text-white font-Manrope">
+              <span className=" text-body14Bold text-white">$ 10.67 at 8%</span>{" "}
+              <span className=" text-white text-body14Medium">
+                Interest accured in 12 days
+              </span>
+            </div> */}
           </div>
         </div>
 
@@ -243,7 +286,7 @@ export default function GroupSaving() {
             </>
           ) : (
             <button
-              onClick={showGroupDrawer}
+              onClick={handleClick}
               className=" bg-[#fff] w-full md:w-auto rounded-[40px] py-3 px-6 flex justify-center items-center space-x-2"
             >
               <img src={grp.src} className=" w-4 md:w-5" alt="" />
@@ -367,7 +410,7 @@ export default function GroupSaving() {
           </div>
           {/* Table Section with Fixed Height */}
           <div className="overflow-auto mt-6 max-h-[100%] h-screen md:h-[55vh] border border-[#c2c4c686] rounded-[8px]">
-            {filteredTransactions.length > 0 ? (
+            {currentTransactions.length > 0 ? (
               <table className="w-full bg-white shadow font-Manrope relative">
                 <thead className="sticky top-0 left-0 bg-white">
                   <tr className="text-left">
@@ -388,7 +431,7 @@ export default function GroupSaving() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredTransactions
+                  {currentTransactions
                     .slice()
                     .sort(
                       (a, b) => new Date(b.created_at) - new Date(a.created_at)
@@ -423,6 +466,33 @@ export default function GroupSaving() {
                 No transactions within this period.
               </div>
             )}
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="flex justify-between items-center mt-4">
+            <button
+              onClick={handlePrevious}
+              disabled={currentPage === 1}
+              className={`py-2 px-4 rounded-md border text-xs font-Manrope ${
+                currentPage === 1 ? "border-[#c2c4c686] opacity-50" : ""
+              }`}
+            >
+              Previous
+            </button>
+            <span className="text-sm text-[#5F6D7E]">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={handleNext}
+              disabled={currentPage === totalPages}
+              className={`py-2 px-4 rounded-md border text-xs font-Manrope ${
+                currentPage === totalPages
+                  ? "border-[#c2c4c686] opacity-50"
+                  : ""
+              }`}
+            >
+              Next
+            </button>
           </div>
         </>
       )}

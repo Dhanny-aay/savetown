@@ -8,7 +8,9 @@ import { handleGetUserNotification } from "@/app/userControllers/profileControll
 export default function NotiDrawer({ onClose, isVisible }) {
   const [showSettings, setShowSettings] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [filteredNotifications, setFilteredNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("All"); // Filter state: All, Today, This Week, Older
 
   const fetchNoti = async () => {
     setLoading(true);
@@ -31,6 +33,42 @@ export default function NotiDrawer({ onClose, isVisible }) {
   const goToNotifications = () => {
     setShowSettings(false);
   };
+
+  // Function to filter notifications
+  const filterNotifications = (filterType) => {
+    setFilter(filterType);
+
+    if (filterType === "All") {
+      setFilteredNotifications(notifications);
+    } else if (filterType === "Today") {
+      const today = new Date().toISOString().split("T")[0];
+      setFilteredNotifications(
+        notifications.filter((noti) => noti.created_at.startsWith(today))
+      );
+    } else if (filterType === "This Week") {
+      const startOfWeek = new Date();
+      startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+      const endOfWeek = new Date();
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+      setFilteredNotifications(
+        notifications.filter((noti) => {
+          const notiDate = new Date(noti.created_at);
+          return notiDate >= startOfWeek && notiDate <= endOfWeek;
+        })
+      );
+    } else if (filterType === "Older") {
+      const startOfWeek = new Date();
+      startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+      setFilteredNotifications(
+        notifications.filter((noti) => new Date(noti.created_at) < startOfWeek)
+      );
+    }
+  };
+
+  useEffect(() => {
+    filterNotifications(filter);
+  }, [notifications]);
 
   return (
     <div
@@ -66,15 +104,32 @@ export default function NotiDrawer({ onClose, isVisible }) {
               />
             </div>
 
+            {/* Filters */}
+            <div className="flex items-start space-x-4 mt-6">
+              {["All", "Today", "This Week", "Older"].map((filterType) => (
+                <button
+                  key={filterType}
+                  onClick={() => filterNotifications(filterType)}
+                  className={`px-4 py-2 rounded-full ${
+                    filter === filterType
+                      ? "bg-[#FDE8EE] text-[#ED1450] font-bold"
+                      : "bg-[#F3F0E9] text-[#000000B2]"
+                  } font-Manrope font-medium text-sm`}
+                >
+                  {filterType}
+                </button>
+              ))}
+            </div>
+
             {loading ? (
               <div className="w-full mt-16 flex items-center justify-center">
                 <p className="text-center text-body16Regular font-Manrope text-[#666666]">
                   Loading notifications...
                 </p>
               </div>
-            ) : notifications.length > 0 ? (
+            ) : filteredNotifications.length > 0 ? (
               <ul className="mt-8 space-y-4">
-                {notifications.map((noti) => (
+                {filteredNotifications.map((noti) => (
                   <li
                     key={noti.id}
                     className="flex items-start justify-between bg-[#F8F9FA] p-4 rounded-lg shadow-sm"
