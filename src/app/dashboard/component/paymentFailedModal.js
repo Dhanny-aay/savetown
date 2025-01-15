@@ -1,6 +1,6 @@
 import React from "react";
 import close from "./assets/close.svg";
-import Xclose from "./assets/Xclose.svg";
+import Xclose from "./assets/clos.svg";
 
 export default function FailureModal({ isVisible, onClose }) {
   return (
