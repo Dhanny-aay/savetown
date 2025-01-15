@@ -7,6 +7,7 @@ const CreateNotificationModal = ({ onClose, onPermissionChange }) => {
     body: "",
     scheduled_date: "",
   });
+  const [loading, setLoading]  = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,6 +27,7 @@ const CreateNotificationModal = ({ onClose, onPermissionChange }) => {
   };
 
   const handleSaveNotification = async () => {
+    setLoading(true)
     const newNotification = {
       id: createNotification.length + 1,
       ...createNotification,
@@ -42,7 +44,8 @@ const CreateNotificationModal = ({ onClose, onPermissionChange }) => {
         active: false,
       },
       (response) => {
-        console.log("Notification created successfully", response);
+        setLoading(false)
+        // console.log("Notification created successfully", response);
       },
       (err) => {
         console.error("Unable to create notification", err);
@@ -71,7 +74,7 @@ const CreateNotificationModal = ({ onClose, onPermissionChange }) => {
 
         {/* Title Input */}
         <div>
-          <label className="block text-sm font-semibold mb-1">Title</label>
+          <label className="block mb-1 text-sm font-semibold">Title</label>
           <input
             type="text"
             name="title"
@@ -85,20 +88,20 @@ const CreateNotificationModal = ({ onClose, onPermissionChange }) => {
 
         {/* Body Input */}
         <div>
-          <label className="block text-sm font-semibold mb-1">Body</label>
+          <label className="block mb-1 text-sm font-semibold">Body</label>
           <textarea
             placeholder="Enter Body"
             name="body"
             value={createNotification.body || ""}
             onChange={handleChange}
             onKeyPress={handleKeyPress}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg h-32 resize-none"
+            className="w-full h-32 px-3 py-2 border border-gray-300 rounded-lg resize-none"
           />
         </div>
 
         {/* Date Input */}
         <div>
-          <label className="block text-sm font-semibold mb-1">Date</label>
+          <label className="block mb-1 text-sm font-semibold">Date</label>
           <input
             type="date"
             name="scheduled_date"
@@ -110,7 +113,7 @@ const CreateNotificationModal = ({ onClose, onPermissionChange }) => {
         </div>
 
         {/* Buttons */}
-        <div className="flex justify-between items-center w-full space-x-2">
+        <div className="flex items-center justify-between w-full space-x-2">
           <button
             onClick={() => onClose(false)}
             className="px-3 py-2 w-1/2 border bg-white border-gray-300 rounded-[32px]"
@@ -121,7 +124,11 @@ const CreateNotificationModal = ({ onClose, onPermissionChange }) => {
             onClick={handleSaveNotification}
             className="px-3 py-2 w-1/2 bg-[#ED1450] text-white rounded-[32px]"
           >
-            Save
+       {loading ? (
+      <div className="flex items-center justify-center">
+        {/* Spinner for the loading state */}
+        <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+      </div>) : 'Save'}
           </button>
         </div>
       </div>

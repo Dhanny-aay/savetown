@@ -1,20 +1,18 @@
 import EditDayModal from "./editDayModal";
 import { useEffect, useState } from "react";
 import { showAvailableAttendees } from "./../../adminControllers/eventsController";
+import Pagination from "../../components/pagination";
 
 export default function Upcoming() {
-  const [attendees, setAttendees] = useState([
-    // {
-    //   id: "",
-    //   date: "",
-    //   email: "",
-    //   first_name: "",
-    //   last_name: "",
-    //   updated_at: "",
-    // },
-  ]);
+  const [attendees, setAttendees] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
+  const lastIndex = currentPage * recordsPerPage;
+  const startIndex = lastIndex - recordsPerPage;
+  const records = attendees.slice(startIndex, lastIndex);
+  const totalPages = Math.ceil(attendees.length / recordsPerPage);
 
   const formatDateTime = (dateTime) => {
     const date = new Date(dateTime);
@@ -37,18 +35,14 @@ export default function Upcoming() {
     try {
       const response = await showAvailableAttendees({});
       const attending = response?.data || [];
-      // if (attending.attended === 'false') {
-      //   console.log('false')
-      // }else {
-      //   console.log('response?.data.attended:', attending.attended);
-      // }
-      setAttendees(attending);
+      const filteredAttendees = attending.filter((attend) => !attend.attended);
+      // console.log("Filtered attendees:", filteredAttendees);
+      setAttendees(filteredAttendees);
       setLoading(false);
     } catch (error) {
       console.error("error displaying dates", error);
     }
   };
-
 
   useEffect(() => {
     displayAvailableAttendees();
@@ -58,11 +52,9 @@ export default function Upcoming() {
     <>
       {loading ? (
         <div> Loading users.....</div>
-      ) : !attendees ||
-        attendees.length === 0 
+      ) : !attendees || attendees.length === 0 ? (
         // ||
-        // attendees.attended === true 
-        ? (
+        // attendees.attended === true
         <div className="text-center text-gray-500">
           No attendees available to display.
         </div>
@@ -87,10 +79,10 @@ export default function Upcoming() {
               </tr>
             </thead>
             <tbody>
-              {attendees.map((attend) => (
+              {records.map((attend, index) => (
                 <tr key={attend.id} className="border-t ">
                   <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium">
-                    {attend.id}
+                    {index + 1}
                   </td>
                   <td className="p-4 text-[#5F6D7E] text-sm font-Manrope font-medium">
                     {attend.first_name} {attend.last_name}
@@ -109,13 +101,18 @@ export default function Upcoming() {
                       className="cursor-pointer text-[#ED1450] hover:text-[#ED1450]"
                       // onClick={() => alert(`Reminder sent to ${attend.name}`)}
                     >
-                     {attend.time}
+                      {attend.time}
                     </span>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
         </div>
       )}
     </>

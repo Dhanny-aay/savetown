@@ -36,7 +36,12 @@ const UserProfile = () => {
   }, [userid]);
 
   if (!userInfo) {
-    return <p>Loading user information...</p>;
+    return (
+      <div className="flex items-center justify-center h-[50vh]">
+        {/* Spinner for the loading state */}
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   const navItems = [
@@ -173,12 +178,13 @@ const UserProfile = () => {
               <p className="flex flex-col">
                 <span className="text-[#979797] text-sm">Education</span>{" "}
                 <span className="font-semibold text-base">
-                  University of Ibadan
+                  N/A
                 </span>
               </p>
               <p className="flex flex-col">
                 <span className="text-[#979797] text-sm">Net Income</span>{" "}
-                <span className="font-semibold text-base">$10,000</span>
+                <span className="font-semibold text-base">
+                 {userInfo.default_currency === 'USD' ? '$' : '₦'}{userInfo.balance}</span>
               </p>
             </div>
           </div>

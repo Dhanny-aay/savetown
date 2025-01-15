@@ -1,5 +1,5 @@
 import Image from "next/image";
-import id from '../assets/id.svg'
+import cancel from '../assets/cancel.svg'
 import { useEffect, useState } from "react";
 import { showUsers } from "../../adminControllers/usersController";
 
@@ -31,7 +31,7 @@ export default function VerifiedModal({ onClose, user }) {
       onClick={() => onClose(false)}
     >
       <div
-        className="bg-white rounded-2xl p-6 w-[400px] h-[500px] md:w-[650px] space-y-5 font-Manrope overflow-auto"
+        className="bg-white rounded-2xl p-6 w-[400px] max-md:h-[500px] md:w-[500px] space-y-5 font-Manrope overflow-auto"
         onClick={(e) => e.stopPropagation()}>
          {/* Modal Header */}
          <div className="mb-4 flex justify-between items-center">
@@ -42,7 +42,8 @@ export default function VerifiedModal({ onClose, user }) {
             onClick={() => onClose(false)}
             className="text-gray-400 hover:text-gray-600"
           >
-            &times;
+             <img src={cancel.src} alt="id picture" width={12}
+              height={12}/>
           </button>
         </div>
 
@@ -65,25 +66,8 @@ export default function VerifiedModal({ onClose, user }) {
           <div className="flex flex-col md:flex-row justify-center gap-3 items-center px-3">
            <img src={selectedUser.id_front} alt="id picture" width={300}
               height={100}/>
-            {/* <Image
-              // src={selectedUser.id_front}
-              src={id.src}
-              alt="id picture"
-              width={300}
-              height={100}
-              priority
-            /> */}
             <img src={selectedUser.id_back} alt="id picture" width={300}
               height={100}/>
-            {/* <Image
-              src={id.src}
-              // src={selectedUser.id_back}
-              alt="id picture"
-              width={300}
-              height={100}
-              priority
-              placeholder='empty'
-            /> */}
           </div>
         </div>
       </div>

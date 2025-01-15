@@ -46,15 +46,18 @@ const EditRoles = ({ onClose, user, onRolesChange }) => {
   };
 
   const handleAddRoles = async () => {
-    console.log("Edited Role Data:", editRole.permissions);
+    // console.log("Edited Role Data:", editRole.permissions);
+    setLoading(true)
     await editRoles(
+
       `${editRole.id}`,
       {
         name: `${editRole.name}`, 
         permissions: editRole.permissions, 
       },
       (response) => {
-        console.log("Response:", response);
+        // console.log("Response:", response);
+        setLoading(false)
       },
       (err) => {
         console.error("Unable to edit roles", err);
@@ -95,7 +98,7 @@ const EditRoles = ({ onClose, user, onRolesChange }) => {
 
         {/* Role Name */}
         <div>
-          <label className="block text-sm font-semibold mb-1">Role Name</label>
+          <label className="block mb-1 text-sm font-semibold">Role Name</label>
           <input
             type="text"
             name="name"
@@ -108,11 +111,11 @@ const EditRoles = ({ onClose, user, onRolesChange }) => {
 
         {/* Selected Permissions */}
         <div>
-          <label className="block text-sm font-semibold mb-1">Permissions</label>
+          <label className="block mb-1 text-sm font-semibold">Permissions</label>
           {loading ? (
             <div>Loading permissions...</div>
           ) : (
-            <ul className="space-y-3 mb-6 w-full">
+            <ul className="w-full mb-6 space-y-3">
               {permissions.map((permission) => (
                 <li key={permission.id} className="flex items-center">
                   <input
@@ -135,7 +138,7 @@ const EditRoles = ({ onClose, user, onRolesChange }) => {
         </div>
 
         {/* Save and Cancel Buttons */}
-        <div className="flex justify-between items-center w-full space-x-2">
+        <div className="flex items-center justify-between w-full space-x-2">
           <button
             onClick={() => onClose(false)}
             className="px-3 py-[13px] w-1/2 border text-sm bg-white border-gray-300 rounded-[32px]"
@@ -146,7 +149,11 @@ const EditRoles = ({ onClose, user, onRolesChange }) => {
             onClick={handleAddRoles}
             className="px-3 py-[13px] w-1/2 text-sm bg-[#ED1450] text-white rounded-[32px]"
           >
-            Save
+             {loading ? (
+      <div className="flex items-center justify-center">
+        {/* Spinner for the loading state */}
+        <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+      </div>) : 'Save'}
           </button>
         </div>
       </div>

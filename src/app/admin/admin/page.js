@@ -14,7 +14,6 @@ export default function Admin() {
   const [filteredAdmins, setFilteredAdmins] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state
   const [errorMessage, setErrorMessage] = useState(""); // Error message state
-
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [newAdmin, setNewAdmin] = useState({
@@ -212,7 +211,7 @@ export default function Admin() {
                   {index + 1}
                 </td>
                 <td className="p-4 text-[#5F6D7E] text-sm font-medium">
-                  {user.name}
+                  {user.first_name} {user.last_name}
                 </td>
                 <td className="p-4 text-[#5F6D7E] text-sm font-medium">
                   {user.email}

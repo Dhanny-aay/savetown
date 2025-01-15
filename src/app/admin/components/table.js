@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
 import { fetchTransactions } from "../adminControllers/transactionControl";
+import Pagination from "./pagination";
 
-export default function Table(second) {
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function Table() {
+const [transactions, setTransactions] = useState([]);
+const [loading, setLoading] = useState(true);
+const [currentPage, setCurrentPage] = useState(1);
+const recordsPerPage = 10;
+const lastIndex = currentPage * recordsPerPage;
+const startIndex = lastIndex - recordsPerPage;
+const records = transactions.slice(startIndex, lastIndex);
+const totalPages = Math.ceil(transactions.length / recordsPerPage);
 
   const showTransactions = async () => {
     setLoading(true);
@@ -27,7 +34,10 @@ export default function Table(second) {
     <>
       <div className="overflow-auto w-full md:h-[100%] text-[#5F6D7E]">
         {loading ? (
-          <div>Loading transactions...</div>
+            <div className="flex items-center justify-center h-[50vh]">
+            {/* Spinner for the loading state */}
+            <div className="w-8 h-8 border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div>
+          </div>
         ) : (
           <table className="w-full mt-4 bg-white rounded font-Manrope">
             <thead>
@@ -48,7 +58,7 @@ export default function Table(second) {
               </tr>
             </thead>
             <tbody>
-              {transactions.map((tx, index) => (
+              {records.map((tx, index) => (
                 <tr key={tx.id} className="border-t">
                   <td className="p-4 text-[#5F6D7E] max-sm:p-2 text-sm font-medium">
                     {index + 1}
@@ -94,6 +104,14 @@ export default function Table(second) {
             </tbody>
           </table>
         )}
+  
+  {/* ============pagination=============== */}
+  <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
+    
       </div>
     </>
   );

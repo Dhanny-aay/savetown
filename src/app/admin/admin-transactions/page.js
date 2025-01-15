@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import search from "./assets/search.svg";
 import { fetchTransactions } from "../adminControllers/transactionControl";
+import Pagination from "../components/pagination";
 
 export default function AdminTransactions() {
   const router = useRouter();
@@ -11,6 +12,12 @@ export default function AdminTransactions() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+const recordsPerPage = 10;
+const lastIndex = currentPage * recordsPerPage;
+const startIndex = lastIndex - recordsPerPage;
+const records = filteredUsers.slice(startIndex, lastIndex);
+const totalPages = Math.ceil(filteredUsers.length / recordsPerPage);
 
   const showTransactions = async () => {
     setLoading(true);
@@ -52,6 +59,15 @@ export default function AdminTransactions() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[50vh]">
+        {/* Spinner for the loading state */}
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+  
   return (
     <div className="flex flex-col px-3 h-full space-y-4">
       {/* Header with Back Button */}
@@ -64,7 +80,7 @@ export default function AdminTransactions() {
           >
             &lt; Back
           </button>
-          <h3 className="text-base md:text-2xl font-bold text-black">
+          <h3 className="text-base md:text-2xl font-bold text-[#595A5C]">
             Transactions
           </h3>
         </div>
@@ -134,7 +150,7 @@ export default function AdminTransactions() {
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.map((tx, index) => (
+              {records.map((tx, index) => (
                 <tr key={tx.id} className="border-t">
                   <td className="p-4 text-[#5F6D7E] max-sm:p-2 text-sm font-medium">
                     {index + 1}
@@ -177,6 +193,11 @@ export default function AdminTransactions() {
             </tbody>
           </table>
         )}
+          <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
       </div>
     </div>
   );

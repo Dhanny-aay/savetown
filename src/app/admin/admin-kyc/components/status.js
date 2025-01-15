@@ -5,6 +5,7 @@ import VerifiedModal from "./verifiedModal";
 import UnverifiedModal from "./unverifiedModal";
 import { fetchUsers } from "../../adminControllers/usersController";
 import PendingModal from "./pendingModal";
+import Pagination from "../../components/pagination";
 
 export default function Status() {
   const [verificationData, setVerificationData] = useState([]);
@@ -14,6 +15,13 @@ export default function Status() {
   const [showPModal, setShowPModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
+  const [loading, setLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1);
+const recordsPerPage = 10;
+const lastIndex = currentPage * recordsPerPage;
+const startIndex = lastIndex - recordsPerPage;
+const records = filteredData.slice(startIndex, lastIndex);
+const totalPages = Math.ceil(filteredData.length / recordsPerPage);
 
   const handleSearch = () => {
     const query = searchQuery.toLowerCase();
@@ -60,11 +68,13 @@ export default function Status() {
   };
 
   const fetchData = async () => {
+    setLoading(true)
     await fetchUsers(
       { page: 1, limit: 10 },
       (response) => {
         setVerificationData(response?.data);
-        setFilteredData(response?.data); // Initialize filtered data
+        setFilteredData(response?.data); 
+setLoading(false)
       },
       (err) => {
         console.error("Unable to display users", err);
@@ -82,8 +92,17 @@ export default function Status() {
     }
   }, [searchQuery, verificationData]);
 
+  
+
   return (
     <div>
+     { loading ? (
+      <div className="flex items-center justify-center h-[50vh]">
+        {/* Spinner for the loading state */}
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    ) : ( 
+      <>
       <div className="mb-4">
         <div className="flex items-center space-x-4">
           <div className="relative w-full font-Manrope">
@@ -114,7 +133,6 @@ export default function Status() {
         </div>
       </div>
 
-      {/* Adjust the height to fit the screen */}
       <table className="w-full mt-4 bg-white rounded">
         <thead>
           <tr className="text-left font-Manrope">
@@ -134,7 +152,7 @@ export default function Status() {
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((user, index) => (
+          {records.map((user, index) => (
             <tr key={user.id} className="border-t">
               <td className="p-4 text-[#5F6D7E] text-xs md:text-sm font-Manrope font-medium">
                 {index + 1}
@@ -182,6 +200,12 @@ export default function Status() {
         </tbody>
       </table>
 
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
+
       {showVModal ? (
         <VerifiedModal onClose={setShowVModal} user={selectedUser} />
       ) : null}
@@ -191,6 +215,8 @@ export default function Status() {
       {showPModal ? (
         <PendingModal onClose={setShowPModal} user={selectedUser} />
       ) : null}
+      </>
+    )}
     </div>
   );
 }

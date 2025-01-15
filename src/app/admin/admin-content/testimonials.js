@@ -159,16 +159,16 @@ export default function Testimonials() {
       ) : (
         <div>
           <div className="mb-4">
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               {/* Search bar */}
-              <div className="flex items-center space-x-4 w-1/2">
+              <div className="flex items-center w-1/2 space-x-4">
                 <div className="relative w-full font-Manrope">
                   <input
                     type="text"
                     placeholder="Search testimony..."
                     className="w-full px-6 py-2 pl-10 border border-gray-300 rounded-full"
                   />
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                  <span className="absolute text-gray-500 transform -translate-y-1/2 left-3 top-1/2">
                     <Image
                       src={search.src}
                       alt="search icon"
@@ -205,11 +205,11 @@ export default function Testimonials() {
               {testimonials &&
                 testimonials.map &&
                 testimonials.map((row, index) => (
-                  <tr key={row.id} className="border-t text-sm">
+                  <tr key={row.id} className="text-sm border-t">
                     <td className="p-4 text-gray-500">{index + 1}</td>
-                    <td className="p-4  text-gray-500">{row.title}</td>
+                    <td className="p-4 text-gray-500">{row.title}</td>
                     <td className="p-4">{row.description}</td>
-                    <td className="p-4 flex items-center justify-center gap-2">
+                    <td className="flex items-center justify-center gap-2 p-4">
                       <button
                         onClick={() => handleEditTestimony(row)}
                         className="text-gray-500 hover:text-gray-800"
@@ -253,7 +253,7 @@ export default function Testimonials() {
                   {editTestimonials.id ? "Edit Testimonial" : "Add New Testimonial"}
                 </h2>
                 <div>
-                  <label className="block text-sm font-semibold mb-1">
+                  <label className="block mb-1 text-sm font-semibold">
                     Heading
                   </label>
                   <input
@@ -304,7 +304,7 @@ export default function Testimonials() {
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-1">
+                  <label className="block mb-1 text-sm font-semibold">
                     Location
                   </label>
                   <textarea
@@ -313,10 +313,10 @@ export default function Testimonials() {
                     value={editTestimonials.description || ""}
                     onChange={handleNewChange}
                     onKeyDown={handleEnter}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-xl h-32 resize-none"
+                    className="w-full h-32 px-3 py-2 text-sm border border-gray-300 resize-none rounded-xl"
                   />
                 </div>
-                <div className="flex justify-between items-center w-full space-x-2">
+                <div className="flex items-center justify-between w-full space-x-2">
                   <button
                     onClick={() => setShowEditModal(false)}
                     className="px-3 py-[11px] text-sm w-1/2 border bg-white border-gray-300 rounded-[30px]"
@@ -336,26 +336,23 @@ export default function Testimonials() {
 
           {showDeletePopup && (
             <div className="fixed inset-0 z-[999] bg-black bg-opacity-50 flex justify-center items-center">
-              <div className="bg-white rounded-2xl p-6 w-[600px] space-y-5 font-Manrope ">
+              <div className="bg-white rounded-2xl p-6 w-[600px] space-y-5 font-Manrope flex flex-col items-center">
                <Image
                                               src={alert.src}
                                               alt="view icon"
                                               width={98}
                                               height={98}
                                               priority
+                                              className = 'text-center'
                                             />
-                        <h2 className="text-lg font-bold font-Manrope text-center">
+                        <h2 className="text-lg font-bold text-center font-Manrope">
                           Delete Section{" "}
                         </h2>
                         <p className="text-center">
                           {" "}
-                          Are you sure you want to delete this section?
-                        </p>
-                        <p className="text-center">
-                          {" "}
                           Are you sure you want to proceed? This action is irreversible and will permanently remove the section.
                         </p>
-                <div className="flex justify-between items-center gap-4 ">
+                <div className="flex items-center justify-between w-full gap-4">
                   <button
                     onClick={() => setShowDeletePopup(false)}
                     className="px-3 py-[13px] w-1/2 border bg-white border-gray-300 rounded-[32px]"
@@ -366,7 +363,11 @@ export default function Testimonials() {
                     onClick={()=>confirmDeleteTestimony(testimonials.id)}
                     className="px-3 py-[13px] w-1/2 bg-[#ED1450] text-white rounded-[32px]"
                   >
-                    Yes, delete
+                   {loading ? (
+      <div className="flex items-center justify-center">
+        {/* Spinner for the loading state */}
+        <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+      </div>) : 'Yes, delete'}
                   </button>
                 </div>
               </div>

@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import { fetchWallet } from "../adminControllers/walletController";
 import ViewModal from "./components/viewModal";
 import { useRouter } from "next/navigation";
+import Pagination from "../components/pagination";
 
 export default function AdminWallet() {
-  const [blog, setBlog] = useState([
+  const [wallet, setWallet] = useState([
     {
       id: "",
       heading: "",
@@ -16,11 +17,17 @@ export default function AdminWallet() {
   const [loading, setLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
+  const lastIndex = currentPage * recordsPerPage;
+  const startIndex = lastIndex - recordsPerPage;
+  const records = wallet.slice(startIndex, lastIndex);
+  const totalPages = Math.ceil(wallet.length / recordsPerPage);
 
   const loadWallets = async () => {
     setLoading(true);
     const response = await fetchWallet({});
-    setBlog(response?.data);
+    setWallet(response?.data);
     setLoading(false);
   };
 
@@ -28,9 +35,9 @@ export default function AdminWallet() {
     loadWallets();
   }, []);
 
-  const handleView = (blog) => {
+  const handleView = (wallet) => {
     setShowModal(true);
-    setSelectedUser(blog);
+    setSelectedUser(wallet);
   };
 
   const router = useRouter();
@@ -38,14 +45,17 @@ export default function AdminWallet() {
   return (
     <>
       {loading ? (
-        <div>Loading wallet......</div>
-      ) : !blog || blog.length === 0 ? (
+           <div className="flex items-center justify-center h-[50vh]">
+           {/* Spinner for the loading state */}
+           <div className="w-8 h-8 border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div>
+         </div>
+      ) : !wallet || wallet.length === 0 ? (
         <div className="text-center text-gray-500">
           No information available to display.
         </div>
       ) : (
         <div>
-          <div className="flex justify-between items-center mb-4 font-Manrope">
+          <div className="flex items-center justify-between mb-4 font-Manrope">
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => router.back()}
@@ -53,47 +63,52 @@ export default function AdminWallet() {
               >
                 &lt; Back
               </button>
-              <h3 className="text-lg md:text-2xl font-bold text-black">
+              <h3 className="text-lg font-bold text-black md:text-2xl">
                 Fincra Wallet Balance
               </h3>
             </div>
           </div>
           <table className="w-full text-left border rounded-lg font-Manrope">
-            <thead className="bg-white text-sm">
+            <thead className="text-sm bg-white">
               <tr>
                 <th className="p-4 text-gray-500">S/N</th>
                 <th className="p-4">ID</th>
                 <th className="p-4">Business</th>
-                <th className="p-4 hidden md:table-cell">Business ID</th>
-                <th className="p-4 hidden md:table-cell">Ledger Balalance</th>
-                <th className="p-4 hidden md:table-cell">Available Balance</th>
+                <th className="hidden p-4 md:table-cell">Business ID</th>
+                <th className="hidden p-4 md:table-cell">Ledger Balalance</th>
+                <th className="hidden p-4 md:table-cell">Available Balance</th>
                 <th className="p-4">Action</th>
               </tr>
             </thead>
             <tbody>
-              {blog &&
-                blog.map &&
-                blog.map((blog, index) => (
-                  <tr key={blog.id} className="border-t text-sm">
+              {records &&
+                records.map &&
+                records.map((wallet, index) => (
+                  <tr key={wallet.id} className="text-sm border-t">
                     <td className="p-4 text-gray-500">{index + 1}</td>
-                    <td className="p-4 text-gray-500">{blog.identifier}</td>
-                    <td className="p-4">{blog.business}</td>
-                    <td className="p-4 text-gray-500 hidden md:table-cell">
-                      {blog.business_id}
+                    <td className="p-4 text-gray-500">{wallet.identifier}</td>
+                    <td className="p-4">{wallet.business}</td>
+                    <td className="hidden p-4 text-gray-500 md:table-cell">
+                      {wallet.business_id}
                     </td>
-                    <td className="p-4 text-gray-500 hidden md:table-cell">
-                      {blog.ledger_balance}
+                    <td className="hidden p-4 text-gray-500 md:table-cell">
+                      {wallet.ledger_balance}
                     </td>
-                    <td className="p-4 text-gray-500 hidden md:table-cell">
-                      {blog.locked_balance}
+                    <td className="hidden p-4 text-gray-500 md:table-cell">
+                      {wallet.locked_balance}
                     </td>
                     <td className="p-4 text-[#ED1450] text-sm ">
-                      <button onClick={()=>handleView(blog)}>View More</button>
+                      <button onClick={()=>handleView(wallet)}>View More</button>
                     </td>
                   </tr>
                 ))}
             </tbody>
           </table>
+          <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
           {showModal && (<ViewModal onClose={setShowModal} user={selectedUser}/>)}
         </div>
       )}
